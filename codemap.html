@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Codemap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E7ECF0;--grid:rgba(20,34,48,.07);--panel:#FBFCFD;--panel2:#EEF2F5;--card:#fff;--gutter:#EEF2F6;--ink:#142230;--ink2:#566676;--ink3:#8795A3;--line:#CBD5DD;--accent:#1F5FBF;--accent-ink:#fff;
+--c-if:#C9731A;--c-loop:#7B58D9;--c-switch:#B0408F;--c-try:#17897B;--c-ret:#CF4255;--c-stmt:#4A6A8C;--c-call:#2F9E62;--c-true:#1E9A6B;--c-false:#CF4255;
+--tk-k:#7B3FC4;--tk-s:#1C8A55;--tk-c:#8795A3;--tk-n:#C2631B;--tk-f:#1F5FBF;--tk-t:#0E7C86;
+--shadow:0 1px 2px rgba(20,34,48,.08),0 8px 24px rgba(20,34,48,.10);
+--ui:"IBM Plex Sans Arabic",system-ui,"Segoe UI",Tahoma,sans-serif;--mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+[data-theme=dark]{--bg:#0D1520;--grid:rgba(255,255,255,.045);--panel:#142030;--panel2:#1A2A3B;--card:#172636;--gutter:#1D2E40;--ink:#E6EDF3;--ink2:#9FB2C2;--ink3:#6B8296;--line:#2A3D50;--accent:#5B9BFF;--accent-ink:#06121F;
+--c-if:#F0A04B;--c-loop:#A68BFF;--c-switch:#E27BC4;--c-try:#3CC7B5;--c-ret:#FF7A8A;--c-stmt:#7FA3C7;--c-call:#4FCB86;--c-true:#4FCB86;--c-false:#FF7A8A;
+--tk-k:#B794F6;--tk-s:#6FD9A0;--tk-c:#6B8296;--tk-n:#F0A04B;--tk-f:#7FB2FF;--tk-t:#4FD0DA;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{font:14px/1.55 var(--ui);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#app{display:grid;grid-template-rows:auto 1fr;height:100vh;height:100dvh}
+#top{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--panel);border-block-end:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600}
+.brand small{font-weight:400;color:var(--ink2)}
+.grow{flex:1}
+.ico,.chip{border:1px solid var(--line);background:var(--panel);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.ico{width:34px;height:34px;padding:0}
+.chip{padding:5px 12px;border-radius:999px;white-space:nowrap}
+.ico:hover,.chip:hover{border-color:var(--accent)}
+.chip.on,.seg button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.stats{display:flex;gap:6px;color:var(--ink2);font-size:13px}
+.stats span{padding:2px 9px;border-radius:999px;background:var(--panel2)}
+.progress{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2)}
+.progress i{display:block;width:90px;height:6px;border-radius:3px;background:var(--panel2);overflow:hidden}
+.progress i b{display:block;height:100%;width:0;background:var(--c-call);transition:width .3s}
+#main{display:flex;min-height:0;position:relative}
+#drawer{width:380px;flex:none;background:var(--panel);border-inline-end:1px solid var(--line);display:flex;flex-direction:column;min-height:0;z-index:10}
+#drawer.closed{display:none}
+.tabs{display:flex;border-block-end:1px solid var(--line)}
+.tabs button{flex:1;padding:10px 6px;border:0;background:none;border-block-end:2px solid transparent;color:var(--ink2)}
+.tabs button.on{color:var(--ink);border-color:var(--accent);font-weight:600}
+.pane{padding:14px;display:flex;flex-direction:column;gap:10px;overflow:auto;min-height:0;flex:1}
+textarea#src{flex:1;min-height:200px;resize:none;direction:ltr;text-align:left;font:12.5px/1.55 var(--mono);padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);tab-size:2}
+input[type=text],input[type=search],input[type=number],input[type=password],select{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 10px;min-width:0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:9px 16px;font-weight:600}
+.primary:hover{filter:brightness(1.08)}
+.drop{border:1.5px dashed var(--line);border-radius:10px;padding:22px 12px;text-align:center;color:var(--ink2)}
+.drop.over{border-color:var(--accent);background:var(--panel2)}
+.hint{color:var(--ink2);font-size:12.5px;margin:0}
+.msg{margin:0;padding:0 14px 12px;font-size:13px;color:var(--ink2)}
+.msg.err{color:var(--c-ret)}
+.bar{height:4px;border-radius:2px;background:var(--panel2);overflow:hidden}
+.bar b{display:block;height:100%;width:0;background:var(--accent)}
+#overview,#fnpage{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--panel);border-block-end:1px solid var(--line);flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--panel);padding:5px 12px}
+.seg button+button{border-inline-start:1px solid var(--line)}
+.canvas{position:relative;flex:1;min-height:0;overflow:hidden;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user-select:none;-webkit-user-select:none}
+.legend{position:absolute;inset-inline-start:12px;inset-block-end:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-shadow:var(--shadow);font-size:12.5px;max-width:300px;max-height:60%;overflow:auto}
+.legend h4{margin:0 0 6px;font-size:12.5px}
+.legend div{display:flex;align-items:center;gap:8px;margin:3px 0;color:var(--ink2)}
+.legend i{width:14px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.legend .fl{cursor:pointer}
+.legend .fl.on{color:var(--ink);font-weight:600}
+.empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink2);text-align:center;padding:20px;pointer-events:none}
+.rel{max-height:34%;overflow:auto;background:var(--panel);border-block-start:1px solid var(--line);padding:10px 14px;font-size:13px}
+.rel h4{margin:0 0 6px}
+.rel ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.rel li{display:flex;gap:6px;flex-wrap:wrap;align-items:baseline;color:var(--ink2)}
+.rel a{color:var(--accent);cursor:pointer;font-family:var(--mono);font-size:12.5px;text-decoration:none}
+.rel a:hover{text-decoration:underline}
+.fnbody{flex:1;display:flex;min-height:0}
+#side{width:350px;flex:none;border-inline-start:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;min-height:0}
+#side .tabs button{padding:8px 4px}
+.sidepane{padding:12px 14px;overflow:auto;flex:1;min-height:0}
+.badge{display:inline-block;padding:1px 9px;border-radius:999px;color:#fff;font-size:12px;font-family:var(--mono)}
+.sidepane h5{margin:14px 0 6px;font-size:13px;color:var(--ink2);font-weight:500}
+.sidepane p{margin:6px 0}
+.lnk{display:inline-flex;margin:2px 4px 2px 0;padding:2px 9px;border-radius:6px;border:1px solid var(--line);background:var(--card);font-family:var(--mono);font-size:12px;color:var(--accent);cursor:pointer}
+.lnk:hover{border-color:var(--accent)}
+.lnk.ext{color:var(--ink2);cursor:default}
+.src{font:12px/1.65 var(--mono);direction:ltr;text-align:left;white-space:pre}
+.src div{display:flex;padding:0 6px;border-radius:3px;cursor:pointer}
+.src div:hover{background:var(--panel2)}
+.src div.hl{background:color-mix(in srgb,var(--accent) 20%,transparent)}
+.src b{font-weight:400;color:var(--ink3);width:38px;flex:none;text-align:right;padding-inline-end:10px;user-select:none}
+.trail{display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px}
+.trail a{padding:2px 8px;border-radius:6px;background:var(--panel2);cursor:pointer;color:var(--ink2)}
+.trail a.cur{background:var(--accent);color:var(--accent-ink);cursor:default}
+.check{display:inline-flex;gap:6px;align-items:center;cursor:pointer;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.check input{accent-color:var(--c-call)}
+#stepbar{position:absolute;inset-inline:12px;inset-block-end:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 auto;max-width:760px}
+#stepbar .d{flex:1;min-width:200px}
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:8px;font-size:12.5px;max-width:320px;box-shadow:var(--shadow);display:none;white-space:pre-line}
+#tip code{font-family:var(--mono)}
+.cv text{font-family:var(--ui)}
+@media(max-width:860px){#drawer{position:absolute;inset-block:0;inset-inline-start:0;width:min(94vw,400px);box-shadow:var(--shadow)}.fnbody{flex-direction:column}#side{width:auto;height:42%;border-inline-start:0;border-block-start:1px solid var(--line)}.progress i{display:none}}
+[dir=rtl] .flip svg{transform:scaleX(-1)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style id="svgcss">
+.ov-edge{fill:none;stroke:var(--ink3);stroke-opacity:.6}
+.ov-edge.x{stroke-dasharray:6 4}
+.ov-edge.cyc{stroke:var(--c-ret);stroke-dasharray:2 3;stroke-opacity:.85}
+.ov-edge.hi{stroke:var(--accent);stroke-opacity:1}
+.ov-edge.dim,.ov-node.dim{opacity:.12}
+.ov-lbl{font-size:10.5px;fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.ov-node{cursor:pointer}
+.ov-node .box{fill:var(--card);stroke:var(--line);stroke-width:1.3}
+.ov-node:hover .box,.ov-node.match .box{stroke:var(--accent);stroke-width:2}
+.ov-node.entry .box{stroke:var(--accent);stroke-width:1.8}
+.ov-node .nm{font:500 12.5px var(--mono);fill:var(--ink)}
+.ov-node .sub{font-size:10px;fill:var(--ink3)}
+.ov-node.mod .box{stroke-dasharray:4 3}
+.ar-ov{fill:var(--ink3)}
+.tr-link{fill:none;stroke-linecap:round}
+.tr-t{font-size:13px;fill:var(--ink)}
+.tr-t.fn{font-family:var(--mono);cursor:pointer;font-size:12.5px}
+.tr-t.fn:hover{fill:var(--accent)}
+.tr-t.root{font-weight:600;font-size:15px}
+.tr-ref{fill:var(--ink2)}
+.tr-tg{cursor:pointer}
+.fl-edge{fill:none;stroke:var(--ink3);stroke-width:1.6}
+.fl-edge.l-true{stroke:var(--c-true)}.fl-edge.l-false{stroke:var(--c-false)}
+.fl-edge.k-back{stroke:var(--c-loop);stroke-dasharray:5 4}
+.fl-edge.k-exc{stroke:var(--c-try);stroke-dasharray:5 4}
+.fl-edge.k-fall{stroke-dasharray:3 3}
+.fl-edge.cur{stroke:var(--accent);stroke-width:3}
+.fl-lbl{font:500 11px var(--mono);fill:var(--ink2);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.fl-lbl.l-true{fill:var(--c-true)}.fl-lbl.l-false{fill:var(--c-false)}.fl-lbl.k-back{fill:var(--c-loop)}.fl-lbl.k-exc{fill:var(--c-try)}
+.ar-n{fill:var(--ink3)}.ar-true{fill:var(--c-true)}.ar-false{fill:var(--c-false)}.ar-loop{fill:var(--c-loop)}.ar-exc{fill:var(--c-try)}
+.fl-edge{marker-end:url(#ar-n)}.fl-edge.l-true{marker-end:url(#ar-true)}.fl-edge.l-false{marker-end:url(#ar-false)}.fl-edge.k-back{marker-end:url(#ar-loop)}.fl-edge.k-exc{marker-end:url(#ar-exc)}
+.ov-edge{marker-end:url(#ar-ov)}
+.fl-node{cursor:pointer}
+.fl-shape{fill:var(--card);stroke:var(--line);stroke-width:1.4}
+.fl-node:hover .fl-shape{stroke:var(--accent)}
+.fl-node.sel .fl-shape{stroke:var(--accent);stroke-width:2.6}
+.fl-node.cur .fl-shape{stroke:var(--accent);stroke-width:3;filter:drop-shadow(0 0 7px var(--accent))}
+.fl-node.vis .fl-shape{fill:color-mix(in srgb,var(--accent) 9%,var(--card))}
+.fl-gut{fill:var(--gutter)}
+.fl-ln{font:10.5px var(--mono);fill:var(--ink3);text-anchor:end}
+.fl-code{font:12px var(--mono);fill:var(--ink);white-space:pre}
+.fl-more{font:11px var(--mono);fill:var(--ink3)}
+.t-stmt .fl-bar{fill:var(--c-stmt)}.t-if .fl-bar{fill:var(--c-if)}.t-loop .fl-bar{fill:var(--c-loop)}.t-switch .fl-bar,.t-case .fl-bar{fill:var(--c-switch)}
+.t-try .fl-bar,.t-catch .fl-bar,.t-finally .fl-bar{fill:var(--c-try)}.t-return .fl-bar,.t-throw .fl-bar{fill:var(--c-ret)}.t-break .fl-bar,.t-continue .fl-bar{fill:var(--c-loop)}
+.t-start .fl-shape{fill:var(--accent);stroke:var(--accent)}.t-end .fl-shape{fill:var(--ink2);stroke:var(--ink2)}
+.t-start text,.t-end text{fill:var(--accent-ink);font:500 12px var(--mono)}
+.t-if .fl-shape,.t-loop .fl-shape,.t-switch .fl-shape{stroke-width:1.8}
+.t-if .fl-shape{stroke:var(--c-if)}.t-loop .fl-shape{stroke:var(--c-loop)}.t-switch .fl-shape{stroke:var(--c-switch)}
+.t-try .fl-shape,.t-catch .fl-shape,.t-finally .fl-shape{stroke:var(--c-try);stroke-dasharray:6 3}
+.t-return .fl-shape,.t-throw .fl-shape{stroke:var(--c-ret)}
+.fl-node.hascall .fl-shape{stroke-opacity:1}
+.chip-g{cursor:pointer}
+.chip-g rect{fill:color-mix(in srgb,var(--c-call) 14%,var(--card));stroke:var(--c-call);stroke-width:1}
+.chip-g:hover rect{fill:color-mix(in srgb,var(--c-call) 30%,var(--card))}
+.chip-g text{font:11px var(--mono);fill:var(--ink)}
+.tk-k{fill:var(--tk-k);color:var(--tk-k)}.tk-s{fill:var(--tk-s);color:var(--tk-s)}.tk-c{fill:var(--tk-c);color:var(--tk-c);font-style:italic}
+.tk-n{fill:var(--tk-n);color:var(--tk-n)}.tk-f{fill:var(--tk-f);color:var(--tk-f)}.tk-t{fill:var(--tk-t);color:var(--tk-t)}
+</style>
+</head>
+<body>
+<div id="app">
+<header id="top">
+  <button id="btnDrawer" class="ico" data-i="menu" data-ti="t_input"></button>
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="3.2" style="color:var(--accent)"/><circle cx="20" cy="9" r="3.2" style="color:var(--c-loop)"/><circle cx="10" cy="20" r="3.2" style="color:var(--c-call)"/><path d="M8.7 7.2l8.6 1.3M7.2 8.8l2 8.4M12.8 18.8l5.6-7.3"/></svg>
+    <span>Codemap</span><small data-t="tagline"></small>
+  </div>
+  <div id="stats" class="stats"></div>
+  <div class="grow"></div>
+  <div class="progress" id="progress"><span id="progTxt"></span><i><b id="progBar"></b></i></div>
+  <button id="btnLang" class="chip">EN</button>
+  <button id="btnTheme" class="ico" data-i="moon"></button>
+</header>
+<main id="main">
+  <aside id="drawer">
+    <div class="tabs" role="tablist">
+      <button data-tab="paste" class="on" data-t="paste"></button>
+      <button data-tab="files" data-t="files"></button>
+      <button data-tab="github">GitHub</button>
+    </div>
+    <div class="pane" data-pane="paste">
+      <textarea id="src" spellcheck="false" dir="ltr" data-tph="ph_src"></textarea>
+      <div class="row"><select id="lang"></select><span class="hint" data-t="samples"></span><span id="samples" class="row"></span></div>
+      <div class="row"><button id="go" class="primary" data-t="analyze"></button></div>
+      <p class="hint" data-t="langs"></p>
+    </div>
+    <div class="pane" data-pane="files" hidden>
+      <div class="drop" id="drop"><p data-t="drop"></p>
+        <div class="row" style="justify-content:center"><label class="chip"><span data-t="pickFiles"></span><input id="fileIn" type="file" multiple hidden></label>
+        <label class="chip"><span data-t="pickFolder"></span><input id="dirIn" type="file" webkitdirectory hidden></label></div>
+      </div>
+      <p class="hint" id="fileList"></p>
+    </div>
+    <div class="pane" data-pane="github" hidden>
+      <input id="ghUrl" type="text" dir="ltr" data-tph="ghPh" value="">
+      <div class="row"><label class="row"><span data-t="ghMax"></span><input id="ghMax" type="number" min="5" max="400" value="80" style="width:80px"></label>
+      <label class="check"><input id="ghTests" type="checkbox" checked><span data-t="ghTests"></span></label></div>
+      <input id="ghTok" type="password" dir="ltr" data-tph="ghToken" autocomplete="off">
+      <div class="row"><button id="ghGo" class="primary" data-t="ghLoad"></button></div>
+      <div class="bar"><b id="ghBar"></b></div>
+      <p class="hint" id="ghLog"></p>
+    </div>
+    <p class="msg" id="msg"></p>
+  </aside>
+  <section id="overview">
+    <div class="toolbar">
+      <div class="seg" id="segView"><button data-v="graph" class="on" data-t="vGraph"></button><button data-v="tree" data-t="vTree"></button></div>
+      <div class="seg" id="segLayout"><button data-l="layered" class="on" data-t="lLayer"></button><button data-l="force" data-t="lForce"></button></div>
+      <div class="seg" id="segTree" hidden><button data-m="call" class="on" data-t="tCall"></button><button data-m="file" data-t="tFile"></button></div>
+      <input id="search" type="search" data-tph="search" style="width:170px">
+      <button id="isoOff" class="chip" hidden></button>
+      <div class="grow"></div>
+      <button id="btnRel" class="chip" data-t="rel"></button>
+      <button id="btnLeg" class="chip" data-t="leg"></button>
+      <button class="ico" id="zin" data-i="plus" data-ti="zin"></button>
+      <button class="ico" id="zout" data-i="minus" data-ti="zout"></button>
+      <button class="ico" id="zfit" data-i="fit" data-ti="fit"></button>
+      <button class="chip" id="exSvg">SVG</button><button class="chip" id="exPng">PNG</button>
+    </div>
+    <div class="canvas" id="ovCanvas">
+      <svg class="cv" id="ovSvg"><defs><marker id="ar-ov" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar-ov" d="M0 1l9 4-9 4z"/></marker></defs><g id="ovG"></g></svg>
+      <div class="legend" id="legend" hidden></div>
+      <div class="empty" id="empty"></div>
+    </div>
+    <div class="rel" id="rel" hidden></div>
+  </section>
+  <section id="fnpage" hidden>
+    <div class="toolbar">
+      <button id="fnBack" class="chip flip"><span data-i="back"></span><span data-t="back"></span></button>
+      <div id="trail" class="trail"></div>
+      <div class="grow"></div>
+      <div class="seg" id="segFn"><button data-fv="flow" class="on" data-t="flow"></button><button data-fv="outline" data-t="outline"></button></div>
+      <button id="btnStep" class="chip" data-t="trace"></button>
+      <label class="check"><input type="checkbox" id="chkLearn"><span data-t="learned"></span></label>
+      <button class="ico" id="fzin" data-i="plus" data-ti="zin"></button>
+      <button class="ico" id="fzout" data-i="minus" data-ti="zout"></button>
+      <button class="ico" id="fzfit" data-i="fit" data-ti="fit"></button>
+      <button class="chip" id="fxSvg">SVG</button><button class="chip" id="fxPng">PNG</button>
+    </div>
+    <div class="fnbody">
+      <div class="canvas" id="fnCanvas">
+        <svg class="cv" id="fnSvg"><defs>
+          <marker id="ar-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ar-n" d="M0 1l9 4-9 4z"/></marker>
+          <marker id="ar-true" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ar-true" d="M0 1l9 4-9 4z"/></marker>
+          <marker id="ar-false" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ar-false" d="M0 1l9 4-9 4z"/></marker>
+          <marker id="ar-loop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ar-loop" d="M0 1l9 4-9 4z"/></marker>
+          <marker id="ar-exc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ar-exc" d="M0 1l9 4-9 4z"/></marker>
+        </defs><g id="fnG"></g></svg>
+        <div id="stepbar" hidden></div>
+      </div>
+      <aside id="side">
+        <div class="tabs"><button data-st="info" class="on" data-t="info"></button><button data-st="source" data-t="source"></button><button data-st="links" data-t="links"></button></div>
+        <div class="sidepane" id="spInfo"></div>
+        <div class="sidepane" id="spSource" hidden></div>
+        <div class="sidepane" id="spLinks" hidden></div>
+      </aside>
+    </div>
+  </section>
+</main>
+</div>
+<div id="tip"></div>
+<script>
+'use strict';
+/* ================= helpers ================= */
+const $=(q,r=document)=>r.querySelector(q),$$=(q,r=document)=>Array.from(r.querySelectorAll(q));
+const NS='http://www.w3.org/2000/svg';
+function H(tag,a,...kids){const e=document.createElement(tag);for(const k in a||{}){const v=a[k];if(v==null||v===false)continue;if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);else e.setAttribute(k,v===true?'':v)}for(const c of kids.flat(9)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e}
+function S(tag,a,...kids){const e=document.createElementNS(NS,tag);for(const k in a||{}){const v=a[k];if(v==null||v===false)continue;if(k==='class')e.setAttribute('class',v);else if(k==='text')e.textContent=v;else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);else e.setAttribute(k,v)}for(const c of kids.flat(9)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const ICON={menu:'M3 6h18M3 12h18M3 18h18',plus:'M12 5v14M5 12h14',minus:'M5 12h14',fit:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',moon:'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',sun:'M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',back:'M15 5l-7 7 7 7'};
+const ico=(k,sz=16)=>`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${ICON[k]}"/></svg>`;
+
+/* ================= i18n ================= */
+const I18N={
+ar:{tagline:'ارسم الكود لتفهمه',t_input:'الكود',paste:'لصق',files:'ملفات',analyze:'حلّل',samples:'أمثلة',ph_src:'ألصق الكود هنا…',
+drop:'اسحب ملفات أو مجلدًا إلى هنا',pickFiles:'اختيار ملفات',pickFolder:'اختيار مجلد',ghPh:'owner/repo أو رابط GitHub',ghMax:'أقصى عدد ملفات',ghTests:'تجاهل الاختبارات',ghToken:'Token (اختياري، للمستودعات الخاصة)',ghLoad:'حمّل المستودع',
+langs:'اللغات: JS/TS، Python، Java، C/C++، C#، Go، Rust، PHP، Kotlin، Swift، Dart',auto:'تلقائي',
+vGraph:'الرسم',vTree:'الخريطة',lLayer:'طبقات',lForce:'قوى',tCall:'حسب الاستدعاء',tFile:'حسب الملف',search:'ابحث عن دالة…',fit:'ملاءمة',zin:'تكبير',zout:'تصغير',leg:'الرموز',rel:'العلاقات',isoOff:'إظهار الكل',
+back:'رجوع',flow:'مخطط التدفق',outline:'الهيكل',trace:'تتبّع التنفيذ',learned:'فهمتها',info:'تفاصيل',source:'المصدر',links:'الروابط',callers:'تستدعيها',callees:'تستدعي',ext:'استدعاءات خارجية',
+empty:'ألصق كودًا أو حمّل مستودعًا لتظهر الخريطة.',nofn:'لم أجد دوال في هذا الكود. جرّب تحديد اللغة يدويًا.',work:'جارٍ التحليل…',prog:'فهمت',
+s_files:'ملف',s_fns:'دالة',s_calls:'استدعاء',noneTxt:'—',
+relTitle:'العلاقات بين الدوال',relLine:(n)=>`تستدعي`,times:'مرّات',atLines:'الأسطر',
+entry:'نقطة دخول (لا يستدعيها أحد)',rec:'تستدعي نفسها',cross:'استدعاء بين ملفين',cyc:'دورة استدعاء',cx:'التعقيد',loc:'سطر',
+next:'التالي',prev:'السابق',restart:'من البداية',stepHint:'اختر الفرع الذي يسلكه التنفيذ',done:'انتهى التنفيذ',
+d_start:s=>`بداية الدالة: ${s}`,d_end:'نهاية الدالة: يعود التنفيذ إلى من استدعاها.',
+d_stmt:(a,b)=>a===b?`تعليمة تُنفَّذ بالتسلسل (السطر ${a}).`:`تعليمات تُنفَّذ بالتسلسل (الأسطر ${a}–${b}).`,
+d_if:c=>`شرط if: يُقيَّم «${c}». إن كان true دخل الفرع true، وإلا انتقل إلى false.`,
+d_loop:(k,c)=>`حلقة ${k}${c?` «${c}»`:''}: يتكرر الجسم عبر الفرع loop ثم يخرج عبر done.`,
+d_switch:c=>`switch على «${c}»: ينتقل التنفيذ إلى case المطابق.`,d_case:c=>`case: ${c}`,d_default:'default: الحالة الافتراضية إن لم يطابق أي case.',
+d_try:'try: يُجرَّب هذا الجزء، وأي exception ينتقل إلى catch.',d_catch:c=>`catch ${c}: معالجة الخطأ.`,d_finally:'finally: يُنفَّذ دائمًا بعد try/catch.',
+d_return:'return: ينهي الدالة ويعيد قيمة.',d_throw:'throw: يرمي exception ويقطع التدفق.',d_break:'break: يخرج من أقرب حلقة أو switch.',d_continue:'continue: ينتقل إلى التكرار التالي.',
+lg_if:'شرط if',lg_loop:'حلقة',lg_switch:'switch / case',lg_try:'try / catch',lg_ret:'return / throw',lg_stmt:'تعليمات',lg_call:'استدعاء دالة في المشروع',lg_back:'رجوع للحلقة',
+err_gh:'تعذّر تحميل المستودع',err_read:'تعذّرت القراءة',gh_tree:'جلب قائمة الملفات…',gh_files:(a,b)=>`تحميل الملفات ${a}/${b}`,gh_cut:(a,b)=>`تم تحميل ${a} من ${b} ملفًا (الحد الأقصى)`,
+fileSel:n=>`${n} ملف`,calls:'يستدعي',hint_click:'انقر دالة لفتح صفحتها · Shift+نقر لعزل جوارها'},
+en:{tagline:'draw code to understand it',t_input:'Code',paste:'Paste',files:'Files',analyze:'Analyze',samples:'Samples',ph_src:'Paste code here…',
+drop:'Drop files or a folder here',pickFiles:'Pick files',pickFolder:'Pick folder',ghPh:'owner/repo or GitHub URL',ghMax:'Max files',ghTests:'Skip tests',ghToken:'Token (optional, private repos)',ghLoad:'Load repo',
+langs:'Languages: JS/TS, Python, Java, C/C++, C#, Go, Rust, PHP, Kotlin, Swift, Dart',auto:'Auto',
+vGraph:'Graph',vTree:'Map',lLayer:'Layered',lForce:'Force',tCall:'By call',tFile:'By file',search:'Find function…',fit:'Fit',zin:'Zoom in',zout:'Zoom out',leg:'Legend',rel:'Relations',isoOff:'Show all',
+back:'Back',flow:'Flowchart',outline:'Outline',trace:'Trace',learned:'Got it',info:'Details',source:'Source',links:'Links',callers:'Called by',callees:'Calls',ext:'External calls',
+empty:'Paste code or load a repo to see the map.',nofn:'No functions found. Try choosing the language manually.',work:'Analyzing…',prog:'Learned',
+s_files:'files',s_fns:'functions',s_calls:'calls',noneTxt:'—',
+relTitle:'Relations between functions',times:'times',atLines:'lines',
+entry:'Entry point (nobody calls it)',rec:'Recursive',cross:'Cross-file call',cyc:'Call cycle',cx:'Complexity',loc:'lines',
+next:'Next',prev:'Prev',restart:'Restart',stepHint:'Pick the branch execution takes',done:'Execution finished',
+d_start:s=>`Function start: ${s}`,d_end:'Function end: control returns to the caller.',
+d_stmt:(a,b)=>a===b?`Statement run in sequence (line ${a}).`:`Statements run in sequence (lines ${a}–${b}).`,
+d_if:c=>`if condition: evaluates “${c}”. true enters the true branch, otherwise false.`,
+d_loop:(k,c)=>`${k} loop${c?` “${c}”`:''}: the body repeats via loop, exits via done.`,
+d_switch:c=>`switch on “${c}”: jumps to the matching case.`,d_case:c=>`case: ${c}`,d_default:'default: fallback when no case matches.',
+d_try:'try: this part is attempted; any exception goes to catch.',d_catch:c=>`catch ${c}: error handling.`,d_finally:'finally: always runs after try/catch.',
+d_return:'return: ends the function and yields a value.',d_throw:'throw: raises an exception and breaks the flow.',d_break:'break: leaves the nearest loop or switch.',d_continue:'continue: jumps to the next iteration.',
+lg_if:'if condition',lg_loop:'loop',lg_switch:'switch / case',lg_try:'try / catch',lg_ret:'return / throw',lg_stmt:'statements',lg_call:'call to a project function',lg_back:'back to loop',
+err_gh:'Could not load repository',err_read:'Could not read',gh_tree:'Fetching file list…',gh_files:(a,b)=>`Loading files ${a}/${b}`,gh_cut:(a,b)=>`Loaded ${a} of ${b} files (limit)`,
+fileSel:n=>`${n} files`,calls:'Calls',hint_click:'Click a function to open it · Shift+click isolates its neighbourhood'}};
+let LANG=store.get('cm.lang','ar');
+const t=(k,...a)=>{const v=I18N[LANG][k]??I18N.en[k]??k;return typeof v==='function'?v(...a):v};
+
+/* ================= languages ================= */
+const LANGS={
+js:{name:'JS / TS',slash:1,block:1,cond:'paren',sw:'case',fall:1,mod:1,regex:1,tick:1,q1:'str'},
+py:{name:'Python',hash:1,cond:'py',sw:'py',mod:1,q1:'str',triple:1},
+java:{name:'Java',slash:1,block:1,cond:'paren',sw:'case',fall:1,q1:'chr'},
+c:{name:'C',slash:1,block:1,cond:'paren',sw:'case',fall:1,q1:'chr'},
+cpp:{name:'C++',slash:1,block:1,cond:'paren',sw:'case',fall:1,q1:'chr'},
+cs:{name:'C#',slash:1,block:1,cond:'paren',sw:'case',fall:1,q1:'chr'},
+go:{name:'Go',slash:1,block:1,cond:'free',sw:'case',tick:1,q1:'chr'},
+rust:{name:'Rust',slash:1,block:1,cond:'free',sw:'arm',arrow:'=>',q1:'chr'},
+php:{name:'PHP',slash:1,block:1,hash:1,cond:'paren',sw:'case',fall:1,mod:1,q1:'str'},
+kotlin:{name:'Kotlin',slash:1,block:1,cond:'paren',sw:'arm',arrow:'->',q1:'chr'},
+swift:{name:'Swift',slash:1,block:1,cond:'free',sw:'case',q1:'chr'},
+dart:{name:'Dart',slash:1,block:1,cond:'paren',sw:'case',fall:1,q1:'str'}};
+const EXT={js:'js',jsx:'js',mjs:'js',cjs:'js',ts:'js',tsx:'js',py:'py',java:'java',c:'c',h:'c',cpp:'cpp',cc:'cpp',cxx:'cpp',hpp:'cpp',cs:'cs',go:'go',rs:'rust',php:'php',kt:'kotlin',kts:'kotlin',swift:'swift',dart:'dart'};
+const langOfPath=p=>EXT[(p.split('.').pop()||'').toLowerCase()]||null;
+function detectLang(c){
+ if(/^\s*<\?php/.test(c))return 'php';
+ if((/^package\s+\w+/m.test(c)||/:=/.test(c))&&/\bfunc\b/.test(c))return 'go';
+ if(/\bfn\s+\w+\s*[(<]/.test(c)&&/\b(let|mut|impl|pub)\b/.test(c))return 'rust';
+ if(/^\s*(def|class)\s+\w+.*:\s*$/m.test(c)&&!/[;{]\s*$/m.test(c))return 'py';
+ if(/\bfun\s+\w+\s*\(/.test(c)&&/\b(val|var)\b/.test(c))return 'kotlin';
+ if(/\bfunc\s+\w+\s*\(.*\)\s*(->|\{)/.test(c)&&/\b(let|var|guard)\b/.test(c))return 'swift';
+ if(/\busing\s+System|Console\.Write/.test(c))return 'cs';
+ if(/\b(public|private|protected)\s+(static\s+)?(class|void|int|String)\b|System\.out/.test(c))return 'java';
+ if(/#include\s*[<"]/.test(c))return /\b(std::|cout|template\s*<)|\bclass\s+\w+/.test(c)?'cpp':'c';
+ if(/^\s*def\s+\w+/m.test(c)&&!/[{;]/.test(c))return 'py';
+ return 'js';
+}
+
+/* ================= masking (strings/comments -> spaces) ================= */
+function maskCode(code,lang){
+ const L=LANGS[lang]||LANGS.js,n=code.length,o=code.split('');
+ const blank=(a,b)=>{for(let k=a;k<b;k++){const c=o[k];if(c!=='\n'&&c!=='\r')o[k]=' '}};
+ const REGOK=new Set(['return','typeof','case','in','of','delete','void','throw','else','do','yield','await','new']);
+ const CHR=/'(?:\\[^'\n]*|[^'\\\n])'/y;
+ let i=0;
+ while(i<n){
+  const c=code[i],d=code[i+1];
+  if(L.slash&&c==='/'&&d==='/'){let j=code.indexOf('\n',i);if(j<0)j=n;blank(i,j);i=j;continue}
+  if(L.hash&&c==='#'&&!(lang==='php'&&d==='[')){let j=code.indexOf('\n',i);if(j<0)j=n;blank(i,j);i=j;continue}
+  if(L.block&&c==='/'&&d==='*'){let j=code.indexOf('*/',i+2);j=j<0?n:j+2;blank(i,j);i=j;continue}
+  if(L.triple&&(c==='"'||c==="'")&&code.startsWith(c+c+c,i)){let j=code.indexOf(c+c+c,i+3);j=j<0?n:j+3;blank(i,j);i=j;continue}
+  if(c==='"'||(c==="'"&&L.q1==='str')){
+   let j=i+1;while(j<n&&code[j]!==c){if(code[j]==='\\')j++;else if(code[j]==='\n')break;j++}
+   j=Math.min(j,n);const closed=code[j]===c;blank(i+1,j);i=closed?j+1:j;continue}
+  if(c==="'"&&L.q1==='chr'){CHR.lastIndex=i;const r=CHR.exec(code);if(r){blank(i+1,i+r[0].length-1);i+=r[0].length}else i++;continue}
+  if(c==='`'&&L.tick){let j=i+1;while(j<n&&code[j]!=='`'){if(code[j]==='\\')j++;j++}j=Math.min(j,n);blank(i+1,j);i=j+1;continue}
+  if(L.regex&&c==='/'&&d!=='/'&&d!=='*'){
+   let k=i-1;while(k>=0&&/\s/.test(o[k]))k--;
+   const p=k>=0?o[k]:'';let ok=p===''||'(,=:[!&|?{;'.includes(p);
+   if(!ok&&/[A-Za-z]/.test(p)){let a=k;while(a>=0&&/\w/.test(o[a]))a--;ok=REGOK.has(o.slice(a+1,k+1).join(''))}
+   if(ok){let j=i+1,cls=false;while(j<n&&code[j]!=='\n'){const q=code[j];if(q==='\\')j++;else if(q==='[')cls=true;else if(q===']')cls=false;else if(q==='/'&&!cls)break;j++}
+    if(code[j]==='/'){blank(i+1,j);i=j+1;continue}}
+  }
+  i++;
+ }
+ return o.join('');
+}
+const lineStarts=code=>{const a=[0];for(let i=0;i<code.length;i++)if(code.charCodeAt(i)===10)a.push(i+1);return a};
+const lineAtFn=ls=>off=>{let lo=0,hi=ls.length-1;while(lo<hi){const mid=(lo+hi+1)>>1;if(ls[mid]<=off)lo=mid;else hi=mid-1}return lo+1};
+
+/* ================= syntax highlighting (per file, per line) ================= */
+const KW=new Set(('if else for while do switch case default break continue return throw try catch finally function def class new const let var import from export async await yield in of is as not and or lambda None True False null nil true false undefined this self super static public private protected void int float double string bool boolean char long short byte struct enum interface impl trait fn func fun val mut pub use mod type namespace using package extends implements throws elif except raise with pass del global nonlocal assert foreach loop match when select defer go chan range goto typeof instanceof delete final override abstract virtual readonly unsafe where guard repeat extension init constructor').split(' '));
+const TYPES=new Set('int float double string bool boolean char long short byte void str list dict set tuple i8 i16 i32 i64 u8 u16 u32 u64 f32 f64 usize isize String Int Double Float Bool Boolean Object Array Map Set List'.split(' '));
+function hlFile(F){
+ if(F.hl)return F.hl;
+ const L=LANGS[F.lang],code=F.code,lines=[[]];
+ const push=(c,text)=>{const ps=text.split('\n');ps.forEach((p,k)=>{if(k>0)lines.push([]);if(p){const cur=lines[lines.length-1],last=cur[cur.length-1];if(last&&last.c===c)last.v+=p;else cur.push({c,v:p})}})};
+ const parts=[];
+ if(L.slash)parts.push('\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?(?:\\*\\/|$)');
+ if(L.hash)parts.push('#[^\\n]*');
+ const cm=parts.length?'('+parts.join('|')+')':'(?!)';
+ const st=[];
+ if(L.triple)st.push('"""[\\s\\S]*?(?:"""|$)',"'''[\\s\\S]*?(?:'''|$)");
+ st.push('"(?:\\\\.|[^"\\\\\\n])*"?');
+ st.push(L.q1==='str'?"'(?:\\\\.|[^'\\\\\\n])*'?":"'(?:\\\\.|[^'\\\\\\n])'");
+ if(L.tick)st.push('`[^`]*`?');
+ const pre=(lang=>lang==='c'||lang==='cpp')(F.lang)?'|(#\\s*\\w+[^\\n]*)':'|((?!))';
+ const re=new RegExp(cm+'|('+st.join('|')+')|(\\b(?:0[xX][\\da-fA-F_]+|\\d[\\d_]*\\.?\\d*(?:[eE][+-]?\\d+)?)\\b)|([A-Za-z_$][\\w$]*)'+pre+'|([\\s\\S])','g');
+ let last=0,m;
+ while((m=re.exec(code))){
+  if(m[0]==='')break;
+  if(m[1]!==undefined)push('c',m[0]);
+  else if(m[2]!==undefined)push('s',m[0]);
+  else if(m[3]!==undefined)push('n',m[0]);
+  else if(m[4]!==undefined){const w=m[0];let c='';if(KW.has(w))c='k';else if(TYPES.has(w))c='t';else{let q=re.lastIndex;while(code[q]===' ')q++;if(code[q]==='(')c='f';else if(/^[A-Z]/.test(w)&&w.length>1)c='t'}push(c,w)}
+  else if(m[5])push('k',m[0]);
+  else push('',m[0]);
+ }
+ F.hl=lines;return lines;
+}
+function cutTokens(tk,from,len){
+ const out=[];let pos=0,end=from+len,cut=false;
+ for(const t of tk){const a=pos,b=pos+t.v.length;pos=b;if(b<=from)continue;if(a>=end){cut=true;break}
+  const s=Math.max(from,a)-a,e=Math.min(end,b)-a;if(e<t.v.length)cut=true;out.push({c:t.c,v:t.v.slice(s,e)})}
+ while(out.length&&!out[out.length-1].v.trim())out.pop();
+ if(out.length)out[out.length-1].v=out[out.length-1].v.replace(/\s+$/,'');
+ if(cut)out.push({c:'c',v:'…'});
+ return out;
+}
+
+/* ================= samples ================= */
+const SAMPLES={
+JavaScript:`// order processing
+const TAX = 0.15;
+
+function processOrder(order) {
+  if (!validate(order)) {
+    report("invalid order", order.id);
+    return null;
+  }
+  let total = calcTotal(order.items);
+  total = applyDiscount(total, order.coupon);
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const receipt = charge(order.card, total);
+      notify(order.email, receipt);
+      return receipt;
+    } catch (err) {
+      report(err.message, order.id);
+      if (attempt === 3) throw err;
+    }
+  }
+}
+
+function validate(order) {
+  if (!order || !order.items.length) return false;
+  return checkCard(order.card);
+}
+
+function checkCard(card) {
+  let sum = 0;
+  let i = card.length - 1;
+  while (i >= 0) {
+    sum += Number(card[i]);
+    i -= 2;
+  }
+  return sum % 10 === 0;
+}
+
+function calcTotal(items) {
+  let total = 0;
+  for (const item of items) {
+    if (item.qty <= 0) continue;
+    total += item.price * item.qty;
+  }
+  return total * (1 + TAX);
+}
+
+function applyDiscount(total, coupon) {
+  switch (coupon) {
+    case "HALF":
+      return total / 2;
+    case "TEN":
+      return total * 0.9;
+    case "FREE":
+      return 0;
+    default:
+      return total;
+  }
+}
+
+function charge(card, amount) {
+  if (amount === 0) return "free-" + Date.now();
+  if (!checkCard(card)) throw new Error("card rejected");
+  return "paid-" + amount.toFixed(2);
+}
+
+function notify(email, receipt) {
+  report("sent " + receipt, email);
+}
+
+function report(msg, ref) {
+  console.error("[" + ref + "] " + msg);
+}
+
+const result = processOrder({ id: 7, items: [{ price: 20, qty: 2 }], coupon: "TEN", card: "4242", email: "a@b.c" });
+`,
+Python:`def analyze(numbers):
+    if not numbers:
+        return None
+    avg = mean(numbers)
+    spread = variance(numbers, avg)
+    label = classify(spread)
+    print(label)
+    return avg, spread
+
+
+def mean(xs):
+    total = 0
+    for x in xs:
+        total += x
+    return total / len(xs)
+
+
+def variance(xs, avg):
+    acc = 0
+    i = 0
+    while i < len(xs):
+        acc += (xs[i] - avg) ** 2
+        i += 1
+    return acc / len(xs)
+
+
+def classify(v):
+    if v < 1:
+        return "stable"
+    elif v < 10:
+        return "normal"
+    else:
+        return "wild"
+
+
+def fib(n):
+    if n < 2:
+        return n
+    return fib(n - 1) + fib(n - 2)
+
+
+if __name__ == "__main__":
+    analyze([1, 2, 3, 4])
+    print(fib(8))
+`,
+Go:`package main
+
+func main() {
+	nums := []int{3, 8, 1}
+	sorted := sortInts(nums)
+	if len(sorted) > 0 {
+		report(sorted[0])
+	}
+}
+
+func sortInts(a []int) []int {
+	for i := 0; i < len(a); i++ {
+		for j := i + 1; j < len(a); j++ {
+			if a[j] < a[i] {
+				swap(a, i, j)
+			}
+		}
+	}
+	return a
+}
+
+func swap(a []int, i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+func report(n int) {
+	println("min", n)
+}
+`};
+/* ================= function finding ================= */
+function matchClose(m,i){const o=m[i],c={'{':'}','(':')','[':']'}[o];let d=0;for(let k=i;k<m.length;k++){const ch=m[k];if(ch===o)d++;else if(ch===c){d--;if(d===0)return k}}return -1}
+const CTRL=new Set('if for while switch catch foreach synchronized using lock do else try finally return function fn func fun def when match with elif unless until sizeof typeof await new throw case default use defer select loop unsafe async alignof decltype'.split(' '));
+const KWRE=/\b(?:function|func|fun|fn)\s*(?:\(([^)]*)\)\s*)?(?:<[^>]*>\s*)?((?:[\w$]+\.)*[\w$]+)\s*[<\[(]/g;
+const TAILRE=/^\s*(?:(?:const|override|final|noexcept|volatile|mutable|async|throws\s+[\w.,\s<>?]+?|where\s+[^(){};]+?|->\s*[^(){};=]+?|:\s*[^(){};=]+?)\s*)*$/;
+const CLASSRE=/(?:^|[\s)}>;])(class|struct|interface|enum|namespace|trait|impl|object|module|extension|protocol|record|union)\b\s*(?:<[^>]*>\s*)?([A-Za-z_$][\w$.]*)?/;
+function findFuncParen(h){
+ h=h.slice(-500);const p=h.lastIndexOf(')');if(p<0)return null;
+ if(!TAILRE.test(h.slice(p+1)))return null;
+ let d=0,q=-1;for(let k=p;k>=0;k--){if(h[k]===')')d++;else if(h[k]==='('){d--;if(d===0){q=k;break}}}
+ if(q<0)return null;
+ const before=h.slice(0,q).replace(/<[^<>()]*>\s*$/,'');
+ const mm=/([A-Za-z_$~#][\w$~#:]*)\s*$/.exec(before);if(!mm)return null;
+ let name=mm[1],owner=null;if(name.includes('::')){const ps=name.split('::').filter(Boolean);name=ps.pop();owner=ps.pop()||null}
+ const pre=before.slice(0,mm.index).trimEnd();
+ return{name,owner,pre,params:h.slice(q+1,p)};
+}
+function okPre(pre){
+ if(/(?:[=(,!?+\-/%^|<]|&&|\|\||=>)$/.test(pre))return false;
+ if(/(?:^|\W)(?:new|return|else|throw|await|typeof|case|in|of|delete|yield)$/.test(pre))return false;
+ if(/\.$/.test(pre))return /\bfun\s+[\w<>?,.]*\.$/.test(pre);
+ if(/:$/.test(pre)&&!/::$/.test(pre))return false;
+ return true;
+}
+function classify(h,lang){
+ const hh=h.trim();if(!hh)return{type:'other'};
+ let km=null,t;KWRE.lastIndex=0;while((t=KWRE.exec(hh)))km=t;
+ if(km){
+  const name=km[2].split('.').pop();let recv=null;
+  if(km[1]){const w=km[1].trim().split(/\s+/).pop()||'';recv=w.replace(/[*&]/g,'').replace(/^.*:/,'')||null}
+  const op=hh.indexOf('(',km.index+km[0].length-1);
+  if(op>=0){const cl=matchClose(hh,op);return{type:'fn',name,owner:recv,params:cl>0?hh.slice(op+1,cl):'',kw:km.index}}
+ }
+ const fp=findFuncParen(hh);
+ if(fp){
+  if(/\b(class|interface|enum|trait|object|record|union|impl)\s*$/.test(fp.pre))return{type:'class',name:fp.name};
+  if(!CTRL.has(fp.name)&&okPre(fp.pre))return{type:'fn',name:fp.name,owner:fp.owner,params:fp.params};
+ }
+ const pre=hh.split('(')[0],cm=CLASSRE.exec(pre);
+ if(cm){let name=cm[2]||'';if(/^(extends|implements|where|for)$/.test(name))name='';
+  if(cm[1]==='impl'){const fm=/\bfor\s+([A-Za-z_]\w*)/.exec(pre);if(fm)name=fm[1]}
+  return{type:'class',name}}
+ return{type:'other'};
+}
+function braceScan(F,out,classes){
+ const{m,code,lang}=F;const stack=[];let last=-1,par=0,fnDepth=0;
+ for(let i=0;i<m.length;i++){
+  const c=m.charCodeAt(i);
+  if(c===40)par++;
+  else if(c===41){if(par>0)par--}
+  else if(c===59){if(par===0)last=i}
+  else if(c===123){
+   const header=m.slice(last+1,i),ht=header.trimEnd();
+   if(/(?:interface|struct)$/.test(ht)){let q=i+1;while(q<m.length&&/\s/.test(m[q]))q++;if(m[q]==='}'){i=q;continue}}
+   if(par>0){const tl=ht.slice(-1);if(tl===''||'(,:[='.includes(tl)){const j=matchClose(m,i);if(j>0){i=j;continue}}}
+   let e;
+   if(fnDepth>0)e={type:'inner'};
+   else if(lang==='go'&&!/\bfunc\b/.test(header))e=/\b(struct|interface)\b/.test(header)?{type:'class',name:(/\btype\s+(\w+)/.exec(header)||[])[1]||''}:{type:'other'};
+   else e=classify(header,lang);
+   e.open=i;e.savePar=par;
+   if(e.type==='fn'){
+    fnDepth++;
+    const lead=header.length-header.trimStart().length;
+    e.sigStart=last+1+(lang==='go'&&e.kw!=null?e.kw:lead);
+    if(e.owner==null){for(let k=stack.length-1;k>=0;k--)if(stack[k].type==='class'){e.owner=stack[k].name||null;break}}
+   }
+   stack.push(e);par=0;last=i;
+  }else if(c===125){
+   const e=stack.pop();
+   if(e){par=e.savePar||0;
+    if(e.type==='fn'){fnDepth--;out.push({name:e.name,owner:e.owner,params:e.params,start:e.sigStart,bodyStart:e.open+1,bodyEnd:i})}
+    else if(e.type==='class'){e.close=i;classes.push(e)}}
+   last=i;
+  }
+ }
+}
+const isWordCh=c=>c!==undefined&&/[\w$]/.test(c);
+function exprEnd(m,pos){
+ let d=0;const n=m.length;
+ for(let k=pos;k<n;k++){const c=m[k];
+  if(c==='('||c==='['||c==='{')d++;
+  else if(c===')'||c===']'||c==='}'){d--;if(d<0)return k}
+  else if(d===0){if(c===';'||c===',')return k;if(c==='\n'&&!contLineIn(m,k))return k}}
+ return n;
+}
+function contLineIn(m,k){
+ let p=k-1;while(p>=0&&m.charCodeAt(p)<=32)p--;
+ const pc=m[p],pp=m[p-1];
+ if(pc==='\\')return true;
+ if(pc==='+'||pc==='-')return pp!==pc;
+ if(pc==='>')return pp==='='||pp==='-';
+ if(pc==='?')return pp===' '||pp===')';
+ if(',*/%=&|:<(.[!^~'.includes(pc))return true;
+ let q=k+1;while(q<m.length&&m.charCodeAt(q)<=32)q++;
+ const nc=m[q],n2=m[q+1];
+ if(nc==='.'&&n2!=='.')return true;
+ if((nc==='&'&&n2==='&')||(nc==='|'&&n2==='|'))return true;
+ if(nc==='?'&&(n2===' '||n2===':'))return true;
+ if(nc===':'&&n2===' ')return true;
+ return false;
+}
+function parseFuncExpr(m,i){
+ const n=m.length;let k=i;const ws=()=>{while(k<n&&/\s/.test(m[k]))k++};
+ ws();if(m.startsWith('async',k)&&!isWordCh(m[k+5])){k+=5;ws()}
+ if(m.startsWith('function',k)&&!isWordCh(m[k+8])){
+  k+=8;while(k<n&&/[\s*]/.test(m[k]))k++;while(k<n&&isWordCh(m[k]))k++;ws();
+  if(m[k]!=='(')return null;const c=matchClose(m,k);if(c<0)return null;
+  let b=c+1;const lim=Math.min(n,c+250);while(b<lim&&m[b]!=='{'&&m[b]!==';')b++;
+  if(m[b]!=='{')return null;const e=matchClose(m,b);if(e<0)return null;
+  return{params:m.slice(k+1,c),bodyStart:b+1,bodyEnd:e,expr:false};
+ }
+ let params;
+ if(m[k]==='('){const c=matchClose(m,k);if(c<0)return null;params=m.slice(k+1,c);k=c+1}
+ else{const s0=k;while(k<n&&isWordCh(m[k]))k++;if(k===s0)return null;params=m.slice(s0,k)}
+ const mm=/^\s*(?::[^=;{}]+?)?\s*=>\s*/.exec(m.slice(k,k+250));if(!mm)return null;
+ k+=mm[0].length;
+ if(m[k]==='{'){const e=matchClose(m,k);if(e<0)return null;return{params,bodyStart:k+1,bodyEnd:e,expr:false}}
+ const e=exprEnd(m,k);return{params,bodyStart:k,bodyEnd:e,expr:true};
+}
+function jsExtras(F,out,classes){
+ const{m}=F;
+ const ranges=out.map(f=>[f.bodyStart,f.bodyEnd]).sort((a,b)=>a[0]-b[0]);
+ const inside=p=>{for(const r of ranges){if(p>=r[0]&&p<r[1])return true;if(r[0]>p)break}return false};
+ const ownerAt=p=>{let b=null;for(const c of classes)if(p>c.open&&p<c.close&&(!b||c.open>b.open))b=c;return b?b.name:null};
+ const re=/(?:\b(?:const|let|var)\s+|(?:^|[\s;{},(]))((?:[A-Za-z_$#][\w$#]*\.)*[A-Za-z_$#][\w$#]*)\s*(?::\s*[^=;(){}\n]+?)?\s*([=:])(?!=)\s*(?=(?:async\s+)?(?:function\b|\(|[A-Za-z_$][\w$]*\s*=>))/g;
+ let t;
+ while((t=re.exec(m))){
+  const nameStart=t.index+t[0].indexOf(t[1]);
+  if(inside(nameStart)||CTRL.has(t[1]))continue;
+  const fe=parseFuncExpr(m,re.lastIndex);if(!fe)continue;
+  const parts=t[1].split('.');let name=parts.pop(),owner=ownerAt(nameStart);
+  if(!owner&&parts.length>1&&parts[parts.length-1]==='prototype')owner=parts[0];
+  out.push({name,owner,params:fe.params,start:nameStart,bodyStart:fe.bodyStart,bodyEnd:fe.bodyEnd,expr:fe.expr});
+  re.lastIndex=Math.max(re.lastIndex,fe.bodyEnd);
+ }
+}
+/* python logical lines */
+function pyLogical(m,s,e){
+ const lines=[];let pos=s;
+ while(pos<e){
+  let nl=m.indexOf('\n',pos);if(nl<0||nl>e)nl=e;
+  let end=nl,depth=0,k=pos;
+  for(;;){
+   for(let q=k;q<end;q++){const c=m[q];if(c==='('||c==='['||c==='{')depth++;else if(c===')'||c===']'||c==='}')depth--}
+   const te=m.slice(k,end).trimEnd();
+   if((depth>0||te.endsWith('\\'))&&end<e){k=end+1;let n2=m.indexOf('\n',k);if(n2<0||n2>e)n2=e;end=n2;continue}
+   break;
+  }
+  const txt=m.slice(pos,end);
+  if(txt.trim()){let ind=0,q=0;while(q<txt.length&&(txt[q]===' '||txt[q]==='\t')){ind+=txt[q]==='\t'?4:1;q++}
+   lines.push({indent:ind,start:pos+q,end:pos+txt.trimEnd().length,text:txt.trim()})}
+  pos=end+1;
+ }
+ return lines;
+}
+function pyColon(t){let d=0;for(let k=0;k<t.length;k++){const c=t[k];if('([{'.includes(c))d++;else if(')]}'.includes(c))d--;else if(d===0&&c===':'&&t[k+1]!=='=')return k}return -1}
+function pyFind(F,out,classes){
+ const{m}=F;const L=pyLogical(m,0,m.length);const stackC=[];
+ for(let a=0;a<L.length;a++){
+  const ln=L[a],tx=ln.text;
+  while(stackC.length&&stackC[stackC.length-1].indent>=ln.indent){const c=stackC.pop();c.close=ln.start;classes.push(c)}
+  const cm=/^class\s+([A-Za-z_]\w*)/.exec(tx);
+  if(cm){stackC.push({type:'class',name:cm[1],indent:ln.indent,open:ln.start});continue}
+  const dm=/^(?:async\s+)?def\s+([A-Za-z_]\w*)\s*\(/.exec(tx);
+  if(dm){
+   const ci=pyColon(tx);if(ci<0)continue;
+   const op=tx.indexOf('(',dm[0].length-1),cl=matchClose(tx,op);
+   let endIdx=a+1;while(endIdx<L.length&&L[endIdx].indent>ln.indent)endIdx++;
+   const inline=tx.slice(ci+1).trim().length>0;
+   out.push({name:dm[1],owner:stackC.length?stackC[stackC.length-1].name:null,params:cl>0?tx.slice(op+1,cl):'',start:ln.start,
+    bodyStart:ln.start+ci+1,bodyEnd:endIdx>a+1?L[endIdx-1].end:ln.end,pyInline:inline});
+   a=endIdx-1;
+  }
+ }
+ while(stackC.length){const c=stackC.pop();c.close=m.length;classes.push(c)}
+}
+function findFunctions(F){
+ const out=[],classes=[];
+ if(F.lang==='py')pyFind(F,out,classes);
+ else{braceScan(F,out,classes);if(F.lang==='js')jsExtras(F,out,classes)}
+ out.sort((a,b)=>a.bodyStart-b.bodyStart);
+ const res=[];let lastK=-1;for(const f of out){if(f.bodyStart===lastK)continue;lastK=f.bodyStart;res.push(f)}
+ return{funcs:res,classes};
+}
+
+/* ================= statement parsers ================= */
+const SKIPW=new Set('import package using namespace use require include from interface enum type declare abstract class struct'.split(' '));
+function makeBraceParser(F,opts){
+ const{m,lang}=F,L=LANGS[lang];const W=/[A-Za-z_]\w*/y;
+ const word=i=>{W.lastIndex=i;const r=W.exec(m);return r?r[0]:''};
+ const skipWs=(i,e)=>{while(i<e&&m.charCodeAt(i)<=32)i++;return i};
+ const mk=(t,s,e,x)=>Object.assign({t,s,e},x);
+ const defs=opts.defs||null;
+ const hasDef=(a,b)=>{if(!defs)return false;let lo=0,hi=defs.length;while(lo<hi){const mid=(lo+hi)>>1;if(defs[mid]<a)lo=mid+1;else hi=mid}return lo<defs.length&&defs[lo]<b};
+ function freeBrace(k,e){let d=0;for(;k<e;k++){const c=m[k];if(c==='('||c==='[')d++;else if(c===')'||c===']')d--;else if(c==='{'&&d<=0)return k}return -1}
+ function contLine(k){return contLineIn(m,k)}
+ function simpleEnd(i,e){
+  let d=0;
+  for(let k=i;k<e;k++){const c=m.charCodeAt(k);
+   if(c===40||c===91||c===123)d++;
+   else if(c===41||c===93||c===125){d--;if(d<0)return k}
+   else if(d===0){if(c===59)return k+1;if(c===10&&!contLine(k))return k}}
+  return e;
+ }
+ function block(i,e){const out=[];while(true){i=skipWs(i,e);if(i>=e)break;if(m[i]===';'){i++;continue}
+  const r=stmt(i,e);if(r[0])out.push(...[].concat(r[0]));i=r[1]>i?r[1]:i+1}return out}
+ function body(i,e){i=skipWs(i,e);
+  if(m[i]==='{'){const j=matchClose(m,i);const end=(j<0||j>e)?e:j;return[block(i+1,end),j<0?e:j+1]}
+  const r=stmt(i,e);return[r[0]?[].concat(r[0]):[],r[1]]}
+ function head(i,kl,e){
+  const k=skipWs(i+kl,e);
+  if(L.cond==='paren'&&m[k]==='('){const c=matchClose(m,k);if(c>0&&c<e)return{cs:k+1,ce:c,next:c+1,he:c+1}}
+  const b=freeBrace(k,e);if(b>=0)return{cs:k,ce:b,next:b,he:b};
+  let nl=m.indexOf('\n',k);if(nl<0||nl>e)nl=e;return{cs:k,ce:nl,next:nl,he:nl};
+ }
+ function simple(i,e){
+  const end=simpleEnd(i,e),w=word(i);
+  if(hasDef(i,end))return[null,end];
+  let t='stmt';if(w==='return')t='return';else if(w==='throw'||w==='raise')t='throw';else if(w==='break')t='break';else if(w==='continue')t='continue';
+  return[mk(t,i,Math.max(end,i+1)),Math.max(end,i+1)];
+ }
+ function ifStmt(i,e){
+  const hd=head(i,2,e);const[tb,ni0]=body(hd.next,e);let ni=ni0;
+  const node=mk('if',i,hd.he,{hs:i,he:hd.he,cs:hd.cs,ce:hd.ce,body:tb,else:null});
+  const j=skipWs(ni,e);
+  if(word(j)==='else'){const k=skipWs(j+4,e);
+   if(word(k)==='if'){const r=ifStmt(k,e);node.else=[r[0]];ni=r[1]}
+   else{const r=body(k,e);node.else=r[0];ni=r[1]}}
+  return[node,ni];
+ }
+ function loopStmt(i,e,kw){
+  const hd=head(i,kw.length,e);const[bd,ni]=body(hd.next,e);
+  return[mk('loop',i,hd.he,{kind:kw==='foreach'?'for each':kw,hs:i,he:hd.he,cs:hd.cs,ce:hd.ce,body:bd}),ni];
+ }
+ function tryRest(i,hdEnd,bd,ni,e){
+  const node=mk('try',i,hdEnd,{hs:i,he:hdEnd,body:bd,catches:[],fin:null});
+  for(;;){const j=skipWs(ni,e),w=word(j);
+   if(w==='catch'){const b=freeBrace(j+5,e);if(b<0)break;const r=body(b,e);node.catches.push({ls:j,le:b+1,cs:j+5,ce:b,body:r[0]});ni=r[1];continue}
+   if(w==='finally'){const b=skipWs(j+7,e);if(m[b]!=='{')break;const r=body(b,e);node.fin={ls:j,le:b+1,body:r[0]};ni=r[1];continue}
+   break}
+  return[node,ni];
+ }
+ function tryStmt(i,e){
+  let k=skipWs(i+3,e);if(m[k]==='('){const c=matchClose(m,k);if(c>0)k=skipWs(c+1,e)}
+  if(m[k]!=='{')return simple(i,e);
+  const r=body(k,e);return tryRest(i,k+1,r[0],r[1],e);
+ }
+ function doStmt(i,e,kw){
+  const k=skipWs(i+kw.length,e);if(m[k]!=='{')return simple(i,e);
+  const r=body(k,e),bd=r[0],ni=r[1];const j=skipWs(ni,e),w=word(j);
+  if(w==='while'){const hd=head(j,5,e);let end=skipWs(hd.next,e);if(m[end]===';')end++;
+   return[mk('dowhile',i,end,{kind:'do-while',hs:j,he:hd.he,cs:hd.cs,ce:hd.ce,body:bd}),end]}
+  if(w==='catch'||w==='finally')return tryRest(i,k+1,bd,ni,e);
+  return[bd,ni];
+ }
+ function caseCases(node,a,b){
+  const labels=[];let d=0;
+  for(let k=a;k<b;k++){const c=m[k];
+   if(c==='('||c==='['||c==='{')d++;else if(c===')'||c===']'||c==='}')d--;
+   else if(d===0&&(c==='c'||c==='d')&&(k===a||!/[\w$]/.test(m[k-1]))){
+    const w=word(k);
+    if(w==='case'||w==='default'){
+     let q=k+w.length,dd=0,found=-1;
+     for(;q<b;q++){const ch=m[q];
+      if(ch==='('||ch==='[')dd++;else if(ch===')'||ch===']')dd--;
+      else if(dd===0){
+       if(ch==='{'||ch===';')break;
+       if(ch===':'){if(m[q+1]===':'){q++;continue}found=q;break}
+       if(ch==='-'&&m[q+1]==='>'){found=q+1;break}}}
+     if(found>=0){labels.push({ls:k,le:found+1,kwEnd:k+w.length,def:w==='default'});k=found}
+    }}}
+  labels.forEach((lb,idx)=>{const be=idx+1<labels.length?labels[idx+1].ls:b;
+   node.cases.push({ls:lb.ls,le:lb.le,cs:lb.kwEnd,ce:lb.le-1,def:lb.def,body:block(lb.le,be)})});
+ }
+ function armCases(node,a,b){
+  const ar=L.arrow;let k=a;
+  for(;;){
+   k=skipWs(k,b);if(k>=b)break;
+   let q=k,d=0,found=-1;
+   for(;q<b;q++){const ch=m[q];
+    if(ch==='('||ch==='['||ch==='{')d++;else if(ch===')'||ch===']'||ch==='}')d--;
+    else if(d===0&&m.startsWith(ar,q)){found=q;break}}
+   if(found<0)break;
+   const bs=skipWs(found+ar.length,b);let bd,next;
+   if(m[bs]==='{'){const c=matchClose(m,bs);bd=block(bs+1,c<0?b:c);next=c<0?b:c+1}
+   else{let r=bs,dd=0;for(;r<b;r++){const ch=m[r];
+     if('([{'.includes(ch))dd++;else if(')]}'.includes(ch))dd--;
+     else if(dd===0&&((ar==='=>'&&ch===',')||(ar==='->'&&ch==='\n'&&!contLine(r))))break}
+    bd=block(bs,r);next=r+1}
+   const pat=m.slice(k,found).trim();
+   node.cases.push({ls:k,le:found+ar.length,cs:k,ce:found,def:pat==='_'||pat==='else',body:bd});
+   k=skipWs(next,b);if(m[k]===',')k++;
+  }
+ }
+ function switchStmt(i,e,kw){
+  const k=skipWs(i+kw.length,e),b=freeBrace(k,e);if(b<0)return simple(i,e);
+  const close=matchClose(m,b),end=close<0||close>e?e:close;
+  const node=mk('switch',i,b+1,{kw,hs:i,he:b+1,cs:k,ce:b,cases:[]});
+  if(L.sw==='arm')armCases(node,b+1,end);else caseCases(node,b+1,end);
+  return[node,close<0?e:close+1];
+ }
+ function scopeStmt(i,e,w){
+  let k=skipWs(i+w.length,e),he=i+w.length;
+  if(m[k]==='('){const c=matchClose(m,k);if(c>0){he=c+1;k=skipWs(c+1,e)}}
+  if(m[k]!=='{')return simple(i,e);
+  const j=matchClose(m,k);const bd=block(k+1,j<0?e:j);
+  return[[mk('stmt',i,he),...bd],j<0?e:j+1];
+ }
+ function stmt(i,e){
+  if(m[i]==='{'){const j=matchClose(m,i);const end=j<0?e:Math.min(j,e);return[block(i+1,end),j<0?e:j+1]}
+  const w=word(i);if(!w)return simple(i,e);
+  if(opts.module&&SKIPW.has(w))return[null,simpleEnd(i,e)];
+  switch(w){
+   case'if':return ifStmt(i,e);
+   case'for':case'foreach':case'while':return loopStmt(i,e,w);
+   case'loop':if(lang==='rust')return loopStmt(i,e,w);break;
+   case'do':case'repeat':return doStmt(i,e,w);
+   case'switch':return switchStmt(i,e,w);
+   case'match':if(lang==='rust')return switchStmt(i,e,w);break;
+   case'when':if(lang==='kotlin')return switchStmt(i,e,w);break;
+   case'select':if(lang==='go')return switchStmt(i,e,w);break;
+   case'try':return tryStmt(i,e);
+   case'synchronized':case'using':case'lock':case'unsafe':case'fixed':case'checked':case'unchecked':return scopeStmt(i,e,w);
+  }
+  return simple(i,e);
+ }
+ return{block};
+}
+function makePyParser(F,opts){
+ const mk=(t,s,e,x)=>Object.assign({t,s,e},x);
+ const kw=t=>{const r=/^[A-Za-z_]\w*/.exec(t);return r?r[0]:''};
+ function term(t,s,e){const w=kw(t);let ty='stmt';if(w==='return')ty='return';else if(w==='raise')ty='throw';else if(w==='break')ty='break';else if(w==='continue')ty='continue';return mk(ty,s,e)}
+ function bodyOf(L,idx,ln,ci){
+  const rest=ln.text.slice(ci+1);
+  if(rest.trim()){const off=ci+1+(rest.length-rest.trimStart().length);return[[term(rest.trim(),ln.start+off,ln.end)],idx+1]}
+  if(idx+1<L.length&&L[idx+1].indent>ln.indent)return suite(L,idx+1,L[idx+1].indent);
+  return[[],idx+1];
+ }
+ function suite(L,idx,ind){const out=[];while(idx<L.length&&L[idx].indent>=ind){const r=pstmt(L,idx);if(r[0])out.push(...[].concat(r[0]));idx=r[1]>idx?r[1]:idx+1}return[out,idx]}
+ function pyIf(L,idx){
+  const ln=L[idx],t=ln.text,w=kw(t),ci=pyColon(t);
+  if(ci<0)return[term(t,ln.start,ln.end),idx+1];
+  const r=bodyOf(L,idx,ln,ci);
+  const node=mk('if',ln.start,ln.start+ci+1,{hs:ln.start,he:ln.start+ci+1,cs:ln.start+w.length,ce:ln.start+ci,body:r[0],else:null});
+  let n2=r[1];
+  if(n2<L.length&&L[n2].indent===ln.indent){
+   const t2=L[n2].text,w2=kw(t2);
+   if(w2==='elif'){const e2=pyIf(L,n2);node.else=[e2[0]];n2=e2[1]}
+   else if(w2==='else'&&/^else\s*:/.test(t2)){const e2=bodyOf(L,n2,L[n2],t2.indexOf(':'));node.else=e2[0];n2=e2[1]}
+  }
+  return[node,n2];
+ }
+ function pstmt(L,idx){
+  const ln=L[idx],t=ln.text;
+  if(t[0]==='@')return[null,idx+1];
+  const aw=/^async\s+/.exec(t),off=aw?aw[0].length:0,w=kw(t.slice(off)),ci=pyColon(t),ks=ln.start+off+w.length;
+  if(opts.module&&(w==='import'||(w==='from'&&/^from\s+\S+\s+import\b/.test(t))))return[null,idx+1];
+  switch(w){
+   case'if':return pyIf(L,idx);
+   case'for':case'while':{if(ci<0)break;
+    const r=bodyOf(L,idx,ln,ci);let n2=r[1],extra=[];
+    if(n2<L.length&&L[n2].indent===ln.indent&&/^else\s*:/.test(L[n2].text)){const e2=bodyOf(L,n2,L[n2],L[n2].text.indexOf(':'));extra=e2[0];n2=e2[1]}
+    return[[mk('loop',ln.start,ln.start+ci+1,{kind:w,hs:ln.start,he:ln.start+ci+1,cs:ks,ce:ln.start+ci,body:r[0]}),...extra],n2]}
+   case'try':{if(ci<0)break;
+    const r=bodyOf(L,idx,ln,ci);let n2=r[1];
+    const node=mk('try',ln.start,ln.start+ci+1,{hs:ln.start,he:ln.start+ci+1,body:r[0],catches:[],fin:null});
+    while(n2<L.length&&L[n2].indent===ln.indent){const l2=L[n2],t2=l2.text,w2=kw(t2),c2=pyColon(t2);
+     if(c2<0)break;
+     if(w2==='except'){const e2=bodyOf(L,n2,l2,c2);node.catches.push({ls:l2.start,le:l2.start+c2+1,cs:l2.start+6,ce:l2.start+c2,body:e2[0]});n2=e2[1]}
+     else if(w2==='else'){const e2=bodyOf(L,n2,l2,c2);node.body=node.body.concat(e2[0]);n2=e2[1]}
+     else if(w2==='finally'){const e2=bodyOf(L,n2,l2,c2);node.fin={ls:l2.start,le:l2.start+c2+1,body:e2[0]};n2=e2[1]}
+     else break}
+    return[node,n2]}
+   case'with':{if(ci<0)break;const r=bodyOf(L,idx,ln,ci);return[[mk('stmt',ln.start,ln.start+ci+1),...r[0]],r[1]]}
+   case'match':{
+    if(ci>=0&&idx+1<L.length&&L[idx+1].indent>ln.indent&&/^case\b/.test(L[idx+1].text)){
+     const ind=L[idx+1].indent;let j=idx+1;
+     const node=mk('switch',ln.start,ln.start+ci+1,{kw:'match',hs:ln.start,he:ln.start+ci+1,cs:ks,ce:ln.start+ci,cases:[]});
+     while(j<L.length&&L[j].indent===ind&&/^case\b/.test(L[j].text)){const l2=L[j],c2=pyColon(l2.text);if(c2<0)break;
+      const e2=bodyOf(L,j,l2,c2);node.cases.push({ls:l2.start,le:l2.start+c2+1,cs:l2.start+4,ce:l2.start+c2,def:/^case\s+_\s*:/.test(l2.text),body:e2[0]});j=e2[1]}
+     return[node,j]}
+    break}
+   case'def':case'class':{
+    let j=idx+1;while(j<L.length&&L[j].indent>ln.indent)j++;
+    if(opts.module)return[null,j];
+    return[mk('stmt',ln.start,ci>=0?ln.start+ci+1:ln.end),j]}
+   case'else':case'elif':case'except':case'finally':{
+    if(ci<0)break;const r=bodyOf(L,idx,ln,ci);return[[mk('stmt',ln.start,ln.start+ci+1),...r[0]],r[1]]}
+  }
+  return[term(t,ln.start,ln.end),idx+1];
+ }
+ return{suite,pyIf};
+}
+function trimRange(m,s,e){while(s<e&&m.charCodeAt(s)<=32)s++;while(e>s&&m.charCodeAt(e-1)<=32)e--;return[s,e]}
+function buildAst(fn){
+ const F=fn.file,m=F.m;
+ if(F.lang==='py'){
+  const L=pyLogical(m,fn.bodyStart,fn.bodyEnd);if(!L.length)return[];
+  const P=makePyParser(F,{module:!!fn.module});
+  return P.suite(L,0,fn.module?0:L[0].indent)[0];
+ }
+ if(fn.expr){const r=trimRange(m,fn.bodyStart,fn.bodyEnd);return r[1]>r[0]?[{t:'return',s:r[0],e:r[1]}]:[]}
+ const defs=fn.module?F.funcs.filter(f=>!f.module).map(f=>f.start).sort((a,b)=>a-b):null;
+ const P=makeBraceParser(F,{module:!!fn.module,defs});
+ return P.block(fn.bodyStart,fn.bodyEnd);
+}
+const getAst=fn=>fn.ast||(fn.ast=buildAst(fn));
+
+/* ================= calls ================= */
+const CALLRE=/(\.\s*|::\s*|->\s*)?([A-Za-z_$#][\w$#]*)\s*(?:<[^<>()\n]*>)?\s*\(/g;
+const NOCALL=new Set('if for while switch catch return typeof new function def fn func fun class when match foreach elif except with and or not in is lambda sizeof await throw do else try synchronized using lock print assert super this self'.split(' '));
+const BUILTIN=new Set('console Math JSON Object Array Promise String Number Date window document os sys re np pd json math fmt System Arrays Collections Objects Integer Double Boolean Thread'.split(' '));
+function extractCalls(m,s,e){
+ const out=[],str=m.slice(s,e);CALLRE.lastIndex=0;let t;
+ while((t=CALLRE.exec(str))){
+  const name=t[2];if(NOCALL.has(name))continue;
+  const pre=str.slice(0,t.index).trimEnd();
+  if(/(?:^|\W)(?:function|def|fn|func|fun|class|new)$/.test(pre)&&!/new$/.test(pre))continue;
+  let obj=null;
+  if(t[1]){const om=/([A-Za-z_$][\w$]*)\s*$/.exec(str.slice(0,t.index));obj=om?om[1]:null;if(obj&&BUILTIN.has(obj))continue}
+  out.push({name,dot:!!t[1],obj,idx:s+t.index});
+ }
+ return out;
+}
+function resolveCall(P,c,from){
+ const list=P.byName.get(c.name);if(!list)return null;
+ let cand=list;
+ if(c.dot){
+  if(c.obj&&(c.obj==='this'||c.obj==='self'||c.obj==='cls'||c.obj==='super'||c.obj==='$this')){
+   const own=cand.filter(f=>f.owner&&f.owner===from.owner&&f.file===from.file);if(own.length)return[own[0].id]}
+  else if(c.obj&&P.classNames.has(c.obj)){const st=cand.filter(f=>f.owner===c.obj);if(st.length)return st.map(f=>f.id)}
+  const mt=cand.filter(f=>f.owner);if(mt.length)cand=mt;
+ }else{
+  const nm=cand.filter(f=>!f.owner),same=cand.filter(f=>f.owner&&f.owner===from.owner&&f.file===from.file);
+  cand=nm.length?nm:(same.length?same:cand);
+ }
+ const sf=cand.filter(f=>f.file===from.file);if(sf.length)cand=sf;
+ if(cand.length>3)return null;
+ return cand.map(f=>f.id);
+}
+function blankRanges(m,ranges){const o=m.split('');for(const[a,b]of ranges)for(let k=a;k<b&&k<o.length;k++)if(o[k]!=='\n')o[k]=' ';return o.join('')}
+
+/* ================= project analysis ================= */
+function analyze(files,name){
+ const P={name,files:[],funcs:[],byName:new Map(),classNames:new Set(),edges:[],out:new Map(),inn:new Map()};
+ files.forEach((f,fi)=>{
+  const lang=f.lang||langOfPath(f.path)||detectLang(f.code);
+  const code=f.code.replace(/\r\n?/g,'\n').replace(/\t/g,'  ');
+  const F={path:f.path,lang,code,idx:fi,m:maskCode(code,lang),ls:null,funcs:[]};
+  F.ls=lineStarts(code);F.lineAt=lineAtFn(F.ls);F.lines=code.split('\n');
+  F.base=f.path.split('/').pop();
+  const{funcs,classes}=findFunctions(F);
+  for(const c of classes)if(c.name)P.classNames.add(c.name);
+  for(const r of funcs){
+   const fn=Object.assign(r,{id:P.funcs.length,file:F,sig:code.slice(r.start,r.pyInline||r.expr?r.bodyStart:r.bodyStart-1).replace(/^(?:@[\w.]+(?:\([^)]*\))?\s*|#\[[^\]]*\]\s*)+/,'').replace(/\s+/g,' ').trim()});
+   fn.sig=fn.sig.replace(/\s*\{$/,'').replace(/:$/,'');
+   fn.qname=fn.owner?fn.owner+'.'+fn.name:fn.name;
+   fn.line=F.lineAt(fn.start);fn.endLine=F.lineAt(Math.max(fn.start,fn.bodyEnd-1));
+   F.funcs.push(fn);P.funcs.push(fn);
+  }
+  if(LANGS[lang].mod){
+   const mod={id:P.funcs.length,name:'‹script›',qname:F.base+' ‹script›',owner:null,file:F,sig:F.base+' ‹script›',params:'',start:0,bodyStart:0,bodyEnd:code.length,module:true,line:1,endLine:F.lines.length};
+   F.funcs.push(mod);
+   let ast=[];try{ast=getAst(mod)}catch(e){}
+   if(ast.length){P.funcs.push(mod)}else F.funcs.pop();
+  }
+  P.files.push(F);
+ });
+ for(const fn of P.funcs){
+  if(fn.module)continue;
+  const add=(k)=>{if(!P.byName.has(k))P.byName.set(k,[]);P.byName.get(k).push(fn)};
+  add(fn.name);
+  if(fn.owner&&/^(constructor|__init__|init|new)$/.test(fn.name))add(fn.owner);
+ }
+ const emap=new Map();
+ for(const fn of P.funcs){
+  const F=fn.file;let m=F.m;
+  if(fn.module)m=blankRanges(m,F.funcs.filter(f=>!f.module).map(f=>[f.start,f.bodyEnd+1]));
+  const body=m.slice(fn.bodyStart,fn.bodyEnd);
+  fn.loc=(fn.endLine-fn.line)+1;
+  let cx=1;const cm=body.match(/\b(?:if|for|while|case|catch|foreach|elif|except|when|and|or)\b|&&|\|\||\?(?![.?:])/g);
+  if(cm)cx+=cm.length;fn.cx=cx;
+  fn.calls=extractCalls(m,fn.bodyStart,fn.bodyEnd);
+  for(const c of fn.calls){
+   const ids=resolveCall(P,c,fn);if(!ids)continue;
+   for(const to of ids){const k=fn.id+'>'+to;let e=emap.get(k);if(!e){e={from:fn.id,to,count:0,lines:[]};emap.set(k,e)}e.count++;e.lines.push(F.lineAt(c.idx))}
+  }
+ }
+ P.edges=[...emap.values()];
+ for(const fn of P.funcs){P.out.set(fn.id,[]);P.inn.set(fn.id,[])}
+ for(const e of P.edges){P.out.get(e.from).push(e);P.inn.get(e.to).push(e);e.cross=P.funcs[e.from].file!==P.funcs[e.to].file}
+ for(const fn of P.funcs){fn.nCallers=P.inn.get(fn.id).filter(e=>e.from!==fn.id).length;fn.nCallees=P.out.get(fn.id).filter(e=>e.to!==fn.id).length;fn.rec=P.out.get(fn.id).some(e=>e.to===fn.id)}
+ P.files.forEach((F,i)=>F.color=`hsl(${Math.round((i*137.5+210)%360)} 58% 52%)`);
+ return P;
+}
+/* ================= control-flow graph ================= */
+function buildFlow(P,fn){
+ const F=fn.file,ast=getAst(fn),nodes=[],edges=[];
+ const ctx=[],rets=[],tries=[];
+ const clip=(s,e)=>{const m=F.m;while(s<e&&m.charCodeAt(s)<=32)s++;while(e>s&&m.charCodeAt(e-1)<=32)e--;return[s,e]};
+ function add(type,ranges,x){
+  const n=Object.assign({id:nodes.length,type,ranges:ranges||[]},x);
+  const set=new Set();
+  for(const[s,e]of n.ranges){const a=F.lineAt(s),b=F.lineAt(Math.max(s,e-1));for(let l=a;l<=b;l++)set.add(l)}
+  n.lineNums=[...set].sort((a,b)=>a-b);
+  if(n.lineNums.length)n.l1=n.lineNums[0],n.l2=n.lineNums[n.lineNums.length-1];
+  nodes.push(n);return n;
+ }
+ const link=(preds,to,lbl,kind)=>{for(const p of preds)edges.push({from:p.from,to:to.id,label:p.label||lbl||'',kind:p.kind||kind||''})};
+ const txt=(s,e)=>F.code.slice(s,e).replace(/\s+/g,' ').trim();
+ function seq(list,preds){
+  let i=0;
+  while(i<list.length){
+   if(!preds.length)break;
+   const s=list[i];
+   if(s.t==='stmt'){
+    const g=[s];while(i+1<list.length&&list[i+1].t==='stmt'&&g.length<40)g.push(list[++i]);
+    const n=add('stmt',g.map(x=>[x.s,x.e]));link(preds,n);preds=[{from:n.id}];i++;continue;
+   }
+   preds=emit(s,preds);i++;
+  }
+  return preds;
+ }
+ function nearest(types){for(let k=ctx.length-1;k>=0;k--)if(types.includes(ctx[k].type))return ctx[k];return null}
+ function emit(s,preds){
+  switch(s.t){
+   case'if':{
+    const d=add('if',[[s.hs,s.he]],{head:txt(s.cs,s.ce)});link(preds,d);
+    const tx=seq(s.body,[{from:d.id,label:'true'}]);
+    const fx=s.else?seq(s.else,[{from:d.id,label:'false'}]):[{from:d.id,label:'false'}];
+    return tx.concat(fx);
+   }
+   case'loop':{
+    const h=add('loop',[[s.hs,s.he]],{kind:s.kind,head:txt(s.cs,s.ce)});link(preds,h);
+    const L={type:'loop',breaks:[],conts:[]};ctx.push(L);
+    const bx=seq(s.body,[{from:h.id,label:'loop'}]);ctx.pop();
+    for(const p of bx.concat(L.conts))if(p.from!==h.id)edges.push({from:p.from,to:h.id,label:p.label||'',kind:'back'});
+    return[{from:h.id,label:'done'}].concat(L.breaks);
+   }
+   case'dowhile':{
+    const first=nodes.length,L={type:'loop',breaks:[],conts:[]};ctx.push(L);
+    const bx=seq(s.body,preds);ctx.pop();
+    const c=add('loop',[[s.hs,s.he]],{kind:'do-while',head:txt(s.cs,s.ce)});
+    link(bx.concat(L.conts),c);
+    edges.push({from:c.id,to:first<c.id?first:c.id,label:'true',kind:'back'});
+    return[{from:c.id,label:'false'}].concat(L.breaks);
+   }
+   case'switch':{
+    const sw=add('switch',[[s.hs,s.he]],{head:txt(s.cs,s.ce),kind:s.kw});link(preds,sw);
+    const L={type:'switch',breaks:[]};ctx.push(L);
+    const fall=!!LANGS[F.lang].fall;let carry=[],join=[],hasDef=false;
+    for(const c of s.cases){
+     if(c.def)hasDef=true;
+     const cn=add('case',[[c.ls,c.le]],{def:c.def,head:txt(c.cs,c.ce)});
+     edges.push({from:sw.id,to:cn.id,label:'',kind:'case'});
+     if(carry.length){if(fall)link(carry.map(p=>({from:p.from,label:'fallthrough',kind:'fall'})),cn);else join=join.concat(carry)}
+     carry=seq(c.body,[{from:cn.id}]);
+    }
+    ctx.pop();
+    const exits=join.concat(carry,L.breaks);
+    if(!hasDef)exits.push({from:sw.id,label:'no match'});
+    return exits;
+   }
+   case'try':{
+    const tn=add('try',[[s.hs,s.he]]);link(preds,tn);
+    const T={throws:[]};tries.push(T);
+    const bx=seq(s.body,[{from:tn.id}]);tries.pop();
+    let all=bx.slice(),first=null;
+    for(const c of s.catches){
+     const cn=add('catch',[[c.ls,c.le]],{head:txt(c.cs,c.ce)});if(!first)first=cn;
+     edges.push({from:tn.id,to:cn.id,label:'exception',kind:'exc'});
+     all=all.concat(seq(c.body,[{from:cn.id}]));
+    }
+    for(const p of T.throws){if(first)edges.push({from:p.from,to:first.id,label:'throw',kind:'exc'});else if(!s.fin)rets.push(p);else T.fin=1}
+    if(s.fin){
+     const fnn=add('finally',[[s.fin.ls,s.fin.le]]);link(all.concat(T.fin?T.throws:[]),fnn);
+     return seq(s.fin.body,[{from:fnn.id}]);
+    }
+    return all;
+   }
+   case'return':{const n=add('return',[[s.s,s.e]]);link(preds,n);rets.push({from:n.id});return[]}
+   case'throw':{const n=add('throw',[[s.s,s.e]]);link(preds,n);
+    if(tries.length)tries[tries.length-1].throws.push({from:n.id});else rets.push({from:n.id});return[]}
+   case'break':{const n=add('break',[[s.s,s.e]]);link(preds,n);const c=nearest(['loop','switch']);if(c)c.breaks.push({from:n.id});else rets.push({from:n.id});return[]}
+   case'continue':{const n=add('continue',[[s.s,s.e]]);link(preds,n);const c=nearest(['loop']);if(c)c.conts.push({from:n.id});else rets.push({from:n.id});return[]}
+  }
+  return preds;
+ }
+ const st=add('start',[],{});
+ const ex=seq(ast,[{from:st.id}]);
+ const en=add('end',[]);link(ex,en);link(rets,en);
+ // call chips
+ for(const n of nodes){
+  if(!n.ranges.length)continue;
+  const ids=new Map(),ext=new Set();
+  for(const[s,e]of n.ranges)for(const c of extractCalls(F.m,s,e)){
+   const r=resolveCall(P,c,fn);
+   if(r)for(const id of r)ids.set(id,(ids.get(id)||0)+1);else ext.add(c.name)}
+  n.calls=[...ids.keys()];n.ext=[...ext];
+ }
+ return{nodes,edges};
+}
+
+/* ================= flowchart layout ================= */
+const FL={CW:7.3,LH:17,PADX:10,GUT:36,PADY:8,CHIP_H:21,GAPX:38,GAPY:56,MAXC:60,MINW:130,MAXW:470};
+function sizeFlow(P,fn,nodes){
+ const F=fn.file;
+ for(const n of nodes){
+  if(n.type==='start'){const s=fn.sig.length>72?fn.sig.slice(0,71)+'…':fn.sig;n.text=s;n.w=clamp(s.length*FL.CW+46,130,FL.MAXW);n.h=34;continue}
+  if(n.type==='end'){n.w=84;n.h=30;continue}
+  const all=n.lineNums,shown=all.length>12?all.slice(0,10):all;n.shown=shown;n.more=all.length-shown.length;
+  const raws=shown.map(l=>F.lines[l-1]||'');
+  let ind=Infinity;for(const r of raws)if(r.trim())ind=Math.min(ind,r.length-r.trimStart().length);if(!isFinite(ind))ind=0;
+  n.ind=ind;n.toks=[];let mx=6;
+  const hex=n.type==='if'||n.type==='loop'||n.type==='switch';
+  const lim=FL.MAXC-(hex?3:0);
+  shown.forEach(l=>{const r=cutTokens(hlFile(F)[l-1]||[],ind,lim);n.toks.push(r);mx=Math.max(mx,r.reduce((a,t)=>a+t.v.length,0))});
+  let w=FL.GUT+mx*FL.CW+FL.PADX*2+(hex?20:0);
+  n.chips=[];
+  for(const id of n.calls||[]){const nm=P.funcs[id].qname;n.chips.push({id,name:nm.length>26?nm.slice(0,25)+'…':nm})}
+  for(const c of n.chips)c.w=c.name.length*6.6+22;
+  const cmax=n.chips.reduce((a,c)=>Math.max(a,c.w),0);
+  n.w=clamp(Math.max(w,cmax+FL.GUT+8),FL.MINW,FL.MAXW);
+  const avail=n.w-FL.GUT-8;let rx=0,row=0;
+  for(const c of n.chips){if(rx+c.w>avail&&rx>0){row++;rx=0}c.row=row;c.x=rx;rx+=c.w+6}
+  n.chipRows=n.chips.length?row+1:0;
+  n.h=Math.max(32,FL.PADY*2+shown.length*FL.LH+(n.more?FL.LH:0)+(n.chipRows?n.chipRows*(FL.CHIP_H+4)+2:0));
+ }
+}
+function layoutFlow(nodes,edges){
+ const verts=nodes.map(n=>({w:n.w,h:n.h,real:true,ins:[],outs:[],n}));
+ const fwd=[],back=[];
+ for(const e of edges){if(e.to>e.from)fwd.push(e);else if(e.to<e.from)back.push(e)}
+ const layer=new Array(nodes.length).fill(0),inF=nodes.map(()=>[]);
+ for(const e of fwd)inF[e.to].push(e.from);
+ for(let i=0;i<nodes.length;i++)for(const p of inF[i])layer[i]=Math.max(layer[i],layer[p]+1);
+ verts.forEach((v,i)=>v.layer=layer[i]);
+ const chains=[];
+ for(const e of fwd){
+  const chain=[e.from];
+  for(let l=layer[e.from]+1;l<layer[e.to];l++){verts.push({w:10,h:10,dummy:true,layer:l,ins:[],outs:[]});chain.push(verts.length-1)}
+  chain.push(e.to);chains.push({e,chain});
+  for(let k=0;k<chain.length-1;k++){verts[chain[k]].outs.push(chain[k+1]);verts[chain[k+1]].ins.push(chain[k])}
+ }
+ const L=[];verts.forEach((v,i)=>{(L[v.layer]=L[v.layer]||[]).push(i)});
+ const ord=new Array(verts.length),setOrd=()=>L.forEach(a=>a.forEach((vi,k)=>ord[vi]=k));setOrd();
+ const sortBy=(l,key)=>{const arr=L[l].map(vi=>{const ps=verts[vi][key];return[ps.length?ps.reduce((s,p)=>s+ord[p],0)/ps.length:ord[vi],ord[vi],vi]});arr.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);L[l]=arr.map(x=>x[2]);L[l].forEach((vi,k)=>ord[vi]=k)};
+ for(let it=0;it<6;it++){for(let l=1;l<L.length;l++)sortBy(l,'ins');for(let l=L.length-2;l>=0;l--)sortBy(l,'outs')}
+ const gap=(a,b)=>(a.dummy||b.dummy)?18:FL.GAPX;
+ for(const arr of L){let x=0;for(const vi of arr){const v=verts[vi];v.x=x+v.w/2;x+=v.w+FL.GAPX}const tot=x-FL.GAPX;for(const vi of arr)verts[vi].x-=tot/2}
+ const place=(arr,des)=>{const n=arr.length;if(!n)return;const f=[],b=[];
+  for(let k=0;k<n;k++){const v=verts[arr[k]];f[k]=des[k];if(k){const p=verts[arr[k-1]];f[k]=Math.max(f[k],f[k-1]+(p.w+v.w)/2+gap(p,v))}}
+  for(let k=n-1;k>=0;k--){const v=verts[arr[k]];b[k]=des[k];if(k<n-1){const q=verts[arr[k+1]];b[k]=Math.min(b[k],b[k+1]-((q.w+v.w)/2+gap(v,q)))}}
+  for(let k=0;k<n;k++)verts[arr[k]].x=(f[k]+b[k])/2};
+ const relax=l=>{const des=L[l].map(vi=>{const v=verts[vi],nb=v.ins.concat(v.outs);return nb.length?nb.reduce((s,p)=>s+verts[p].x,0)/nb.length:v.x});place(L[l],des)};
+ for(let it=0;it<12;it++){for(let l=0;l<L.length;l++)relax(l);for(let l=L.length-1;l>=0;l--)relax(l)}
+ const rowH=L.map(a=>Math.max(...a.map(vi=>verts[vi].h)));
+ const ytop=[];let y=40;for(let l=0;l<L.length;l++){ytop[l]=y;y+=rowH[l]+FL.GAPY}
+ let minX=Infinity,maxX=-Infinity;
+ verts.forEach(v=>{v.y=v.dummy?ytop[v.layer]+rowH[v.layer]/2-5:ytop[v.layer];if(v.real){minX=Math.min(minX,v.x-v.w/2);maxX=Math.max(maxX,v.x+v.w/2)}});
+ const sx=60-minX;verts.forEach(v=>v.x+=sx);maxX+=sx;
+ verts.forEach((v,i)=>{if(v.real){v.n.x=v.x;v.n.y=v.y}});
+ // anchors
+ const outsBy=new Map(),insBy=new Map();
+ for(const c of chains){const a=c.chain[0],b=c.chain[c.chain.length-1];(outsBy.get(a)||outsBy.set(a,[]).get(a)).push(c);(insBy.get(b)||insBy.set(b,[]).get(b)).push(c)}
+ const fan=(k,i,w)=>k<2?0:(i-(k-1)/2)*Math.min(30,(w*0.6)/(k-1));
+ for(const[a,list]of outsBy){list.sort((p,q)=>verts[p.chain[1]].x-verts[q.chain[1]].x);list.forEach((c,i)=>c.ox=fan(list.length,i,verts[a].w))}
+ for(const[b,list]of insBy){list.sort((p,q)=>verts[p.chain[p.chain.length-2]].x-verts[q.chain[q.chain.length-2]].x);list.forEach((c,i)=>c.ix=fan(list.length,i,verts[b].w))}
+ const paths=[];
+ for(const c of chains){
+  const a=verts[c.chain[0]],b=verts[c.chain[c.chain.length-1]];
+  const pts=[{x:a.x+(c.ox||0),y:a.y+a.h}];
+  for(let k=1;k<c.chain.length-1;k++){const d=verts[c.chain[k]];pts.push({x:d.x,y:d.y+5})}
+  pts.push({x:b.x+(c.ix||0),y:b.y});
+  paths.push({e:c.e,pts});
+ }
+ // back edges
+ const bc=new Map();
+ for(const e of back){
+  const s=verts[e.from],t=verts[e.to];let rx=-Infinity;
+  for(const v of verts)if(v.layer>=t.layer&&v.layer<=s.layer)rx=Math.max(rx,v.x+v.w/2);
+  const k=bc.get(e.to)||0;bc.set(e.to,k+1);rx+=26+k*14;maxX=Math.max(maxX,rx);
+  const sy=s.y+s.h/2,ty=t.y+t.h/2;
+  paths.push({e,back:true,pts:[{x:s.x+s.w/2,y:sy},{x:rx,y:sy},{x:rx,y:ty},{x:t.x+t.w/2,y:ty}]});
+ }
+ return{paths,w:maxX+80,h:y};
+}
+function pathD(pts){let d=`M${pts[0].x},${pts[0].y}`;for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i],my=(a.y+b.y)/2;d+=` C${a.x},${my} ${b.x},${my} ${b.x},${b.y}`}return d}
+function roundedD(pts,r){
+ let d=`M${pts[0].x},${pts[0].y}`;
+ for(let i=1;i<pts.length-1;i++){
+  const a=pts[i-1],b=pts[i],c=pts[i+1];
+  const l1=Math.hypot(b.x-a.x,b.y-a.y),l2=Math.hypot(c.x-b.x,c.y-b.y),k=Math.min(r,l1/2,l2/2);
+  const p1={x:b.x+(a.x-b.x)/l1*k,y:b.y+(a.y-b.y)/l1*k},p2={x:b.x+(c.x-b.x)/l2*k,y:b.y+(c.y-b.y)/l2*k};
+  d+=` L${p1.x},${p1.y} Q${b.x},${b.y} ${p2.x},${p2.y}`;
+ }
+ const z=pts[pts.length-1];return d+` L${z.x},${z.y}`;
+}
+
+/* ================= call-graph layouts ================= */
+const OV={H:34,GAPY:16,GAPX:110};
+function sizeOv(fns){for(const f of fns){const nm=f.qname.length>30?f.qname.slice(0,29)+'…':f.qname;f.disp=nm;f.w=clamp(nm.length*7.6+38,90,260);f.h=OV.H}}
+function layoutLayered(fns,edges){
+ const ids=new Set(fns.map(f=>f.id)),adj=new Map(),radj=new Map();
+ fns.forEach(f=>{adj.set(f.id,[]);radj.set(f.id,[])});
+ for(const e of edges)if(e.from!==e.to&&ids.has(e.from)&&ids.has(e.to))adj.get(e.from).push(e.to);
+ const state=new Map(),back=new Set();
+ const roots=fns.filter(f=>!edges.some(e=>e.to===f.id&&e.from!==f.id&&ids.has(e.from))).map(f=>f.id);
+ const dfs=u=>{const stack=[[u,0]];state.set(u,1);
+  while(stack.length){const top=stack[stack.length-1],[v,i]=top;const a=adj.get(v);
+   if(i<a.length){top[1]++;const w=a[i];const s=state.get(w);if(s===1)back.add(v+'>'+w);else if(!s){state.set(w,1);stack.push([w,0])}}
+   else{state.set(v,2);stack.pop()}}};
+ for(const r of roots)if(!state.get(r))dfs(r);
+ for(const f of fns)if(!state.get(f.id))dfs(f.id);
+ const dag=new Map();fns.forEach(f=>dag.set(f.id,[]));
+ for(const e of edges)if(e.from!==e.to&&ids.has(e.from)&&ids.has(e.to)&&!back.has(e.from+'>'+e.to)){dag.get(e.from).push(e.to);radj.get(e.to).push(e.from)}
+ const layer=new Map();
+ const lay=u=>{if(layer.has(u))return layer.get(u);layer.set(u,0);let l=0;for(const p of radj.get(u))l=Math.max(l,lay(p)+1);layer.set(u,l);return l};
+ fns.forEach(f=>lay(f.id));
+ const cols=[];fns.forEach(f=>{const l=layer.get(f.id);(cols[l]=cols[l]||[]).push(f.id)});
+ const ord=new Map(),setOrd=()=>cols.forEach(c=>c.forEach((id,k)=>ord.set(id,k)));setOrd();
+ const sortCol=(c,nbr)=>{const arr=cols[c].map(id=>{const ns=nbr.get(id);return[ns.length?ns.reduce((s,p)=>s+ord.get(p),0)/ns.length:ord.get(id),ord.get(id),id]});arr.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);cols[c]=arr.map(x=>x[2]);cols[c].forEach((id,k)=>ord.set(id,k))};
+ for(let it=0;it<5;it++){for(let c=1;c<cols.length;c++)sortCol(c,radj);for(let c=cols.length-2;c>=0;c--)sortCol(c,dag)}
+ const byId=new Map(fns.map(f=>[f.id,f]));const pos=new Map();let x=30,H=0;
+ const colH=cols.map(c=>c.reduce((s,id)=>s+byId.get(id).h+OV.GAPY,-OV.GAPY));const maxH=Math.max(...colH,0);
+ cols.forEach((c,ci)=>{const cw=Math.max(...c.map(id=>byId.get(id).w));let y=30+(maxH-colH[ci])/2;
+  c.forEach(id=>{const f=byId.get(id);pos.set(id,{x:x+(cw-f.w)/2,y,w:f.w,h:f.h});y+=f.h+OV.GAPY});x+=cw+OV.GAPX});
+ return{pos,w:x,h:maxH+60,mode:'lr'};
+}
+function layoutForce(fns,edges,groupFiles){
+ const n=fns.length,idx=new Map(fns.map((f,i)=>[f.id,i]));
+ const R=Math.sqrt(n)*95+60;
+ const p=fns.map((f,i)=>{const a=i*2.399963;const r=R*Math.sqrt((i+.5)/n);return{x:Math.cos(a)*r,y:Math.sin(a)*r,vx:0,vy:0,f}});
+ const es=edges.filter(e=>e.from!==e.to&&idx.has(e.from)&&idx.has(e.to)).map(e=>[idx.get(e.from),idx.get(e.to)]);
+ const iters=n>300?120:260;
+ for(let it=0;it<iters;it++){
+  const cool=1-it/iters;
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){
+   let dx=p[i].x-p[j].x,dy=p[i].y-p[j].y;let d2=dx*dx+dy*dy+.01;
+   if(d2>400*400)continue;const d=Math.sqrt(d2),f=(p[i].f.w+p[j].f.w)*55/d2;
+   dx/=d;dy/=d;p[i].vx+=dx*f;p[i].vy+=dy*f;p[j].vx-=dx*f;p[j].vy-=dy*f;
+  }
+  for(const[a,b]of es){const dx=p[b].x-p[a].x,dy=p[b].y-p[a].y,d=Math.hypot(dx,dy)||1,f=(d-150)*.02;
+   p[a].vx+=dx/d*f;p[a].vy+=dy/d*f;p[b].vx-=dx/d*f;p[b].vy-=dy/d*f}
+  if(groupFiles){const cen=new Map();for(const q of p){const k=q.f.file.idx;const c=cen.get(k)||{x:0,y:0,n:0};c.x+=q.x;c.y+=q.y;c.n++;cen.set(k,c)}
+   for(const q of p){const c=cen.get(q.f.file.idx);q.vx+=(c.x/c.n-q.x)*.012;q.vy+=(c.y/c.n-q.y)*.012}}
+  for(const q of p){q.vx-=q.x*.004;q.vy-=q.y*.004;q.x+=clamp(q.vx,-40,40)*cool*.9+0;q.y+=clamp(q.vy,-40,40)*cool*.9;q.vx*=.6;q.vy*=.6}
+ }
+ const pos=new Map();let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+ for(const q of p){minX=Math.min(minX,q.x-q.f.w/2);minY=Math.min(minY,q.y-q.f.h/2);maxX=Math.max(maxX,q.x+q.f.w/2);maxY=Math.max(maxY,q.y+q.f.h/2)}
+ for(const q of p)pos.set(q.f.id,{x:q.x-q.f.w/2-minX+30,y:q.y-q.f.h/2-minY+30,w:q.f.w,h:q.f.h});
+ return{pos,w:maxX-minX+60,h:maxY-minY+60,mode:'free'};
+}
+
+/* ================= tree (markmap-like) ================= */
+function layoutTree(root){
+ const colW=[];
+ (function m(n,d){n.d=d;n.w=n.label.length*7.3+16;colW[d]=Math.max(colW[d]||0,n.w);if(!n.collapsed)for(const c of n.children||[])m(c,d+1)})(root,0);
+ const x0=[];let acc=30;colW.forEach((w,d)=>{x0[d]=acc;acc+=w+80});
+ let y=30;
+ (function p(n){n.x=x0[n.d];if(n.collapsed||!n.children||!n.children.length){n.y=y;y+=28;return}
+  for(const c of n.children)p(c);n.y=(n.children[0].y+n.children[n.children.length-1].y)/2})(root);
+ return{w:acc,h:y+20};
+}
+
+/* ================= viewport (pan / zoom) ================= */
+function Viewport(svg,g,box){
+ const st={x:0,y:0,k:1};let moved=0;const ptrs=new Map();let pinch=0;
+ const apply=()=>{g.setAttribute('transform',`translate(${st.x},${st.y}) scale(${st.k})`);box.style.backgroundPosition=`${st.x}px ${st.y}px`;box.style.backgroundSize=`${24*st.k}px ${24*st.k}px`};
+ function zoomAt(px,py,f){const k=clamp(st.k*f,.04,4),r=k/st.k;st.x=px-(px-st.x)*r;st.y=py-(py-st.y)*r;st.k=k;apply()}
+ svg.addEventListener('wheel',e=>{e.preventDefault();const r=svg.getBoundingClientRect();zoomAt(e.clientX-r.left,e.clientY-r.top,Math.exp(-e.deltaY*(e.ctrlKey?.01:.0016)))},{passive:false});
+ svg.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;if(ptrs.size===2){const[a,b]=[...ptrs.values()];pinch=Math.hypot(a.x-b.x,a.y-b.y)}});
+ window.addEventListener('pointermove',e=>{
+  const p=ptrs.get(e.pointerId);if(!p)return;
+  if(ptrs.size===1){const dx=e.clientX-p.x,dy=e.clientY-p.y;moved+=Math.abs(dx)+Math.abs(dy);if(moved>4){st.x+=dx;st.y+=dy;apply()}}
+  else if(ptrs.size===2){const o=[...ptrs.entries()];p.x=e.clientX;p.y=e.clientY;const[a,b]=[...ptrs.values()],d=Math.hypot(a.x-b.x,a.y-b.y);const r=svg.getBoundingClientRect();if(pinch)zoomAt((a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top,d/pinch);pinch=d;moved=99;return}
+  p.x=e.clientX;p.y=e.clientY});
+ const up=e=>{ptrs.delete(e.pointerId);pinch=0};
+ window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);
+ return{st,apply,zoomAt,
+  wasDrag:()=>moved>4,
+  zoomBy(f){const r=svg.getBoundingClientRect();zoomAt(r.width/2,r.height/2,f)},
+  fit(b,pad=40,maxK=1.2){const r=svg.getBoundingClientRect(),W=r.width||800,Hh=r.height||600;const k=clamp(Math.min((W-pad*2)/b.w,(Hh-pad*2)/b.h,maxK),.04,4);st.k=k;st.x=(W-b.w*k)/2-(b.x||0)*k;st.y=Math.max(pad/2,(Hh-b.h*k)/2)-(b.y||0)*k;apply()},
+  centerOn(x,y,k){const r=svg.getBoundingClientRect();if(k)st.k=k;st.x=r.width/2-x*st.k;st.y=r.height/2-y*st.k;apply()}};
+}
+/* ================= state & DOM ================= */
+const state={P:null,view:'graph',layout:'layered',treeMode:'call',iso:null,fileF:null,q:'',trail:[],fnId:null,fnView:'flow',sideTab:'info',showLeg:false,showRel:false,sel:null,
+ trace:{on:false,cur:null,path:[],vis:new Set()},learned:new Set(store.get('cm.learned',[])),theme:store.get('cm.theme',(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light')};
+const ovSvg=$('#ovSvg'),ovG=$('#ovG'),fnSvg=$('#fnSvg'),fnG=$('#fnG');
+const ovVp=Viewport(ovSvg,ovG,$('#ovCanvas')),fnVp=Viewport(fnSvg,fnG,$('#fnCanvas'));
+let ovBounds={w:100,h:100},fnBounds={w:100,h:100};
+const lkey=f=>f.file.path+'::'+f.qname;
+const CXCOL=c=>c<=4?'#2F9E62':c<=9?'#C9731A':'#CF4255';
+const TYCOL={stmt:'--c-stmt',if:'--c-if',loop:'--c-loop',switch:'--c-switch',case:'--c-switch',try:'--c-try',catch:'--c-try',finally:'--c-try',return:'--c-ret',throw:'--c-ret',break:'--c-loop',continue:'--c-loop',start:'--accent',end:'--ink2'};
+const short=(s,n)=>s.length>n?s.slice(0,n-1)+'…':s;
+const clean=(F,s,e)=>F.code.slice(s,e).replace(/\s+/g,' ').trim();
+
+/* ---------- tooltip ---------- */
+const tip=$('#tip');
+function showTip(text,e){tip.textContent=text;tip.style.display='block';const w=tip.offsetWidth,h=tip.offsetHeight;let x=e.clientX+14,y=e.clientY+14;if(x+w>innerWidth-8)x=e.clientX-w-14;if(y+h>innerHeight-8)y=e.clientY-h-14;tip.style.left=Math.max(4,x)+'px';tip.style.top=Math.max(4,y)+'px'}
+const hideTip=()=>{tip.style.display='none'};
+
+/* ---------- i18n / theme ---------- */
+function setTheme(th){state.theme=th;document.documentElement.dataset.theme=th;store.set('cm.theme',th);$('#btnTheme').innerHTML=ico(th==='dark'?'sun':'moon')}
+function applyI18n(){
+ document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';
+ $$('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));$$('[data-tph]').forEach(e=>e.placeholder=t(e.dataset.tph));$$('[data-ti]').forEach(e=>e.title=t(e.dataset.ti));
+ $$('[data-i]').forEach(e=>{if(e.id!=='btnTheme')e.innerHTML=ico(e.dataset.i)});
+ $('#btnLang').textContent=LANG==='ar'?'EN':'عربي';
+ const sel=$('#lang'),cur=sel.value;sel.innerHTML='';sel.append(H('option',{value:'auto',text:t('auto')}));for(const k in LANGS)sel.append(H('option',{value:k,text:LANGS[k].name}));sel.value=cur||'auto';
+ $('#isoOff').textContent=t('isoOff')+' ×';
+}
+function setStats(){
+ const P=state.P,el=$('#stats');el.innerHTML='';if(!P)return;
+ for(const[n,k]of[[P.files.length,'s_files'],[P.funcs.length,'s_fns'],[P.edges.length,'s_calls']])el.append(H('span',{text:`${n} ${t(k)}`}));
+}
+function updateProgress(){
+ const P=state.P;if(!P){$('#progTxt').textContent='';return}
+ const n=P.funcs.filter(f=>state.learned.has(lkey(f))).length;
+ $('#progTxt').textContent=`${t('prog')} ${n}/${P.funcs.length}`;$('#progBar').style.width=(P.funcs.length?100*n/P.funcs.length:0)+'%';
+}
+
+/* ================= overview ================= */
+function neighborhood(id,depth){const P=state.P,s=new Set([id]);let fr=[id];for(let d=0;d<depth;d++){const nx=[];for(const u of fr){for(const e of P.out.get(u))if(!s.has(e.to)){s.add(e.to);nx.push(e.to)}for(const e of P.inn.get(u))if(!s.has(e.from)){s.add(e.from);nx.push(e.from)}}fr=nx}return s}
+function visibleFns(){
+ const P=state.P;let fns=P.funcs;
+ if(state.fileF!=null)fns=fns.filter(f=>f.file.idx===state.fileF);
+ if(state.iso!=null){const s=neighborhood(state.iso,2);fns=fns.filter(f=>s.has(f.id))}
+ return fns;
+}
+function renderOverview(fit=true){
+ const P=state.P;ovG.innerHTML='';
+ const em=$('#empty');
+ if(!P||!P.funcs.length){em.textContent=P?t('nofn'):t('empty');em.hidden=false;return}
+ em.hidden=true;
+ $('#segLayout').hidden=state.view!=='graph';$('#segTree').hidden=state.view!=='tree';
+ $('#isoOff').hidden=state.iso==null&&state.fileF==null;
+ if(state.view==='graph')drawGraph(fit);else{drawTreeInto(ovG,state.treeMode==='call'?buildCallTree():buildFileTree(),ovVp,b=>ovBounds=b,fit,id=>openFn(id))}
+ renderLegend();renderRel();
+}
+function edgePt(r,tx,ty){const cx=r.x+r.w/2,cy=r.y+r.h/2,dx=tx-cx,dy=ty-cy;if(!dx&&!dy)return{x:cx,y:cy};const k=Math.min(r.w/2/(Math.abs(dx)||1e-9),r.h/2/(Math.abs(dy)||1e-9));return{x:cx+dx*k,y:cy+dy*k}}
+function edgeGeom(a,b,mode,self){
+ if(self){const x=a.x+a.w-30,y=a.y;return{d:`M${x},${y} C${x},${y-32} ${x+26},${y-32} ${x+26},${y}`,lx:x+13,ly:y-26,cyc:false}}
+ if(mode==='lr'){
+  if(b.x>a.x+a.w-5){const x1=a.x+a.w,y1=a.y+a.h/2,x2=b.x,y2=b.y+b.h/2,dx=Math.max(40,(x2-x1)/2);return{d:`M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`,lx:(x1+x2)/2,ly:(y1+y2)/2-5,cyc:false}}
+  const x1=a.x,y1=a.y+a.h/2,x2=b.x+b.w,y2=b.y+b.h/2;return{d:`M${x1},${y1} C${x1-70},${y1+55} ${x2+70},${y2+55} ${x2},${y2}`,lx:(x1+x2)/2,ly:Math.max(y1,y2)+34,cyc:true}
+ }
+ const ac={x:a.x+a.w/2,y:a.y+a.h/2},bc={x:b.x+b.w/2,y:b.y+b.h/2};
+ const p1=edgePt(a,bc.x,bc.y),p2=edgePt(b,ac.x,ac.y),mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2,nx=-(p2.y-p1.y)*.12,ny=(p2.x-p1.x)*.12;
+ return{d:`M${p1.x},${p1.y} Q${mx+nx},${my+ny} ${p2.x},${p2.y}`,lx:mx+nx/2,ly:my+ny/2-4,cyc:false};
+}
+function drawGraph(fit){
+ const P=state.P,fns=visibleFns();sizeOv(fns);
+ const ids=new Set(fns.map(f=>f.id)),edges=P.edges.filter(e=>ids.has(e.from)&&ids.has(e.to));
+ const lay=state.layout==='layered'?layoutLayered(fns,edges):layoutForce(fns,edges,P.files.length>1);
+ ovBounds={w:lay.w,h:lay.h};
+ const gE=S('g'),gN=S('g');ovG.append(gE,gN);
+ const nodeEl=new Map(),edgeEls=[];
+ const drag=state.layout==='force';
+ for(const e of edges){
+  const a=lay.pos.get(e.from),b=lay.pos.get(e.to);
+  const fa=P.funcs[e.from],fb=P.funcs[e.to];
+  const geo=edgeGeom(a,b,lay.mode,e.from===e.to);
+  const cls='ov-edge'+(e.cross?' x':'')+(geo.cyc?' cyc':'');
+  const path=S('path',{class:cls,d:geo.d,'stroke-width':(1.2+Math.min(2.6,Math.log2(e.count+1)*.9)).toFixed(2)});
+  const hit=S('path',{d:geo.d,fill:'none',stroke:'transparent','stroke-width':12,'pointer-events':'stroke'});
+  const lbl=e.count>1?S('text',{class:'ov-lbl','text-anchor':'middle',x:geo.lx,y:geo.ly,text:'×'+e.count}):null;
+  const msg=`${fa.qname}  →  ${fb.qname}\n×${e.count}  ·  ${t('atLines')}: ${e.lines.slice(0,10).join(', ')}${e.cross?'\n'+t('cross'):''}${geo.cyc?'\n'+t('cyc'):''}${e.from===e.to?'\n'+t('rec'):''}`;
+  hit.addEventListener('pointerenter',ev=>{path.classList.add('hi');showTip(msg,ev)});hit.addEventListener('pointermove',ev=>showTip(msg,ev));hit.addEventListener('pointerleave',()=>{path.classList.remove('hi');hideTip()});
+  gE.append(path,hit);if(lbl)gE.append(lbl);
+  edgeEls.push({e,path,hit,lbl});
+ }
+ const refreshEdges=()=>{for(const o of edgeEls){const a=lay.pos.get(o.e.from),b=lay.pos.get(o.e.to),g=edgeGeom(a,b,lay.mode,o.e.from===o.e.to);o.path.setAttribute('d',g.d);o.hit.setAttribute('d',g.d);if(o.lbl){o.lbl.setAttribute('x',g.lx);o.lbl.setAttribute('y',g.ly)}}};
+ for(const f of fns){
+  const p=lay.pos.get(f.id),learned=state.learned.has(lkey(f));
+  const g=S('g',{class:'ov-node'+(f.nCallers===0?' entry':'')+(f.module?' mod':''),transform:`translate(${p.x},${p.y})`});
+  g.append(S('rect',{class:'box',width:p.w,height:p.h,rx:9}),S('rect',{x:1,y:1,width:5,height:p.h-2,rx:2.5,fill:f.file.color}),
+   S('text',{class:'nm',x:15,y:p.h/2+4,text:f.disp}),S('rect',{x:12,y:p.h-5,width:Math.min(p.w-26,f.cx*7),height:2.5,rx:1.2,fill:CXCOL(f.cx)}));
+  if(learned)g.append(S('circle',{cx:p.w-12,cy:p.h/2,r:6.5,fill:'var(--c-call)'}),S('path',{d:`M${p.w-15},${p.h/2} l2.2,2.4 l4.2,-4.6`,fill:'none',stroke:'#fff','stroke-width':1.8,'stroke-linecap':'round'}));
+  const info=`${f.qname}\n${f.file.path}:${f.line}\n${t('loc')}: ${f.loc}   ${t('cx')}: ${f.cx}\n${t('callers')}: ${f.nCallers}   ${t('callees')}: ${f.nCallees}`+(f.nCallers===0?'\n'+t('entry'):'')+(f.rec?'\n'+t('rec'):'');
+  g.addEventListener('pointerenter',ev=>{highlight(f.id);showTip(info,ev)});g.addEventListener('pointermove',ev=>showTip(info,ev));g.addEventListener('pointerleave',()=>{highlight(null);hideTip()});
+  let dragging=false,sx=0,sy=0,ox=0,oy=0,mv=0;
+  if(drag)g.addEventListener('pointerdown',ev=>{ev.stopPropagation();dragging=true;mv=0;sx=ev.clientX;sy=ev.clientY;ox=p.x;oy=p.y;
+   const mvF=e2=>{if(!dragging)return;mv+=Math.abs(e2.clientX-sx)+Math.abs(e2.clientY-sy);const k=ovVp.st.k;p.x=ox+(e2.clientX-sx)/k;p.y=oy+(e2.clientY-sy)/k;g.setAttribute('transform',`translate(${p.x},${p.y})`);refreshEdges()};
+   const upF=()=>{dragging=false;removeEventListener('pointermove',mvF);removeEventListener('pointerup',upF);g._dragged=mv>4};addEventListener('pointermove',mvF);addEventListener('pointerup',upF)});
+  g.addEventListener('click',ev=>{if(ovVp.wasDrag()||g._dragged){g._dragged=false;return}hideTip();if(ev.shiftKey){state.iso=state.iso===f.id?null:f.id;renderOverview(true)}else openFn(f.id)});
+  gN.append(g);nodeEl.set(f.id,g);
+ }
+ function highlight(id){
+  if(id==null){nodeEl.forEach(g=>g.classList.remove('dim'));edgeEls.forEach(o=>{o.path.classList.remove('dim');o.path.classList.remove('hi')});applySearch();return}
+  const s=new Set([id]);for(const o of edgeEls)if(o.e.from===id||o.e.to===id){s.add(o.e.from);s.add(o.e.to)}
+  nodeEl.forEach((g,k)=>g.classList.toggle('dim',!s.has(k)));
+  edgeEls.forEach(o=>{const inc=o.e.from===id||o.e.to===id;o.path.classList.toggle('dim',!inc);o.path.classList.toggle('hi',inc)});
+ }
+ function applySearch(){const q=state.q.trim().toLowerCase();nodeEl.forEach((g,k)=>{const m=q&&P.funcs[k].qname.toLowerCase().includes(q);g.classList.toggle('match',!!m);g.classList.toggle('dim',!!q&&!m)});edgeEls.forEach(o=>o.path.classList.toggle('dim',!!q))}
+ state.ovApply=applySearch;state.ovFirst=()=>{const q=state.q.trim().toLowerCase();if(!q)return;for(const f of fns)if(f.qname.toLowerCase().includes(q)){const p=lay.pos.get(f.id);ovVp.centerOn(p.x+p.w/2,p.y+p.h/2,Math.max(ovVp.st.k,.9));return}};
+ applySearch();
+ if(fit)ovVp.fit({x:0,y:0,w:lay.w,h:lay.h},30,1);
+}
+function renderLegend(){
+ const P=state.P,el=$('#legend');el.hidden=!(state.showLeg&&P&&P.funcs.length&&state.view==='graph');if(el.hidden)return;
+ el.innerHTML='';
+ el.append(H('h4',{text:t('leg')}));
+ for(const F of P.files)el.append(H('div',{class:'fl'+(state.fileF===F.idx?' on':''),onclick:()=>{state.fileF=state.fileF===F.idx?null:F.idx;renderOverview(true)}},H('i',{style:`background:${F.color}`}),F.path));
+ const sw=(cls,txt)=>H('div',{},H('svg',{width:30,height:10},S('line',{x1:0,y1:5,x2:30,y2:5,class:'ov-edge '+cls,'stroke-width':1.8,style:'marker-end:none'})),txt);
+ el.append(H('hr',{style:'border:0;border-top:1px solid var(--line);margin:6px 0'}),sw('',t('callees')),sw('x',t('cross')),sw('cyc',t('cyc')));
+ el.append(H('div',{},H('i',{style:'background:#2F9E62'}),'1–4  '),H('div',{},H('i',{style:'background:#C9731A'}),'5–9  '+t('cx')),H('div',{},H('i',{style:'background:#CF4255'}),'10+'));
+ el.append(H('div',{style:'margin-top:6px'},t('hint_click')));
+}
+function renderRel(){
+ const P=state.P,el=$('#rel');el.hidden=!(state.showRel&&P&&P.funcs.length);if(el.hidden)return;
+ const ids=new Set(visibleFns().map(f=>f.id));el.innerHTML='';el.append(H('h4',{text:t('relTitle')}));
+ const ul=H('ul');let n=0;
+ for(const e of P.edges){if(!ids.has(e.from)||!ids.has(e.to))continue;if(n++>250)break;
+  const a=P.funcs[e.from],b=P.funcs[e.to];
+  ul.append(H('li',{},H('a',{onclick:()=>openFn(a.id),text:a.qname}),t('calls'),H('a',{onclick:()=>openFn(b.id),text:b.qname}),`×${e.count}`,H('span',{text:`${t('atLines')} ${e.lines.slice(0,6).join(', ')}`})));}
+ el.append(ul);
+}
+
+/* ---------- trees ---------- */
+const BR=i=>`hsl(${Math.round((i*53+205)%360)} 62% 52%)`;
+function buildCallTree(){
+ const P=state.P;let roots=P.funcs.filter(f=>f.nCallers===0);
+ if(!roots.length)roots=[...P.funcs].sort((a,b)=>b.nCallees-a.nCallees).slice(0,1);
+ let budget=1500;const big=P.funcs.length>40;
+ const mk=(f,depth,path)=>{
+  const n={label:f.qname,fnId:f.id,children:[],collapsed:false};budget--;
+  for(const e of P.out.get(f.id)){if(e.to===f.id)continue;const c=P.funcs[e.to];
+   if(path.has(c.id)||budget<=0||depth>=8)n.children.push({label:'↻ '+c.qname,fnId:c.id,ref:true,children:[]});
+   else{path.add(c.id);n.children.push(mk(c,depth+1,path));path.delete(c.id)}}
+  n.collapsed=big&&depth>=2&&n.children.length>0;return n};
+ return{label:P.name,root:true,children:roots.map(f=>mk(f,1,new Set([f.id])))};
+}
+function buildFileTree(){
+ const P=state.P;
+ return{label:P.name,root:true,children:P.files.filter(F=>F.funcs.some(f=>P.funcs.includes(f))).map(F=>({label:F.path,children:F.funcs.filter(f=>P.funcs.includes(f)).map(f=>({label:f.qname,fnId:f.id,collapsed:true,
+  children:P.out.get(f.id).filter(e=>e.to!==f.id).slice(0,14).map(e=>({label:'→ '+P.funcs[e.to].qname,fnId:e.to,ref:true,children:[]}))}))}))};
+}
+function drawTreeInto(g,root,vp,setB,fit,onFn){
+ g.innerHTML='';const lay=layoutTree(root);setB({w:lay.w,h:lay.h});
+ const gl=S('g'),gn=S('g');g.append(gl,gn);
+ const col=(n,inh)=>n.color||inh;
+ (function walk(n,inh,idx){
+  const c=n.root?'var(--ink2)':col(n,inh);
+  const hasKids=n.children&&n.children.length>0;
+  if(!n.collapsed&&hasKids)n.children.forEach((k,i)=>{const bc=n.root?(k.color||BR(i)):c;const a={x:n.x+n.w,y:n.y+3},b={x:k.x,y:k.y+3};
+   gl.append(S('path',{class:'tr-link',d:`M${a.x+12},${a.y} C${a.x+42},${a.y} ${b.x-30},${b.y} ${b.x},${b.y}`,stroke:bc,'stroke-width':Math.max(1.2,2.8-n.d*.4)}));walk(k,bc,i)});
+  const tg=S('g',{});
+  const tx=S('text',{class:'tr-t'+(n.fnId!=null?' fn':'')+(n.root?' root':'')+(n.ref?' tr-ref':''),x:n.x,y:n.y-3,text:n.label});
+  if(n.fnId!=null||n.onClick)tx.addEventListener('click',()=>{if(vp.wasDrag())return;n.onClick?n.onClick():onFn(n.fnId)});
+  tg.append(tx,S('line',{x1:n.x,y1:n.y+3,x2:n.x+n.w+10,y2:n.y+3,stroke:c,'stroke-width':n.root?2.4:1.6,'stroke-opacity':.7}));
+  if(hasKids){const cx=n.x+n.w+17;
+   const tgl=S('g',{class:'tr-tg'},S('circle',{cx,cy:n.y+3,r:6,fill:n.collapsed?c:'var(--card)',stroke:c,'stroke-width':1.6}));
+   if(n.collapsed)tgl.append(S('text',{x:cx+11,y:n.y+7,'font-size':10,fill:'var(--ink2)',text:'+'+n.children.length}));
+   tgl.addEventListener('click',()=>{if(vp.wasDrag())return;n.collapsed=!n.collapsed;drawTreeInto(g,root,vp,setB,false,onFn)});tg.append(tgl)}
+  gn.append(tg);
+ })(root,'var(--ink2)',0);
+ if(fit)vp.fit({x:0,y:0,w:lay.w,h:lay.h},30,1);
+}
+
+/* ================= function page ================= */
+function openFn(id,push){
+ if(push){if(state.trail[state.trail.length-1]!==id)state.trail.push(id)}else state.trail=[id];
+ if(location.hash==='#/f/'+id)route();else location.hash='#/f/'+id;
+}
+function route(){
+ const m=/^#\/f\/(\d+)/.exec(location.hash);
+ if(m&&state.P&&state.P.funcs[+m[1]])showFn(+m[1]);else showOverview();
+}
+function showOverview(){
+ $('#overview').hidden=false;$('#fnpage').hidden=true;state.fnId=null;hideTip();
+ if(state.P){renderOverview(false);updateProgress()}
+}
+function showFn(id){
+ if(state.trail[state.trail.length-1]!==id)state.trail=[id];
+ $('#overview').hidden=true;$('#fnpage').hidden=false;hideTip();
+ state.fnId=id;state.sel=null;state.trace={on:false,cur:null,path:[],vis:new Set()};$('#stepbar').hidden=true;$('#btnStep').classList.remove('on');
+ renderFn(true);
+}
+function renderTrail(){
+ const P=state.P,tr=$('#trail');tr.innerHTML='';
+ state.trail.forEach((id,i)=>{
+  if(i)tr.append(H('span',{text:'›'}));
+  const f=P.funcs[id],last=i===state.trail.length-1;
+  tr.append(H('a',{class:last?'cur':'',onclick:last?null:()=>{state.trail=state.trail.slice(0,i+1);openFn(id,true)},text:short(f.qname,28)}));
+ });
+}
+function renderFn(fit){
+ const P=state.P,fn=P.funcs[state.fnId];
+ renderTrail();$('#chkLearn').checked=state.learned.has(lkey(fn));
+ $$('#segFn button').forEach(b=>b.classList.toggle('on',b.dataset.fv===state.fnView));
+ if(!fn.flow){fn.flow=buildFlow(P,fn);sizeFlow(P,fn,fn.flow.nodes);fn.lay=layoutFlow(fn.flow.nodes,fn.flow.edges)}
+ fn.lineOwner=fn.lineOwner||(()=>{const m={};for(const n of fn.flow.nodes)for(const l of n.lineNums||[])if(!(l in m))m[l]=n.id;return m})();
+ if(state.fnView==='flow')drawFlow(fn,fit);
+ else drawTreeInto(fnG,buildOutline(fn),fnVp,b=>fnBounds=b,fit,null);
+ renderSide();
+}
+function drawFlow(fn,fit){
+ const F=fn.file,{nodes,edges}=fn.flow,lay=fn.lay;fnBounds={w:lay.w,h:lay.h};fnG.innerHTML='';
+ const gE=S('g'),gN=S('g');fnG.append(gE,gN);
+ state.edgeEls=[];state.nodeEls=new Map();
+ for(const p of lay.paths){
+  const e=p.e,lb=e.label||'';
+  const cls='fl-edge'+(lb==='true'||lb==='false'?' l-'+lb:'')+(e.kind?' k-'+e.kind:'');
+  const el=S('path',{class:cls,d:p.back?roundedD(p.pts,10):pathD(p.pts)});gE.append(el);state.edgeEls.push({e,el});
+  if(lb&&e.kind!=='case'){
+   let x,y,anc;
+   if(p.back){x=p.pts[1].x+6;y=(p.pts[1].y+p.pts[2].y)/2;anc='start'}
+   else{const a=p.pts[0],b=p.pts[1];const left=b.x<a.x-1;x=a.x+(left?-7:7);y=a.y+14;anc=left?'end':'start'}
+   gE.append(S('text',{class:'fl-lbl'+(lb==='true'||lb==='false'?' l-'+lb:'')+(e.kind?' k-'+e.kind:''),x,y,'text-anchor':anc,text:lb}));
+  }
+ }
+ for(const n of nodes){
+  const hex=n.type==='if'||n.type==='loop'||n.type==='switch';
+  const g=S('g',{class:`fl-node t-${n.type}`+(n.calls&&n.calls.length?' hascall':''),transform:`translate(${n.x-n.w/2},${n.y})`});
+  if(n.type==='start'||n.type==='end'){
+   g.append(S('rect',{class:'fl-shape',width:n.w,height:n.h,rx:n.h/2}),S('text',{x:n.w/2,y:n.h/2+4.2,'text-anchor':'middle',text:n.type==='start'?n.text:'end'}));
+  }else{
+   if(hex){const w=n.w,h=n.h;g.append(S('path',{class:'fl-shape',d:`M0,${h/2} L13,0 L${w-13},0 L${w},${h/2} L${w-13},${h} L13,${h} Z`}),S('rect',{class:'fl-gut',x:14,y:4,width:FL.GUT-16,height:h-8,rx:3}))}
+   else g.append(S('rect',{class:'fl-shape',width:n.w,height:n.h,rx:6}),S('rect',{class:'fl-gut',x:5,y:1,width:FL.GUT-7,height:n.h-2}),S('rect',{class:'fl-bar',x:0,y:0,width:5,height:n.h,rx:2}));
+   const tx=FL.GUT+4+(hex?10:0);
+   n.shown.forEach((l,i)=>{
+    const y=FL.PADY+(i+1)*FL.LH-5;
+    g.append(S('text',{class:'fl-ln',x:FL.GUT-(hex?4:6),y,text:l}));
+    const t2=S('text',{class:'fl-code',x:tx,y});for(const k of n.toks[i])t2.append(S('tspan',{class:k.c?'tk-'+k.c:null,text:k.v}));g.append(t2);
+   });
+   let y0=FL.PADY+n.shown.length*FL.LH;
+   if(n.more){g.append(S('text',{class:'fl-more',x:tx,y:y0+FL.LH-5,text:`⋯ +${n.more}`}));y0+=FL.LH}
+   for(const c of n.chips){
+    const cg=S('g',{class:'chip-g',transform:`translate(${FL.GUT+c.x},${y0+4+c.row*(FL.CHIP_H+4)})`},S('rect',{width:c.w,height:FL.CHIP_H,rx:6}),S('text',{x:9,y:14.5,text:c.name}));
+    cg.addEventListener('click',ev=>{ev.stopPropagation();if(fnVp.wasDrag())return;openFn(c.id,true)});
+    cg.addEventListener('pointerenter',ev=>{const f=state.P.funcs[c.id];showTip(`${f.qname}\n${f.file.path}:${f.line}`,ev)});cg.addEventListener('pointerleave',hideTip);
+    g.append(cg);
+   }
+  }
+  g.addEventListener('click',()=>{if(fnVp.wasDrag())return;selectNode(n.id)});
+  g.addEventListener('pointerenter',()=>hoverLines(n));g.addEventListener('pointerleave',()=>hoverLines(null));
+  gN.append(g);state.nodeEls.set(n.id,g);
+ }
+ if(fit){
+  const r=fnSvg.getBoundingClientRect(),W=r.width||800,Hh=r.height||600,kw=(W-60)/lay.w,kfull=Math.min(kw,(Hh-40)/lay.h,1);
+  const k=kfull>=.5?kfull:clamp(Math.min(kw,1),.5,1);
+  fnVp.st.k=k;fnVp.st.x=(W-lay.w*k)/2;fnVp.st.y=kfull>=.5?Math.max(10,(Hh-lay.h*k)/2):10;fnVp.apply();
+ }
+}
+function hoverLines(n){$$('#spSource .src div').forEach(d=>d.classList.toggle('hl',!!n&&(n.lineNums||[]).includes(+d.dataset.ln)||(!n&&state.sel!=null&&(state.P.funcs[state.fnId].flow.nodes[state.sel].lineNums||[]).includes(+d.dataset.ln))))}
+function selectNode(id){
+ state.sel=id;
+ state.nodeEls&&state.nodeEls.forEach((g,k)=>g.classList.toggle('sel',k===id));
+ renderInfo();hoverLines(null);
+ if(id!=null&&innerWidth>860)setSideTab('info');
+}
+function selectByLine(l){const fn=state.P.funcs[state.fnId];const id=fn.lineOwner[l];if(id!=null){if(state.fnView!=='flow'){state.fnView='flow';renderFn(true)}selectNode(id);const n=fn.flow.nodes[id];fnVp.centerOn(n.x,n.y+n.h/2,Math.max(fnVp.st.k,.8))}}
+
+/* ---------- side panel ---------- */
+function describe(n,fn){
+ const hd=n.head||'';
+ switch(n.type){
+  case'start':return t('d_start',fn.sig);case'end':return t('d_end');case'stmt':return t('d_stmt',n.l1,n.l2);
+  case'if':return t('d_if',hd);case'loop':return t('d_loop',n.kind,hd);case'switch':return t('d_switch',hd);
+  case'case':return n.def?t('d_default'):t('d_case',hd);case'try':return t('d_try');case'catch':return t('d_catch',hd);case'finally':return t('d_finally');
+  case'return':return t('d_return');case'throw':return t('d_throw');case'break':return t('d_break');case'continue':return t('d_continue');
+ }
+ return'';
+}
+function setSideTab(k){state.sideTab=k;$$('#side .tabs button').forEach(b=>b.classList.toggle('on',b.dataset.st===k));$('#spInfo').hidden=k!=='info';$('#spSource').hidden=k!=='source';$('#spLinks').hidden=k!=='links'}
+function renderSide(){renderInfo();renderSource();renderLinks();setSideTab(state.sideTab)}
+function fnLink(id,cnt){const f=state.P.funcs[id];return H('span',{class:'lnk',title:`${f.file.path}:${f.line}`,onclick:()=>openFn(id,true)},f.qname+(cnt?` ×${cnt}`:''))}
+function renderInfo(){
+ const P=state.P,fn=P.funcs[state.fnId],el=$('#spInfo');el.innerHTML='';
+ el.append(H('div',{style:'font:600 13px var(--mono);direction:ltr;text-align:left;word-break:break-word'},fn.sig),
+  H('p',{class:'hint',style:'direction:ltr;text-align:left'},`${fn.file.path}:${fn.line}–${fn.endLine}`),
+  H('p',{},`${t('loc')} ${fn.loc}  ·  ${t('cx')} ${fn.cx}  ·  ${t('callers')} ${fn.nCallers}  ·  ${t('callees')} ${fn.nCallees}`));
+ if(fn.nCallers===0)el.append(H('p',{class:'hint',text:t('entry')}));
+ if(fn.rec)el.append(H('p',{class:'hint',text:t('rec')}));
+ if(state.sel!=null){
+  const n=fn.flow.nodes[state.sel];
+  el.append(H('h5',{text:''}),H('span',{class:'badge',style:`background:var(${TYCOL[n.type]})`,text:n.type==='loop'?n.kind:n.type}),H('p',{text:describe(n,fn)}));
+  if(n.calls&&n.calls.length){el.append(H('h5',{text:t('calls')}));n.calls.forEach(id=>el.append(fnLink(id)))}
+  if(n.ext&&n.ext.length){el.append(H('h5',{text:t('ext')}));n.ext.slice(0,16).forEach(x=>el.append(H('span',{class:'lnk ext',text:x})))}
+ }
+ const lg=H('div',{style:'margin-top:16px'},H('h5',{text:t('leg')}));
+ [['--c-if','lg_if'],['--c-loop','lg_loop'],['--c-switch','lg_switch'],['--c-try','lg_try'],['--c-ret','lg_ret'],['--c-stmt','lg_stmt'],['--c-call','lg_call']].forEach(([c,k])=>lg.append(H('div',{class:'row',style:'margin:3px 0;color:var(--ink2)'},H('i',{style:`width:14px;height:10px;border-radius:3px;background:var(${c})`}),t(k))));
+ el.append(lg);
+}
+function renderSource(){
+ const P=state.P,fn=P.funcs[state.fnId],F=fn.file,el=$('#spSource');el.innerHTML='';
+ const a=fn.line,b=Math.min(fn.endLine,a+(fn.module?400:2000)),box=H('div',{class:'src'}),hl=hlFile(F);
+ for(let l=a;l<=b;l++){
+  const row=H('div',{'data-ln':l,onclick:()=>selectByLine(l)},H('b',{text:l}));
+  const tk=hl[l-1]||[];for(const k of tk)row.append(H('span',{class:k.c?'tk-'+k.c:null,text:k.v}));
+  box.append(row);
+ }
+ el.append(box);
+}
+function renderLinks(){
+ const P=state.P,fn=P.funcs[state.fnId],el=$('#spLinks');el.innerHTML='';
+ el.append(H('h5',{text:t('callers')}));
+ const ins=P.inn.get(fn.id).filter(e=>e.from!==fn.id);
+ if(!ins.length)el.append(H('p',{class:'hint',text:t('entry')}));ins.forEach(e=>el.append(fnLink(e.from,e.count)));
+ el.append(H('h5',{text:t('callees')}));
+ const outs=P.out.get(fn.id).filter(e=>e.to!==fn.id);
+ if(!outs.length)el.append(H('p',{class:'hint',text:t('noneTxt')}));outs.forEach(e=>el.append(fnLink(e.to,e.count)));
+ const ext=new Set();fn.flow&&fn.flow.nodes.forEach(n=>(n.ext||[]).forEach(x=>ext.add(x)));
+ if(ext.size){el.append(H('h5',{text:t('ext')}));[...ext].slice(0,40).forEach(x=>el.append(H('span',{class:'lnk ext',text:x})))}
+}
+
+/* ---------- outline (markmap-like) ---------- */
+function buildOutline(fn){
+ const F=fn.file,ast=getAst(fn);
+ const lbl=(s,e)=>short(clean(F,s,e),52);
+ const col=n=>`var(${TYCOL[n]})`;
+ const conv=list=>{
+  const out=[];let i=0;
+  while(i<list.length){
+   const s=list[i];
+   if(s.t==='stmt'){let j=i;while(j+1<list.length&&list[j+1].t==='stmt')j++;const k=j-i;
+    out.push({label:lbl(s.s,s.e)+(k?`  (+${k})`:''),color:col('stmt'),onClick:()=>selectByLine(F.lineAt(s.s)),children:[]});i=j+1;continue}
+   const ln=F.lineAt(s.s),mk=(label,type,children)=>({label,color:col(type),onClick:()=>selectByLine(ln),children:children||[]});
+   if(s.t==='if'){const kids=conv(s.body);if(s.else)kids.push({label:'else',color:col('if'),onClick:()=>selectByLine(ln),children:conv(s.else)});out.push(mk('if '+short(clean(F,s.cs,s.ce),44),'if',kids))}
+   else if(s.t==='loop'||s.t==='dowhile')out.push(mk(`${s.kind} ${short(clean(F,s.cs,s.ce),40)}`,'loop',conv(s.body)));
+   else if(s.t==='switch')out.push(mk(`${s.kw} ${short(clean(F,s.cs,s.ce),40)}`,'switch',s.cases.map(c=>({label:c.def?'default':'case '+short(clean(F,c.cs,c.ce),30),color:col('switch'),onClick:()=>selectByLine(F.lineAt(c.ls)),children:conv(c.body)}))));
+   else if(s.t==='try'){const kids=conv(s.body);for(const c of s.catches)kids.push({label:'catch '+short(clean(F,c.cs,c.ce),30),color:col('try'),onClick:()=>selectByLine(F.lineAt(c.ls)),children:conv(c.body)});if(s.fin)kids.push({label:'finally',color:col('try'),onClick:()=>selectByLine(F.lineAt(s.fin.ls)),children:conv(s.fin.body)});out.push(mk('try',"try",kids))}
+   else out.push(mk(lbl(s.s,s.e),s.t));
+   i++;
+  }
+  return out;
+ };
+ return{label:fn.qname,root:true,children:conv(ast)};
+}
+
+/* ---------- trace mode ---------- */
+function traceGo(id){
+ const fn=state.P.funcs[state.fnId],tr=state.trace;
+ if(tr.cur!=null)tr.path.push(tr.cur);tr.cur=id;tr.vis.add(id);paintTrace();
+ const n=fn.flow.nodes[id];fnVp.centerOn(n.x,n.y+n.h/2,Math.max(fnVp.st.k,.75));selectNode(id);
+}
+function traceBack(){const tr=state.trace;if(!tr.path.length)return;tr.vis.delete(tr.cur);tr.cur=tr.path.pop();paintTrace();const n=state.P.funcs[state.fnId].flow.nodes[tr.cur];fnVp.centerOn(n.x,n.y+n.h/2);selectNode(tr.cur)}
+function paintTrace(){
+ const fn=state.P.funcs[state.fnId],tr=state.trace,bar=$('#stepbar');
+ state.nodeEls.forEach((g,k)=>{g.classList.toggle('cur',tr.on&&k===tr.cur);g.classList.toggle('vis',tr.on&&tr.vis.has(k)&&k!==tr.cur)});
+ const seq=[...tr.path,tr.cur];
+ state.edgeEls.forEach(o=>{let on=false;for(let i=0;i<seq.length-1;i++)if(seq[i]===o.e.from&&seq[i+1]===o.e.to)on=true;o.el.classList.toggle('cur',tr.on&&on)});
+ bar.hidden=!tr.on;if(!tr.on)return;
+ bar.innerHTML='';
+ const n=fn.flow.nodes[tr.cur];
+ bar.append(H('div',{class:'d'},H('b',{text:n.type==='loop'?n.kind:n.type}),H('div',{text:describe(n,fn)})));
+ const outs=fn.flow.edges.filter(e=>e.from===n.id);
+ if(!outs.length)bar.append(H('span',{class:'hint',text:t('done')}));
+ else outs.forEach(e=>{const tn=fn.flow.nodes[e.to];bar.append(H('button',{class:'chip',onclick:()=>traceGo(e.to),text:(e.label||t('next'))+' → '+(tn.type==='end'?'end':'L'+tn.l1)}))});
+ bar.append(H('button',{class:'chip',onclick:traceBack,text:t('prev')}),H('button',{class:'chip',onclick:()=>{tr.path=[];tr.vis=new Set();tr.cur=null;traceGo(0)},text:t('restart')}));
+}
+$('#btnStep').addEventListener('click',()=>{
+ if(state.fnView!=='flow'){state.fnView='flow';renderFn(true)}
+ const tr=state.trace;tr.on=!tr.on;$('#btnStep').classList.toggle('on',tr.on);
+ if(tr.on){tr.path=[];tr.vis=new Set();tr.cur=null;traceGo(0)}else paintTrace();
+});
+
+/* ================= export ================= */
+function svgString(svg,b){
+ const clone=svg.cloneNode(true),cg=clone.querySelector('g[id]');cg.removeAttribute('transform');
+ clone.removeAttribute('class');clone.removeAttribute('style');clone.setAttribute('xmlns',NS);
+ clone.setAttribute('viewBox',`0 0 ${b.w} ${b.h}`);clone.setAttribute('width',b.w);clone.setAttribute('height',b.h);
+ const cs=getComputedStyle(document.documentElement);
+ const css=$('#svgcss').textContent.replace(/var\(--([\w-]+)\)/g,(_,k)=>cs.getPropertyValue('--'+k).trim()||'#888')+`\ntext{font-family:${cs.getPropertyValue('--ui')}}`;
+ const bg=document.createElementNS(NS,'rect');bg.setAttribute('width','100%');bg.setAttribute('height','100%');bg.setAttribute('fill',cs.getPropertyValue('--bg').trim());
+ const st=document.createElementNS(NS,'style');st.textContent=css;clone.insertBefore(bg,clone.firstChild);clone.insertBefore(st,clone.firstChild);
+ return'<?xml version="1.0" standalone="no"?>\r\n'+new XMLSerializer().serializeToString(clone);
+}
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+function exportSvg(svg,b,name){download(new Blob([svgString(svg,b)],{type:'image/svg+xml;charset=utf-8'}),name+'.svg')}
+function exportPng(svg,b,name){
+ const sc=Math.min(4,12000/Math.max(b.w,b.h)),img=new Image();
+ img.onload=()=>{const c=document.createElement('canvas');c.width=Math.ceil(b.w*sc);c.height=Math.ceil(b.h*sc);const x=c.getContext('2d');x.drawImage(img,0,0,c.width,c.height);c.toBlob(bl=>download(bl,name+'.png'),'image/png')};
+ img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgString(svg,b));
+}
+const pname=()=>(state.P?state.P.name:'codemap').replace(/[^\w.-]+/g,'_');
+
+/* ================= input ================= */
+const msg=(s,err)=>{const m=$('#msg');m.textContent=s||'';m.className='msg'+(err?' err':'')};
+function setProject(P){
+ state.P=P;state.iso=null;state.fileF=null;state.q='';$('#search').value='';state.trail=[];
+ state.showLeg=P.files.length>1;state.showRel=false;
+ if(!P.funcs.length)msg(t('nofn'),true);else msg('');
+ setStats();updateProgress();
+ if(location.hash&&location.hash!=='#/'){history.replaceState(null,'','#/')}
+ $('#overview').hidden=false;$('#fnpage').hidden=true;renderOverview(true);
+ if(innerWidth<=860)$('#drawer').classList.add('closed');
+}
+function runAnalyze(files,name){
+ msg(t('work'));
+ setTimeout(()=>{try{setProject(analyze(files,name))}catch(e){console.error(e);msg(t('err_read')+': '+e.message,true)}},30);
+}
+$('#go').addEventListener('click',()=>{
+ const code=$('#src').value;if(!code.trim())return msg(t('empty'),true);
+ const sel=$('#lang').value,lang=sel==='auto'?detectLang(code):sel;
+ runAnalyze([{path:'snippet.'+({js:'js',py:'py',java:'java',c:'c',cpp:'cpp',cs:'cs',go:'go',rust:'rs',php:'php',kotlin:'kt',swift:'swift',dart:'dart'}[lang]),code,lang}],'snippet');
+});
+const SAMPLE_EXT={JavaScript:'js',Python:'py',Go:'go'};
+for(const k in SAMPLES)$('#samples').append(H('button',{class:'chip',onclick:()=>{$('#src').value=SAMPLES[k];$('#lang').value='auto';$('#go').click()},text:k}));
+const okFile=(path,size)=>langOfPath(path)&&size<=400000&&!/(^|\/)(node_modules|\.git|dist|build|vendor)\//.test(path);
+async function ingestFiles(list){
+ const files=[];
+ for(const f of list){const path=f.webkitRelativePath||f._path||f.name;if(!okFile(path,f.size))continue;
+  try{files.push({path,code:await f.text()})}catch(e){}}
+ if(!files.length)return msg(t('nofn'),true);
+ const root=files[0].path.includes('/')?files[0].path.split('/')[0]:'files';
+ $('#fileList').textContent=t('fileSel',files.length);
+ runAnalyze(files,files.length===1?files[0].path:root);
+}
+$('#fileIn').addEventListener('change',e=>ingestFiles([...e.target.files]));
+$('#dirIn').addEventListener('change',e=>ingestFiles([...e.target.files]));
+async function walkEntry(en,path,out){
+ if(en.isFile){await new Promise(r=>en.file(f=>{f._path=path+f.name;out.push(f);r()},r))}
+ else if(en.isDirectory){const rd=en.createReader();let all=[];for(;;){const b=await new Promise(r=>rd.readEntries(r,()=>r([])));if(!b.length)break;all=all.concat(b)}
+  for(const c of all)await walkEntry(c,path+en.name+'/',out)}
+}
+async function onDrop(e){
+ e.preventDefault();$('#drop').classList.remove('over');
+ const items=[...(e.dataTransfer.items||[])].map(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()).filter(Boolean);
+ if(items.length){const out=[];for(const en of items)await walkEntry(en,'',out);return ingestFiles(out)}
+ ingestFiles([...e.dataTransfer.files]);
+}
+addEventListener('dragover',e=>{e.preventDefault();$('#drop').classList.add('over')});
+addEventListener('dragleave',e=>{if(!e.relatedTarget)$('#drop').classList.remove('over')});
+addEventListener('drop',e=>{if(!$('#drawer').classList.contains('closed'))$$('.tabs [data-tab]').find(b=>b.dataset.tab==='files').click();onDrop(e)});
+
+/* ---------- GitHub ---------- */
+async function loadGithub(){
+ const raw=$('#ghUrl').value.trim();let o,r,br=null,sub='';
+ let m=/github\.com\/([^\/\s]+)\/([^\/\s#?]+)(?:\/tree\/([^\/\s]+)(?:\/([^\s#?]*))?)?/.exec(raw);
+ if(!m)m=/^([\w.-]+)\/([\w.-]+)$/.exec(raw);
+ if(!m)return msg(t('err_gh'),true);
+ o=m[1];r=m[2].replace(/\.git$/,'');br=m[3]||null;sub=(m[4]||'').replace(/\/$/,'');
+ const tok=$('#ghTok').value.trim(),hd={Accept:'application/vnd.github+json'};if(tok)hd.Authorization='Bearer '+tok;
+ const bar=$('#ghBar'),log=$('#ghLog');bar.style.width='0';log.textContent=t('gh_tree');msg('');
+ try{
+  const tr=await fetch(`https://api.github.com/repos/${o}/${r}/git/trees/${encodeURIComponent(br||'HEAD')}?recursive=1`,{headers:hd});
+  if(!tr.ok)throw new Error(tr.status===403?'rate limit (403)':tr.status===404?'404':'HTTP '+tr.status);
+  const j=await tr.json();
+  const skipT=$('#ghTests').checked;
+  let items=j.tree.filter(x=>x.type==='blob'&&langOfPath(x.path)&&(x.size||0)<=200000&&(!sub||x.path.startsWith(sub+'/'))
+   &&!/(^|\/)(node_modules|dist|build|vendor|third_party|__pycache__|target|out|\.git)\//.test(x.path)&&!/\.min\.js$|\.d\.ts$|\.pb\.go$/.test(x.path)
+   &&!(skipT&&(/(^|\/)(tests?|__tests__|spec|e2e|testdata)\//i.test(x.path)||/(\.test\.|\.spec\.|_test\.|Test\.java$)/.test(x.path))));
+  items.sort((a,b)=>a.path.split('/').length-b.path.split('/').length||a.path.localeCompare(b.path));
+  const max=clamp(+$('#ghMax').value||80,5,400),total=items.length;items=items.slice(0,max);
+  const files=[];let done=0;const q=items.slice();
+  const worker=async()=>{while(q.length){const it=q.shift();
+   try{const enc=it.path.split('/').map(encodeURIComponent).join('/');
+    const res=tok?await fetch(`https://api.github.com/repos/${o}/${r}/contents/${enc}?ref=${encodeURIComponent(br||'HEAD')}`,{headers:{Authorization:'Bearer '+tok,Accept:'application/vnd.github.raw+json'}}):await fetch(`https://raw.githubusercontent.com/${o}/${r}/${encodeURIComponent(br||'HEAD')}/${enc}`);
+    if(res.ok)files.push({path:it.path,code:await res.text()})}catch(e){}
+   done++;bar.style.width=(100*done/items.length)+'%';log.textContent=t('gh_files',done,items.length)}};
+  await Promise.all(Array.from({length:6},worker));
+  if(!files.length)throw new Error(t('nofn'));
+  files.sort((a,b)=>a.path.localeCompare(b.path));
+  log.textContent=total>items.length?t('gh_cut',items.length,total):'';
+  runAnalyze(files,`${o}/${r}`);
+ }catch(e){msg(t('err_gh')+': '+e.message,true);log.textContent=''}
+}
+$('#ghGo').addEventListener('click',loadGithub);
+
+/* ================= wiring ================= */
+$$('#drawer .tabs [data-tab]').forEach(b=>b.addEventListener('click',()=>{$$('#drawer .tabs [data-tab]').forEach(x=>x.classList.toggle('on',x===b));$$('#drawer [data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab)}));
+$('#btnDrawer').addEventListener('click',()=>$('#drawer').classList.toggle('closed'));
+$('#btnTheme').addEventListener('click',()=>setTheme(state.theme==='dark'?'light':'dark'));
+$('#btnLang').addEventListener('click',()=>{LANG=LANG==='ar'?'en':'ar';store.set('cm.lang',LANG);applyI18n();setStats();updateProgress();if(state.P){if(state.fnId!=null)renderFn(false);else renderOverview(false)}});
+$$('#segView button').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.v;$$('#segView button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
+$$('#segLayout button').forEach(b=>b.addEventListener('click',()=>{state.layout=b.dataset.l;$$('#segLayout button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
+$$('#segTree button').forEach(b=>b.addEventListener('click',()=>{state.treeMode=b.dataset.m;$$('#segTree button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
+$$('#segFn button').forEach(b=>b.addEventListener('click',()=>{state.fnView=b.dataset.fv;state.trace.on=false;$('#btnStep').classList.remove('on');$('#stepbar').hidden=true;renderFn(true)}));
+$('#search').addEventListener('input',e=>{state.q=e.target.value;if(state.ovApply)state.ovApply()});
+$('#search').addEventListener('keydown',e=>{if(e.key==='Enter'&&state.ovFirst)state.ovFirst()});
+$('#isoOff').addEventListener('click',()=>{state.iso=null;state.fileF=null;renderOverview(true)});
+$('#btnLeg').addEventListener('click',()=>{state.showLeg=!state.showLeg;renderLegend()});
+$('#btnRel').addEventListener('click',()=>{state.showRel=!state.showRel;renderRel()});
+$('#zin').addEventListener('click',()=>ovVp.zoomBy(1.3));$('#zout').addEventListener('click',()=>ovVp.zoomBy(1/1.3));
+$('#zfit').addEventListener('click',()=>ovVp.fit({x:0,y:0,w:ovBounds.w,h:ovBounds.h},30,1));
+$('#fzin').addEventListener('click',()=>fnVp.zoomBy(1.3));$('#fzout').addEventListener('click',()=>fnVp.zoomBy(1/1.3));
+$('#fzfit').addEventListener('click',()=>fnVp.fit({x:0,y:0,w:fnBounds.w,h:fnBounds.h},30,1));
+$('#exSvg').addEventListener('click',()=>exportSvg(ovSvg,ovBounds,pname()+'_map'));$('#exPng').addEventListener('click',()=>exportPng(ovSvg,ovBounds,pname()+'_map'));
+$('#fxSvg').addEventListener('click',()=>exportSvg(fnSvg,fnBounds,pname()+'_'+state.P.funcs[state.fnId].name));$('#fxPng').addEventListener('click',()=>exportPng(fnSvg,fnBounds,pname()+'_'+state.P.funcs[state.fnId].name));
+$('#fnBack').addEventListener('click',()=>{if(state.trail.length>1){state.trail.pop();openFn(state.trail[state.trail.length-1],true)}else{location.hash='#/'}});
+$$('#side .tabs button').forEach(b=>b.addEventListener('click',()=>setSideTab(b.dataset.st)));
+$('#chkLearn').addEventListener('change',e=>{const f=state.P.funcs[state.fnId],k=lkey(f);e.target.checked?state.learned.add(k):state.learned.delete(k);store.set('cm.learned',[...state.learned]);updateProgress()});
+addEventListener('hashchange',route);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&state.fnId!=null)$('#fnBack').click();if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&state.fnId==null){e.preventDefault();$('#search').focus()}});
+addEventListener('resize',()=>{if(state.P&&state.fnId==null&&!$('#overview').hidden){}});
+
+/* ---------- boot ---------- */
+setTheme(state.theme);applyI18n();
+$('#src').value=SAMPLES.JavaScript;
+setStats();updateProgress();
+$('#empty').textContent=t('empty');
+{const hash=location.hash;try{setProject(analyze([{path:'snippet.js',code:SAMPLES.JavaScript,lang:'js'}],'snippet'))}catch(e){console.error(e)}
+ if(/^#\/f\/\d+/.test(hash)){location.hash=hash;route()}}
+</script>
+</body>
+</html>

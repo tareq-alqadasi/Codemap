@@ -103,6 +103,29 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
 #tip code{font-family:var(--mono)}
 .cv text{font-family:var(--ui)}
 @media(max-width:860px){#drawer{position:absolute;inset-block:0;inset-inline-start:0;width:min(94vw,400px);box-shadow:var(--shadow)}.fnbody{flex-direction:column}#side{width:auto;height:42%;border-inline-start:0;border-block-start:1px solid var(--line)}.progress i{display:none}}
+
+.modal{position:fixed;inset:0;background:rgba(10,18,28,.55);display:grid;place-items:center;z-index:60;padding:16px}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);width:min(580px,100%);max-height:88vh;overflow:auto;padding:18px}
+.sheet h3{margin:0 0 6px}.sheet h4{margin:16px 0 4px;color:var(--ink2);font-weight:500}
+.setrow{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-block-end:1px solid var(--line)}
+.setrow input{margin-top:5px;accent-color:var(--accent)}
+.soon{font-size:11px;padding:1px 8px;border-radius:999px;background:var(--panel2);color:var(--ink2);margin-inline-start:6px}
+.note{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:var(--card);display:grid;gap:4px}
+.note .trg{font:600 13px var(--mono);direction:ltr;text-align:left;word-break:break-all}
+.note .meta{font-size:11.5px;color:var(--ink2);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.note .meta span{background:var(--panel2);padding:0 7px;border-radius:999px}
+.note .meta button{border:0;background:none;color:var(--accent);padding:0 4px}
+.mono{font-family:var(--mono);direction:ltr;text-align:left}
+.runrow{display:flex;gap:8px;align-items:center;margin:6px 0}.runrow .mono{min-width:64px}.runrow input{flex:1;font-family:var(--mono);direction:ltr;text-align:left}
+.steps{width:100%;border-collapse:collapse;font-size:12px}
+.steps td{padding:3px 5px;border-block-end:1px solid var(--line);vertical-align:top}
+.steps tr{cursor:pointer}.steps tr:hover,.steps tr.cur{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.steps .v{color:var(--c-if);font-family:var(--mono);direction:ltr;text-align:left}
+.out{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font:12px var(--mono);direction:ltr;text-align:left;white-space:pre-wrap;max-height:110px;overflow:auto}
+#dfHint{position:absolute;inset-inline-start:12px;inset-block-start:10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 11px;font-size:12.5px;color:var(--ink2);max-width:360px;box-shadow:var(--shadow)}
+.selpop{position:fixed;z-index:55;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:4px 10px;box-shadow:var(--shadow)}
+.fld{display:grid;gap:4px}.fld label{font-size:12.5px;color:var(--ink2)}
+textarea.note-in{min-height:64px;resize:vertical;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 10px}
 [dir=rtl] .flip svg{transform:scaleX(-1)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -162,6 +185,18 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
 .chip-g rect{fill:color-mix(in srgb,var(--c-call) 14%,var(--card));stroke:var(--c-call);stroke-width:1}
 .chip-g:hover rect{fill:color-mix(in srgb,var(--c-call) 30%,var(--card))}
 .chip-g text{font:11px var(--mono);fill:var(--ink)}
+.tk-o{fill:var(--ink2);color:var(--ink2)}
+.hastip{text-decoration:underline dotted var(--ink3);text-underline-offset:3px;cursor:help}
+.hasnote{text-decoration:underline wavy var(--c-if);text-underline-offset:3px;cursor:help}
+.chip-g.val{cursor:default}.chip-g.val rect{fill:color-mix(in srgb,var(--c-if) 14%,var(--card));stroke:var(--c-if);stroke-dasharray:3 2}
+.visit rect{fill:var(--accent)}.visit text{fill:var(--accent-ink);font:600 10.5px var(--mono);text-anchor:middle}
+.fl-edge.res{stroke:var(--c-call);stroke-dasharray:4 3;marker-end:url(#ar-true)}
+.fl-lbl.res{fill:var(--c-call)}
+.d-param .fl-bar{fill:var(--c-try)}.d-call .fl-bar{fill:var(--c-call)}.d-ext .fl-bar{fill:var(--ink3)}.d-assign .fl-bar{fill:var(--c-stmt)}.d-ret .fl-bar{fill:var(--c-ret)}
+.d-cond .fl-shape{stroke:var(--c-if);stroke-width:1.8}.d-param .fl-shape{stroke:var(--c-try)}.d-ext .fl-shape{stroke-dasharray:4 3}
+.d-call .nm{font:600 12px var(--mono);fill:var(--ink)}.d-sub{font:11px var(--mono);fill:var(--c-if)}
+.tr-sub{font-size:11px;fill:var(--ink2)}
+.fl-node.dsel .fl-shape{stroke:var(--accent);stroke-width:2.6}
 .tk-k{fill:var(--tk-k);color:var(--tk-k)}.tk-s{fill:var(--tk-s);color:var(--tk-s)}.tk-c{fill:var(--tk-c);color:var(--tk-c);font-style:italic}
 .tk-n{fill:var(--tk-n);color:var(--tk-n)}.tk-f{fill:var(--tk-f);color:var(--tk-f)}.tk-t{fill:var(--tk-t);color:var(--tk-t)}
 </style>
@@ -178,6 +213,7 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
   <div class="grow"></div>
   <div class="progress" id="progress"><span id="progTxt"></span><i><b id="progBar"></b></i></div>
   <button id="btnLang" class="chip">EN</button>
+  <button id="btnSet" class="ico" data-i="gear" data-ti="settings"></button>
   <button id="btnTheme" class="ico" data-i="moon"></button>
 </header>
 <main id="main">
@@ -186,6 +222,7 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
       <button data-tab="paste" class="on" data-t="paste"></button>
       <button data-tab="files" data-t="files"></button>
       <button data-tab="github">GitHub</button>
+      <button data-tab="notes" data-t="notesTab"></button>
     </div>
     <div class="pane" data-pane="paste">
       <textarea id="src" spellcheck="false" dir="ltr" data-tph="ph_src"></textarea>
@@ -208,6 +245,19 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
       <div class="row"><button id="ghGo" class="primary" data-t="ghLoad"></button></div>
       <div class="bar"><b id="ghBar"></b></div>
       <p class="hint" id="ghLog"></p>
+    </div>
+    <div class="pane" data-pane="notes" hidden>
+      <div class="row"><select id="nScope"></select><select id="nLang"></select><select id="nSort"></select></div>
+      <input id="nSearch" type="search" data-tph="noteSearch">
+      <div id="nTags" class="row"></div>
+      <div class="note" id="nForm">
+        <div class="fld"><label data-t="noteTrigger"></label><input id="nTrig" type="text" dir="ltr" placeholder="**"></div>
+        <div class="fld"><label data-t="noteText"></label><textarea id="nText" class="note-in"></textarea></div>
+        <div class="row"><select id="nSc"></select><input id="nTg" type="text" data-tph="noteTags" style="flex:1"></div>
+        <div class="row"><button id="nSave" class="primary" data-t="save"></button><button id="nCancel" class="chip" data-t="cancel" hidden></button></div>
+      </div>
+      <div id="nList" style="display:grid;gap:8px"></div>
+      <div class="row"><button id="nExp" class="chip" data-t="export"></button><label class="chip"><span data-t="import"></span><input id="nImp" type="file" accept=".json" hidden></label></div>
     </div>
     <p class="msg" id="msg"></p>
   </aside>
@@ -238,7 +288,7 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
       <button id="fnBack" class="chip flip"><span data-i="back"></span><span data-t="back"></span></button>
       <div id="trail" class="trail"></div>
       <div class="grow"></div>
-      <div class="seg" id="segFn"><button data-fv="flow" class="on" data-t="flow"></button><button data-fv="outline" data-t="outline"></button></div>
+      <div class="seg" id="segFn"><button data-fv="flow" class="on" data-t="flow"></button><button data-fv="data" data-t="dataflow"></button><button data-fv="outline" data-t="outline"></button></div>
       <button id="btnStep" class="chip" data-t="trace"></button>
       <label class="check"><input type="checkbox" id="chkLearn"><span data-t="learned"></span></label>
       <button class="ico" id="fzin" data-i="plus" data-ti="zin"></button>
@@ -255,11 +305,12 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
           <marker id="ar-loop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ar-loop" d="M0 1l9 4-9 4z"/></marker>
           <marker id="ar-exc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ar-exc" d="M0 1l9 4-9 4z"/></marker>
         </defs><g id="fnG"></g></svg>
-        <div id="stepbar" hidden></div>
+        <div id="dfHint" hidden></div><div id="stepbar" hidden></div>
       </div>
       <aside id="side">
-        <div class="tabs"><button data-st="info" class="on" data-t="info"></button><button data-st="source" data-t="source"></button><button data-st="links" data-t="links"></button></div>
+        <div class="tabs"><button data-st="info" class="on" data-t="info"></button><button data-st="run" data-t="run"></button><button data-st="source" data-t="source"></button><button data-st="links" data-t="links"></button></div>
         <div class="sidepane" id="spInfo"></div>
+        <div class="sidepane" id="spRun" hidden></div>
         <div class="sidepane" id="spSource" hidden></div>
         <div class="sidepane" id="spLinks" hidden></div>
       </aside>
@@ -268,6 +319,7 @@ svg.cv{width:100%;height:100%;display:block;touch-action:none;direction:ltr;user
 </main>
 </div>
 <div id="tip"></div>
+<div id="settings" class="modal" hidden><div class="sheet" id="setSheet"></div></div>
 <script>
 'use strict';
 /* ================= helpers ================= */
@@ -277,7 +329,7 @@ function H(tag,a,...kids){const e=document.createElement(tag);for(const k in a||
 function S(tag,a,...kids){const e=document.createElementNS(NS,tag);for(const k in a||{}){const v=a[k];if(v==null||v===false)continue;if(k==='class')e.setAttribute('class',v);else if(k==='text')e.textContent=v;else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);else e.setAttribute(k,v)}for(const c of kids.flat(9)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e}
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const ICON={menu:'M3 6h18M3 12h18M3 18h18',plus:'M12 5v14M5 12h14',minus:'M5 12h14',fit:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',moon:'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',sun:'M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',back:'M15 5l-7 7 7 7'};
+const ICON={menu:'M3 6h18M3 12h18M3 18h18',plus:'M12 5v14M5 12h14',minus:'M5 12h14',fit:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',moon:'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',sun:'M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',back:'M15 5l-7 7 7 7',gear:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z'};
 const ico=(k,sz=16)=>`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${ICON[k]}"/></svg>`;
 
 /* ================= i18n ================= */
@@ -393,7 +445,7 @@ const TYPES=new Set('int float double string bool boolean char long short byte v
 function hlFile(F){
  if(F.hl)return F.hl;
  const L=LANGS[F.lang],code=F.code,lines=[[]];
- const push=(c,text)=>{const ps=text.split('\n');ps.forEach((p,k)=>{if(k>0)lines.push([]);if(p){const cur=lines[lines.length-1],last=cur[cur.length-1];if(last&&last.c===c)last.v+=p;else cur.push({c,v:p})}})};
+ const push=(c,text)=>{const ps=text.split('\n');ps.forEach((p,k)=>{if(k>0)lines.push([]);if(p){const cur=lines[lines.length-1],last=cur[cur.length-1];if(last&&last.c===c&&c!=='o')last.v+=p;else cur.push({c,v:p})}})};
  const parts=[];
  if(L.slash)parts.push('\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?(?:\\*\\/|$)');
  if(L.hash)parts.push('#[^\\n]*');
@@ -404,7 +456,8 @@ function hlFile(F){
  st.push(L.q1==='str'?"'(?:\\\\.|[^'\\\\\\n])*'?":"'(?:\\\\.|[^'\\\\\\n])'");
  if(L.tick)st.push('`[^`]*`?');
  const pre=(lang=>lang==='c'||lang==='cpp')(F.lang)?'|(#\\s*\\w+[^\\n]*)':'|((?!))';
- const re=new RegExp(cm+'|('+st.join('|')+')|(\\b(?:0[xX][\\da-fA-F_]+|\\d[\\d_]*\\.?\\d*(?:[eE][+-]?\\d+)?)\\b)|([A-Za-z_$][\\w$]*)'+pre+'|([\\s\\S])','g');
+ const op='|(\\*\\*=?|\\/\\/=?|<<=?|>>=?|===|!==|==|!=|<=|>=|&&|\\|\\||\\?\\?=?|\\?\\.|=>|->|:=|<-|::|\\.\\.\\.|\\.\\.=?|\\+\\+|--|[+\\-*/%&|^]=|[+\\-*/%&|^~!<>=?@])';
+ const re=new RegExp(cm+'|('+st.join('|')+')|(\\b(?:0[xX][\\da-fA-F_]+|\\d[\\d_]*\\.?\\d*(?:[eE][+-]?\\d+)?)\\b)|([A-Za-z_$][\\w$]*)'+pre+op+'|([\\s\\S])','g');
  let last=0,m;
  while((m=re.exec(code))){
   if(m[0]==='')break;
@@ -413,6 +466,7 @@ function hlFile(F){
   else if(m[3]!==undefined)push('n',m[0]);
   else if(m[4]!==undefined){const w=m[0];let c='';if(KW.has(w))c='k';else if(TYPES.has(w))c='t';else{let q=re.lastIndex;while(code[q]===' ')q++;if(code[q]==='(')c='f';else if(/^[A-Z]/.test(w)&&w.length>1)c='t'}push(c,w)}
   else if(m[5])push('k',m[0]);
+  else if(m[6]!==undefined)push('o',m[0]);
   else push('',m[0]);
  }
  F.hl=lines;return lines;
@@ -578,6 +632,126 @@ func report(n int) {
 	println("min", n)
 }
 `};
+/* ================= extra strings ================= */
+Object.assign(I18N.ar,{
+dataflow:'تدفق البيانات',run:'تشغيل',settings:'الإعدادات',result:'ناتج',params:'المعاملات',
+dfHint:'كل صندوق دالة أو خطوة، وكل سهم يحمل اسم المتغيّر الذي ينتقل من واحدة إلى التالية.',dfNone:'لا توجد علاقات بيانات واضحة في هذه الدالة.',
+runHint:'أدخل قيمًا تجريبية لكل معامل ثم شغّل لترى ما يفعله كل سطر. القيم المقترحة قابلة للتعديل.',runBtn:'شغّل',runUnsupported:'التشغيل متاح لدوال JavaScript وPython العامة (لا الأساليب داخل الأصناف) حاليًا.',runOff:'ميزة التشغيل متوقفة من الإعدادات.',
+runLoading:'جارٍ تحميل Python (مرة واحدة، نحو 10MB)…',runWork:'جارٍ التشغيل…',runErr:'خطأ أثناء التشغيل',runRet:'القيمة المُرجَعة',runSteps:'الخطوات',runOut:'المخرجات',runNoPy:'تحميل Pyodide معطّل في الإعدادات.',runNoSteps:'لم تُسجَّل خطوات (الدالة قصيرة أو بتعبير واحد).',
+stepOf:(i,n,l)=>`الخطوة ${i}/${n} · السطر ${l}`,play:'تشغيل تلقائي',pause:'إيقاف',exit:'إنهاء',
+x_if:c=>`يتحقق: ${c}`,x_loop:(k,c)=>`يكرّر (${k}) ${c}`,x_switch:c=>`يختار حسب ${c}`,x_try:'يجرّب ويلتقط الأخطاء',x_return:v=>`يعيد ${v}`,x_return0:'ينهي الدالة',x_throw:'يرمي خطأً',x_break:'يخرج من الحلقة',x_continue:'ينتقل للتكرار التالي',
+x_assign_call:(v,c)=>`يحفظ ناتج ${c} في ${v}`,x_assign:(v,e)=>`يحسب ${v} = ${e}`,x_call:c=>`يستدعي ${c}`,x_in:v=>`يستقبل: ${v}`,x_true:'عند true',x_false:'وإلا',
+notesTab:'ملاحظاتي',noteSearch:'ابحث في ملاحظاتك…',noteTrigger:'الرمز أو التركيب (مثل **)',noteText:'ملاحظتك',noteTags:'وسوم (بفاصلة)',save:'حفظ',cancel:'إلغاء',export:'تصدير',import:'استيراد',del:'حذف',edit:'تعديل',myNote:'ملاحظتك',addNote:'+ ملاحظة',
+scAll:'عامة (نصائح وحيل)',scLang:'هذه اللغة',scCode:'هذا الكود',allScopes:'كل النطاقات',allLangs:'كل اللغات',sortNew:'الأحدث',sortTrig:'الرمز',sortLang:'اللغة',
+noNotes:'لا ملاحظات بعد. حدّد جزءًا من الكود في تبويب «المصدر» ثم اضغط «+ ملاحظة».',tipOf:'تلميح',example:'مثال',
+setGen:'عام',setExp:'تجريبي (للمستقبل)',soon:'قريبًا',setReset:'إعادة الضبط',setBackup:'نسخة احتياطية (ملاحظات وإعدادات)',setNote:'الإعدادات المعلَّمة «قريبًا» محفوظة ومجهّزة لكنها لا تفعل شيئًا بعد.',close:'إغلاق'});
+Object.assign(I18N.en,{
+dataflow:'Data flow',run:'Run',settings:'Settings',result:'result',params:'Parameters',
+dfHint:'Each box is a function or a step; each arrow carries the variable that flows from one to the next.',dfNone:'No clear data relations in this function.',
+runHint:'Enter sample values for each parameter, then run to see what every line does. Suggested values are editable.',runBtn:'Run',runUnsupported:'Running works for plain JavaScript and Python functions (not class methods) for now.',runOff:'Running is turned off in settings.',
+runLoading:'Loading Python (once, ~10MB)…',runWork:'Running…',runErr:'Run error',runRet:'Returned value',runSteps:'Steps',runOut:'Output',runNoPy:'Pyodide loading is disabled in settings.',runNoSteps:'No steps recorded (the function is a single expression).',
+stepOf:(i,n,l)=>`Step ${i}/${n} · line ${l}`,play:'Autoplay',pause:'Pause',exit:'Exit',
+x_if:c=>`Checks: ${c}`,x_loop:(k,c)=>`Repeats (${k}) ${c}`,x_switch:c=>`Chooses by ${c}`,x_try:'Tries, catches errors',x_return:v=>`Returns ${v}`,x_return0:'Ends the function',x_throw:'Throws an error',x_break:'Leaves the loop',x_continue:'Jumps to next iteration',
+x_assign_call:(v,c)=>`Stores the result of ${c} in ${v}`,x_assign:(v,e)=>`Computes ${v} = ${e}`,x_call:c=>`Calls ${c}`,x_in:v=>`Takes: ${v}`,x_true:'when true',x_false:'otherwise',
+notesTab:'My notes',noteSearch:'Search your notes…',noteTrigger:'Symbol or construct (e.g. **)',noteText:'Your note',noteTags:'Tags (comma)',save:'Save',cancel:'Cancel',export:'Export',import:'Import',del:'Delete',edit:'Edit',myNote:'Your note',addNote:'+ Note',
+scAll:'General (tips & tricks)',scLang:'This language',scCode:'This code',allScopes:'All scopes',allLangs:'All languages',sortNew:'Newest',sortTrig:'Symbol',sortLang:'Language',
+noNotes:'No notes yet. Select part of the code in the Source tab, then press “+ Note”.',tipOf:'Tip',example:'Example',
+setGen:'General',setExp:'Experimental (future)',soon:'Soon',setReset:'Reset',setBackup:'Backup (notes & settings)',setNote:'Settings marked “Soon” are stored and wired but do nothing yet.',close:'Close'});
+
+/* ================= built-in hover tips ================= */
+// [token, langs ('*' = all), arabic, english, example]
+const TIPS=[
+['**','py,js,php','أُسّ: a ** b تعني a مرفوعة إلى القوة b','Exponent: a ** b = a to the power b','2 ** 3  →  8'],
+['//','py','قسمة صحيحة: تُسقط الكسر','Floor division: drops the fraction','7 // 2  →  3'],
+['%','*','باقي القسمة (modulo)','Remainder (modulo)','7 % 3  →  1'],
+['=','*','إسناد: يحفظ القيمة التي على اليمين في المتغيّر الذي على اليسار','Assignment: stores the right-hand value in the left-hand variable','x = 5'],
+['==','*','مساواة: يقارن القيمتين ويعطي true أو false','Equality: compares two values, gives true/false','3 == 3  →  true'],
+['!=','*','عدم مساواة','Not equal','3 != 4  →  true'],
+['===','js,php,dart','مساواة صارمة: القيمة والنوع معًا','Strict equality: value and type','"1" === 1  →  false'],
+['!==','js,php','عدم مساواة صارم (قيمة ونوع)','Strict inequality (value and type)',''],
+['&&','*','«و» منطقية: لا تكون true إلا إذا تحقق الطرفان','Logical AND: true only if both sides are true','a > 0 && b > 0'],
+['||','*','«أو» منطقية: تكفي true من أحد الطرفين','Logical OR: true if either side is true','a || b'],
+['!','*','نفي منطقي: يقلب true إلى false والعكس','Logical NOT: flips true/false','!ready'],
+['??','js,cs,kotlin,php,dart,swift','إن كانت القيمة null/undefined استعمل البديل','If the value is null/undefined, use the fallback','name ?? "guest"'],
+['?.','js,cs,kotlin,swift,dart','وصول آمن: لا ينهار إن كان الكائن null','Optional chaining: safe if the object is null','user?.name'],
+['?','js,java,c,cpp,cs,php,dart,kotlin,swift','شرط ثلاثي: شرط ? إن_صح : إن_خطأ، أو نوع اختياري حسب اللغة','Ternary: cond ? a : b (or an optional type, depending on language)','x > 0 ? "pos" : "neg"'],
+['=>','js,cs,php,dart,rust,kotlin','سهم: دالة مختصرة (x) => x*2، أو فرع في match/switch','Arrow: short function (x) => x*2, or a match arm','(x) => x * 2'],
+['->','py,java,c,cpp,kotlin,rust,swift,php','سهم: نوع القيمة المُرجَعة (Python/Rust/Swift) أو وصول عبر مؤشّر (C/C++/PHP) أو لامدا (Java/Kotlin)','Arrow: return type (Python/Rust/Swift), pointer access (C/C++/PHP) or lambda (Java/Kotlin)','def f(x) -> int:'],
+[':=','py,go','Python: يسند داخل التعبير (walrus). Go: تعريف وإسناد سريع','Python: assign inside an expression (walrus). Go: declare and assign','if (n := len(a)) > 3:'],
+['...','js,php,dart,kotlin','spread/rest: نشر عناصر مصفوفة أو تجميع بقية المعاملات','Spread/rest: expand items or collect remaining args','[...a, ...b]'],
+['::','cpp,rust,php,java,kotlin,cs','عامل النطاق: الوصول إلى اسم داخل صنف أو وحدة','Scope operator: access a name inside a class or module','std::cout'],
+['<-','go','إرسال/استقبال عبر channel','Send/receive on a channel','ch <- 5'],
+['++','js,java,c,cpp,cs,php,go,dart,swift','زيادة بمقدار 1','Increment by 1','i++'],
+['--','js,java,c,cpp,cs,php,go,dart,swift','إنقاص بمقدار 1','Decrement by 1','i--'],
+['+=','*','تعديل مختصر: x += 1 تعني x = x + 1','Shorthand: x += 1 means x = x + 1',''],
+['-=','*','تعديل مختصر: x -= 1 تعني x = x - 1','Shorthand: x -= 1 means x = x - 1',''],
+['*=','*','تعديل مختصر: x *= 2 تعني x = x * 2','Shorthand: x *= 2 means x = x * 2',''],
+['/=','*','تعديل مختصر: x /= 2 تعني x = x / 2','Shorthand: x /= 2 means x = x / 2',''],
+['<<','*','إزاحة بتات لليسار (تضاعف القيمة لكل خانة)','Left bit shift (doubles per step)','1 << 3  →  8'],
+['>>','*','إزاحة بتات لليمين (تنصّف القيمة لكل خانة)','Right bit shift (halves per step)','8 >> 1  →  4'],
+['&','*','AND على مستوى البتات، أو أخذ عنوان/استعارة (C/Go/Rust)','Bitwise AND, or address-of/borrow (C/Go/Rust)','5 & 3  →  1'],
+['|','*','OR على مستوى البتات','Bitwise OR','5 | 3  →  7'],
+['^','*','XOR على مستوى البتات','Bitwise XOR','5 ^ 3  →  6'],
+['~','*','نفي البتات','Bitwise NOT',''],
+['@','py','Python: مزخرف decorator يعدّل سلوك الدالة، أو ضرب مصفوفات','Python: decorator (wraps a function) or matrix multiply',''],
+['lambda','py','دالة صغيرة بلا اسم','Small anonymous function','lambda x: x * 2'],
+['elif','py','اختصار else if','Short for else if',''],
+['in','py,js,kotlin,rust','Python/Rust: ينتمي إلى أو يمرّ على عناصر. JS: يفحص وجود مفتاح','Python/Rust: membership or iterate over. JS: key exists','3 in [1,2,3]  →  True'],
+['not','py','نفي منطقي','Logical NOT','not ready'],
+['and','py','«و» منطقية','Logical AND',''],
+['or','py','«أو» منطقية','Logical OR',''],
+['is','py,kotlin,cs,dart','Python: هل هما الكائن نفسه (لا مجرد قيمتين متساويتين). غيرها: فحص النوع','Python: same object (not just equal). Others: type check','a is None'],
+['yield','py,js,cs','ينتج قيمة ويوقف الدالة مؤقتًا (generator)','Produces a value and pauses the function (generator)',''],
+['with','py','يضمن تنظيف المورد (إغلاق ملف…) حتى لو حدث خطأ','Guarantees cleanup (e.g. closing a file) even on error','with open(f) as x:'],
+['pass','py','لا يفعل شيئًا (يملأ كتلة فارغة)','Does nothing (fills an empty block)',''],
+['None','py','لا قيمة (مثل null)','No value (like null)',''],
+['self','py,rust,swift','الكائن الحالي داخل أسلوب في صنف','The current object inside a class method',''],
+['raise','py','يرمي استثناءً (خطأً)','Throws an exception',''],
+['assert','py,java','يتأكد أن الشرط صحيح وإلا يوقف البرنامج','Checks a condition, stops if false',''],
+['const','js,cs,cpp,c,dart,swift','متغيّر لا يُعاد إسناده (JS) أو ثابت','Variable that cannot be reassigned / a constant',''],
+['let','js,rust,swift','متغيّر محدود النطاق بالكتلة','Block-scoped variable',''],
+['var','js,cs,kotlin,swift,go,dart','JS: متغيّر بنطاق الدالة (قديم). غيرها: نوع يُستنتج تلقائيًا','JS: function-scoped (old). Others: inferred type',''],
+['typeof','js','يعطي نوع القيمة كنص','Gives the value type as a string','typeof 5  →  "number"'],
+['await','js,py,cs,rust,dart','ينتظر نتيجة عملية غير متزامنة','Waits for an async result',''],
+['async','js,py,cs,rust,dart,kotlin','يجعل الدالة غير متزامنة (تعيد وعدًا/coroutine)','Makes the function asynchronous',''],
+['of','js','JS: يمرّ على عناصر المجموعة (بخلاف in الذي يمرّ على المفاتيح)','JS: iterates over values (in iterates over keys)','for (x of list)'],
+['new','js,java,cs,cpp,php,dart','ينشئ كائنًا جديدًا من صنف','Creates a new object from a class',''],
+['this','js,java,cs,cpp,php,kotlin,dart','الكائن الحالي','The current object',''],
+['null','*','لا قيمة','No value',''],
+['undefined','js','متغيّر لم تُسند له قيمة بعد','A variable with no value assigned yet',''],
+['defer','go,swift','يؤجّل التنفيذ حتى نهاية الدالة (للتنظيف غالبًا)','Delays execution until the function ends (usually cleanup)',''],
+['go','go','يشغّل الدالة في خيط خفيف (goroutine) بالتوازي','Runs the function concurrently (goroutine)',''],
+['chan','go','قناة لتبادل القيم بين goroutines','Channel for passing values between goroutines',''],
+['nil','go,swift','لا قيمة','No value',''],
+['mut','rust','يجعل المتغيّر قابلًا للتعديل','Makes the variable mutable',''],
+['unwrap','rust','يستخرج القيمة من Option/Result وينهار إن كانت فارغة','Extracts the value from Option/Result, panics if empty',''],
+['match','rust,py','يطابق قيمة مع أنماط ويختار الفرع المناسب','Matches a value against patterns',''],
+['len','py,go','عدد العناصر','Number of items','len([1,2,3])  →  3'],
+['range','py,go,rust','سلسلة أعداد: range(5) تعطي 0 إلى 4','Sequence of numbers: range(5) → 0..4','range(1, 4)  →  1,2,3'],
+['print','py','يطبع القيمة على الشاشة','Prints the value',''],
+['enumerate','py','يعطي (رقم، عنصر) لكل عنصر','Yields (index, item) pairs','for i, x in enumerate(a):'],
+['zip','py','يجمع قوائم عنصرًا بعنصر','Pairs up lists element by element',''],
+['map','py,js','يطبّق دالة على كل عنصر','Applies a function to every item',''],
+['filter','py,js','يُبقي العناصر التي تحقق شرطًا','Keeps items that satisfy a condition',''],
+['reduce','js','يختزل المصفوفة إلى قيمة واحدة','Folds an array into a single value',''],
+['sorted','py','ترتيب جديد للعناصر دون تغيير الأصل','Returns a sorted copy','sorted([3,1,2])'],
+['sum','py','مجموع العناصر','Sum of items',''],
+['min','py','أصغر قيمة','Smallest value',''],['max','py','أكبر قيمة','Largest value',''],['abs','py','القيمة المطلقة','Absolute value',''],
+['int','py','يحوّل إلى عدد صحيح','Converts to an integer',''],['str','py','يحوّل إلى نص','Converts to a string',''],['float','py','يحوّل إلى عدد عشري','Converts to a float',''],
+['isinstance','py','هل الكائن من هذا النوع؟','Is the object of this type?',''],
+['append','py,go','يضيف عنصرًا إلى النهاية','Adds an item at the end',''],
+['push','js','يضيف عنصرًا إلى نهاية المصفوفة','Adds an item at the end of the array',''],
+['slice','js,py','يقتطع جزءًا دون تغيير الأصل','Takes a part without changing the original',''],
+['forEach','js','ينفّذ دالة على كل عنصر','Runs a function on every item',''],
+['includes','js','هل العنصر موجود؟','Is the item present?',''],
+['toFixed','js','يقرّب لعدد من الخانات العشرية ويعيد نصًا','Rounds to n decimals, returns a string','(2.345).toFixed(1)'],
+['console','js','أدوات الطباعة والتشخيص في المتصفح','Browser logging tools',''],
+['Number','js','يحوّل إلى عدد','Converts to a number',''],
+['JSON','js','تحويل بين الكائنات والنص (stringify/parse)','Converts between objects and text',''],
+['Promise','js','وعد: نتيجة ستصل لاحقًا','A result that will arrive later','']
+];
+const TIPMAP=new Map();for(const e of TIPS){if(!TIPMAP.has(e[0]))TIPMAP.set(e[0],[]);TIPMAP.get(e[0]).push(e)}
+function builtinTip(lang,tk){const l=TIPMAP.get(tk);if(!l)return null;for(const e of l)if(e[1]==='*'||e[1].split(',').includes(lang))return{txt:LANG==='ar'?e[2]:e[3],ex:e[4]};return null}
 /* ================= function finding ================= */
 function matchClose(m,i){const o=m[i],c={'{':'}','(':')','[':']'}[o];let d=0;for(let k=i;k<m.length;k++){const ch=m[k];if(ch===o)d++;else if(ch===c){d--;if(d===0)return k}}return -1}
 const CTRL=new Set('if for while switch catch foreach synchronized using lock do else try finally return function fn func fun def when match with elif unless until sizeof typeof await new throw case default use defer select loop unsafe async alignof decltype'.split(' '));
@@ -998,7 +1172,7 @@ function extractCalls(m,s,e){
   if(/(?:^|\W)(?:function|def|fn|func|fun|class|new)$/.test(pre)&&!/new$/.test(pre))continue;
   let obj=null;
   if(t[1]){const om=/([A-Za-z_$][\w$]*)\s*$/.exec(str.slice(0,t.index));obj=om?om[1]:null;if(obj&&BUILTIN.has(obj))continue}
-  out.push({name,dot:!!t[1],obj,idx:s+t.index});
+  out.push({name,dot:!!t[1],obj,idx:s+t.index,open:s+t.index+t[0].length-1});
  }
  return out;
 }
@@ -1072,6 +1246,57 @@ function analyze(files,name){
  for(const fn of P.funcs){fn.nCallers=P.inn.get(fn.id).filter(e=>e.from!==fn.id).length;fn.nCallees=P.out.get(fn.id).filter(e=>e.to!==fn.id).length;fn.rec=P.out.get(fn.id).some(e=>e.to===fn.id)}
  P.files.forEach((F,i)=>F.color=`hsl(${Math.round((i*137.5+210)%360)} 58% 52%)`);
  return P;
+}
+
+/* ================= assignment / params helpers ================= */
+const idents=str=>{const o=[],re=/[A-Za-z_$][\w$]*/g;let t;while((t=re.exec(str)))o.push(t[0]);return o};
+function splitTop(str,sep){const out=[];let d=0,cur='';for(const c of str){if('([{'.includes(c))d++;else if(')]}'.includes(c))d--;if(c===sep&&d===0){out.push(cur);cur=''}else cur+=c}if(cur.trim()||out.length)out.push(cur);return out}
+const DECLKW=new Set('const let var final val auto mut static public private protected readonly int float double string bool boolean char long short byte void String Integer Double Boolean var dim'.split(' '));
+function lhsVars(lhs){
+ let l=lhs.trim().replace(/^(?:(?:const|let|var|final|val|auto|mut|static)\s+)+/,'');
+ if(!/^[\[{(]/.test(l)&&/[.\[]/.test(l)){const r=idents(l)[0];return r?[r]:[]}
+ l=l.replace(/:\s*[^,=]+/g,'').replace(/[\[\](){}]/g,' ');
+ const out=[];
+ for(const seg of l.split(',')){const ids=idents(seg).filter(x=>!DECLKW.has(x)||idents(seg).length===1);const last=ids[ids.length-1];if(last&&!KW.has(last)||(last&&idents(seg).length===1))out.push(last)}
+ return out;
+}
+function parseAssign(txt){
+ let d=0;
+ for(let i=0;i<txt.length;i++){
+  const c=txt[i];
+  if('([{'.includes(c))d++;else if(')]}'.includes(c))d--;
+  else if(d===0&&c==='='){
+   const p=txt[i-1],n=txt[i+1];
+   if(n==='='||n==='>')continue;
+   if(p==='='||p==='!'||p==='<'||p==='>')continue;
+   let st=i,aug=false;
+   if(p===':')st=i-1;
+   else if('+-*/%&|^'.includes(p||'#')){aug=true;st=i-1;if((p==='*'&&txt[i-2]==='*')||(p==='/'&&txt[i-2]==='/'))st=i-2}
+   else if(p==='?'&&txt[i-2]==='?'){aug=true;st=i-2}
+   const lhs=txt.slice(0,st);
+   if(!lhs.trim()||/^\s*(?:if|while|for|return|elif|else)\b/.test(lhs))return null;
+   const vars=lhsVars(lhs);if(!vars.length)return null;
+   const weak=/[.\[]/.test(lhs.trim())&&!/^[\[{(]/.test(lhs.trim());
+   return{vars,aug,weak,endIdx:i+1,lhs};
+  }
+ }
+ return null;
+}
+function paramNames(fn){
+ const L=fn.file.lang,raw=fn.params||'';const out=[];
+ for(const seg0 of splitTop(raw,',')){
+  let seg=seg0.trim();if(!seg)continue;
+  seg=seg.replace(/=.*$/,'').replace(/^\*+|^\.\.\./,'').replace(/^(?:final|const|mut|readonly|public|private|protected)\s+/,'');
+  if(seg.includes(':')&&!/::/.test(seg))seg=seg.split(':')[0];
+  seg=seg.replace(/[\[\]{}<>&*?]/g,' ').trim();
+  const toks=seg.split(/\s+/).filter(Boolean);if(!toks.length)continue;
+  let nm;
+  if(toks.length===1)nm=toks[0];
+  else if(['java','c','cpp','cs','dart'].includes(L))nm=toks[toks.length-1];
+  else nm=toks[0];
+  if(/^[A-Za-z_$][\w$]*$/.test(nm)&&nm!=='self'&&nm!=='cls'&&nm!=='this'&&nm!=='_')out.push(nm);
+ }
+ return out;
 }
 /* ================= control-flow graph ================= */
 function buildFlow(P,fn){
@@ -1172,10 +1397,16 @@ function buildFlow(P,fn){
  // call chips
  for(const n of nodes){
   if(!n.ranges.length)continue;
-  const ids=new Map(),ext=new Set();
-  for(const[s,e]of n.ranges)for(const c of extractCalls(F.m,s,e)){
-   const r=resolveCall(P,c,fn);
-   if(r)for(const id of r)ids.set(id,(ids.get(id)||0)+1);else ext.add(c.name)}
+  const ids=new Map(),ext=new Set();n.assign=new Map();
+  for(const[s,e]of n.ranges){
+   const pa=parseAssign(F.m.slice(s,e));let sc=null;
+   if(pa){const cs=extractCalls(F.m,s,e).map(c=>Object.assign(c,{close:matchClose(F.m,c.open)})).filter(c=>c.close>0&&c.close<=e);
+    const outer=cs.filter(c=>!cs.some(o=>o!==c&&o.open<c.idx&&o.close>c.close));
+    if(outer.length===1){const c=outer[0],pre=F.m.slice(s+pa.endIdx,c.idx).trim(),after=F.m.slice(c.close+1,e).trim().replace(/;$/,'');if(/^(?:await\s+|new\s+)*[\w$.]*$/.test(pre)&&!after)sc=c}}
+   for(const c of extractCalls(F.m,s,e)){
+    const r=resolveCall(P,c,fn);
+    if(r){for(const id of r){ids.set(id,(ids.get(id)||0)+1);if(sc&&c===sc||(sc&&c.idx===sc.idx))n.assign.set(id,pa.vars.join(', '))}}else ext.add(c.name)}
+  }
   n.calls=[...ids.keys()];n.ext=[...ext];
  }
  return{nodes,edges};
@@ -1197,7 +1428,8 @@ function sizeFlow(P,fn,nodes){
   shown.forEach(l=>{const r=cutTokens(hlFile(F)[l-1]||[],ind,lim);n.toks.push(r);mx=Math.max(mx,r.reduce((a,t)=>a+t.v.length,0))});
   let w=FL.GUT+mx*FL.CW+FL.PADX*2+(hex?20:0);
   n.chips=[];
-  for(const id of n.calls||[]){const nm=P.funcs[id].qname;n.chips.push({id,name:nm.length>26?nm.slice(0,25)+'…':nm})}
+  for(const id of n.calls||[]){let nm=P.funcs[id].qname;const av=n.assign&&n.assign.get(id);if(av)nm+=' → '+av;n.chips.push({id,name:nm.length>34?nm.slice(0,33)+'…':nm})}
+  if(fn.run&&cfg('values')){const vs=fn.run.vals.get(n.id)||[];for(const v of vs)n.chips.push({val:true,name:v.length>38?v.slice(0,37)+'…':v})}
   for(const c of n.chips)c.w=c.name.length*6.6+22;
   const cmax=n.chips.reduce((a,c)=>Math.max(a,c.w),0);
   n.w=clamp(Math.max(w,cmax+FL.GUT+8),FL.MINW,FL.MAXW);
@@ -1527,6 +1759,7 @@ function drawTreeInto(g,root,vp,setB,fit,onFn){
    gl.append(S('path',{class:'tr-link',d:`M${a.x+12},${a.y} C${a.x+42},${a.y} ${b.x-30},${b.y} ${b.x},${b.y}`,stroke:bc,'stroke-width':Math.max(1.2,2.8-n.d*.4)}));walk(k,bc,i)});
   const tg=S('g',{});
   const tx=S('text',{class:'tr-t'+(n.fnId!=null?' fn':'')+(n.root?' root':'')+(n.ref?' tr-ref':''),x:n.x,y:n.y-3,text:n.label});
+  if(n.sub)tg.append(S('text',{class:'tr-sub',x:n.x,y:n.y+17,text:n.sub}));
   if(n.fnId!=null||n.onClick)tx.addEventListener('click',()=>{if(vp.wasDrag())return;n.onClick?n.onClick():onFn(n.fnId)});
   tg.append(tx,S('line',{x1:n.x,y1:n.y+3,x2:n.x+n.w+10,y2:n.y+3,stroke:c,'stroke-width':n.root?2.4:1.6,'stroke-opacity':.7}));
   if(hasKids){const cx=n.x+n.w+17;
@@ -1554,7 +1787,7 @@ function showOverview(){
 function showFn(id){
  if(state.trail[state.trail.length-1]!==id)state.trail=[id];
  $('#overview').hidden=true;$('#fnpage').hidden=false;hideTip();
- state.fnId=id;state.sel=null;state.trace={on:false,cur:null,path:[],vis:new Set()};$('#stepbar').hidden=true;$('#btnStep').classList.remove('on');
+ if(state.trace&&state.trace.timer)clearInterval(state.trace.timer);state.fnId=id;state.sel=null;state.trace={on:false,cur:null,path:[],vis:new Set()};$('#stepbar').hidden=true;$('#btnStep').classList.remove('on');
  renderFn(true);
 }
 function renderTrail(){
@@ -1571,9 +1804,11 @@ function renderFn(fit){
  $$('#segFn button').forEach(b=>b.classList.toggle('on',b.dataset.fv===state.fnView));
  if(!fn.flow){fn.flow=buildFlow(P,fn);sizeFlow(P,fn,fn.flow.nodes);fn.lay=layoutFlow(fn.flow.nodes,fn.flow.edges)}
  fn.lineOwner=fn.lineOwner||(()=>{const m={};for(const n of fn.flow.nodes)for(const l of n.lineNums||[])if(!(l in m))m[l]=n.id;return m})();
+ $('#dfHint').hidden=true;
  if(state.fnView==='flow')drawFlow(fn,fit);
- else drawTreeInto(fnG,buildOutline(fn),fnVp,b=>fnBounds=b,fit,null);
- renderSide();
+ else if(state.fnView==='data')drawData(fn,fit);
+ else drawTreeInto(fnG,buildOutline(fn),fnVp,b=>fnBounds=b,fit,id=>openFn(id,true));
+ renderSide();if(state.trace.on)paintTrace();
 }
 function drawFlow(fn,fit){
  const F=fn.file,{nodes,edges}=fn.flow,lay=fn.lay;fnBounds={w:lay.w,h:lay.h};fnG.innerHTML='';
@@ -1602,11 +1837,12 @@ function drawFlow(fn,fit){
    n.shown.forEach((l,i)=>{
     const y=FL.PADY+(i+1)*FL.LH-5;
     g.append(S('text',{class:'fl-ln',x:FL.GUT-(hex?4:6),y,text:l}));
-    const t2=S('text',{class:'fl-code',x:tx,y});for(const k of n.toks[i])t2.append(S('tspan',{class:k.c?'tk-'+k.c:null,text:k.v}));g.append(t2);
+    const t2=S('text',{class:'fl-code',x:tx,y});for(const k of n.toks[i])t2.append(S('tspan',Object.assign({class:tokClass(F.lang,k.v.trim(),k.c),text:k.v},tokAttr(F.lang,k.v.trim()))));g.append(t2);
    });
    let y0=FL.PADY+n.shown.length*FL.LH;
    if(n.more){g.append(S('text',{class:'fl-more',x:tx,y:y0+FL.LH-5,text:`⋯ +${n.more}`}));y0+=FL.LH}
    for(const c of n.chips){
+    if(c.val){g.append(S('g',{class:'chip-g val',transform:`translate(${FL.GUT+c.x},${y0+4+c.row*(FL.CHIP_H+4)})`},S('rect',{width:c.w,height:FL.CHIP_H,rx:6}),S('text',{x:9,y:14.5,text:c.name})));continue}
     const cg=S('g',{class:'chip-g',transform:`translate(${FL.GUT+c.x},${y0+4+c.row*(FL.CHIP_H+4)})`},S('rect',{width:c.w,height:FL.CHIP_H,rx:6}),S('text',{x:9,y:14.5,text:c.name}));
     cg.addEventListener('click',ev=>{ev.stopPropagation();if(fnVp.wasDrag())return;openFn(c.id,true)});
     cg.addEventListener('pointerenter',ev=>{const f=state.P.funcs[c.id];showTip(`${f.qname}\n${f.file.path}:${f.line}`,ev)});cg.addEventListener('pointerleave',hideTip);
@@ -1616,6 +1852,9 @@ function drawFlow(fn,fit){
   g.addEventListener('click',()=>{if(fnVp.wasDrag())return;selectNode(n.id)});
   g.addEventListener('pointerenter',()=>hoverLines(n));g.addEventListener('pointerleave',()=>hoverLines(null));
   gN.append(g);state.nodeEls.set(n.id,g);
+  const vis=fn.run&&fn.run.visits.get(n.id);
+  if(vis&&vis.length){const txt=vis.length>1?`${vis[0]+1} ×${vis.length}`:String(vis[0]+1),bw=txt.length*6.6+12;
+   g.append(S('g',{class:'visit',transform:'translate(-6,-9)'},S('rect',{width:bw,height:17,rx:8.5}),S('text',{x:bw/2,y:12.3,text:txt})))}
  }
  if(fit){
   const r=fnSvg.getBoundingClientRect(),W=r.width||800,Hh=r.height||600,kw=(W-60)/lay.w,kfull=Math.min(kw,(Hh-40)/lay.h,1);
@@ -1643,8 +1882,8 @@ function describe(n,fn){
  }
  return'';
 }
-function setSideTab(k){state.sideTab=k;$$('#side .tabs button').forEach(b=>b.classList.toggle('on',b.dataset.st===k));$('#spInfo').hidden=k!=='info';$('#spSource').hidden=k!=='source';$('#spLinks').hidden=k!=='links'}
-function renderSide(){renderInfo();renderSource();renderLinks();setSideTab(state.sideTab)}
+function setSideTab(k){state.sideTab=k;$$('#side .tabs button').forEach(b=>b.classList.toggle('on',b.dataset.st===k));$('#spInfo').hidden=k!=='info';$('#spRun').hidden=k!=='run';$('#spSource').hidden=k!=='source';$('#spLinks').hidden=k!=='links'}
+function renderSide(){renderInfo();renderRun();renderSource();renderLinks();setSideTab(state.sideTab)}
 function fnLink(id,cnt){const f=state.P.funcs[id];return H('span',{class:'lnk',title:`${f.file.path}:${f.line}`,onclick:()=>openFn(id,true)},f.qname+(cnt?` ×${cnt}`:''))}
 function renderInfo(){
  const P=state.P,fn=P.funcs[state.fnId],el=$('#spInfo');el.innerHTML='';
@@ -1658,6 +1897,10 @@ function renderInfo(){
   el.append(H('h5',{text:''}),H('span',{class:'badge',style:`background:var(${TYCOL[n.type]})`,text:n.type==='loop'?n.kind:n.type}),H('p',{text:describe(n,fn)}));
   if(n.calls&&n.calls.length){el.append(H('h5',{text:t('calls')}));n.calls.forEach(id=>el.append(fnLink(id)))}
   if(n.ext&&n.ext.length){el.append(H('h5',{text:t('ext')}));n.ext.slice(0,16).forEach(x=>el.append(H('span',{class:'lnk ext',text:x})))}
+  const code=(n.lineNums||[]).map(l=>fn.file.lines[l-1]).join(' ');
+  const mine=NOTES.list.filter(x=>x.trigger&&code.includes(x.trigger)&&(x.scope==='all'||(x.scope==='lang'&&x.lang===fn.file.lang)||(x.scope==='code'&&x.proj===P.name)));
+  if(mine.length){el.append(H('h5',{text:t('myNote')}));mine.forEach(x=>el.append(H('p',{},H('span',{class:'lnk ext mono',text:x.trigger}),' '+x.text)))}
+  el.append(H('div',{class:'row',style:'margin-top:10px'},H('button',{class:'chip',text:t('addNote'),onclick:()=>openNote({trigger:(fn.file.lines[n.l1-1]||'').trim().slice(0,60),scope:'lang'})})));
  }
  const lg=H('div',{style:'margin-top:16px'},H('h5',{text:t('leg')}));
  [['--c-if','lg_if'],['--c-loop','lg_loop'],['--c-switch','lg_switch'],['--c-try','lg_try'],['--c-ret','lg_ret'],['--c-stmt','lg_stmt'],['--c-call','lg_call']].forEach(([c,k])=>lg.append(H('div',{class:'row',style:'margin:3px 0;color:var(--ink2)'},H('i',{style:`width:14px;height:10px;border-radius:3px;background:var(${c})`}),t(k))));
@@ -1668,7 +1911,7 @@ function renderSource(){
  const a=fn.line,b=Math.min(fn.endLine,a+(fn.module?400:2000)),box=H('div',{class:'src'}),hl=hlFile(F);
  for(let l=a;l<=b;l++){
   const row=H('div',{'data-ln':l,onclick:()=>selectByLine(l)},H('b',{text:l}));
-  const tk=hl[l-1]||[];for(const k of tk)row.append(H('span',{class:k.c?'tk-'+k.c:null,text:k.v}));
+  const tk=hl[l-1]||[];for(const k of tk)row.append(H('span',Object.assign({class:tokClass(F.lang,k.v.trim(),k.c),text:k.v},tokAttr(F.lang,k.v.trim()))));
   box.append(row);
  }
  el.append(box);
@@ -1685,30 +1928,6 @@ function renderLinks(){
  if(ext.size){el.append(H('h5',{text:t('ext')}));[...ext].slice(0,40).forEach(x=>el.append(H('span',{class:'lnk ext',text:x})))}
 }
 
-/* ---------- outline (markmap-like) ---------- */
-function buildOutline(fn){
- const F=fn.file,ast=getAst(fn);
- const lbl=(s,e)=>short(clean(F,s,e),52);
- const col=n=>`var(${TYCOL[n]})`;
- const conv=list=>{
-  const out=[];let i=0;
-  while(i<list.length){
-   const s=list[i];
-   if(s.t==='stmt'){let j=i;while(j+1<list.length&&list[j+1].t==='stmt')j++;const k=j-i;
-    out.push({label:lbl(s.s,s.e)+(k?`  (+${k})`:''),color:col('stmt'),onClick:()=>selectByLine(F.lineAt(s.s)),children:[]});i=j+1;continue}
-   const ln=F.lineAt(s.s),mk=(label,type,children)=>({label,color:col(type),onClick:()=>selectByLine(ln),children:children||[]});
-   if(s.t==='if'){const kids=conv(s.body);if(s.else)kids.push({label:'else',color:col('if'),onClick:()=>selectByLine(ln),children:conv(s.else)});out.push(mk('if '+short(clean(F,s.cs,s.ce),44),'if',kids))}
-   else if(s.t==='loop'||s.t==='dowhile')out.push(mk(`${s.kind} ${short(clean(F,s.cs,s.ce),40)}`,'loop',conv(s.body)));
-   else if(s.t==='switch')out.push(mk(`${s.kw} ${short(clean(F,s.cs,s.ce),40)}`,'switch',s.cases.map(c=>({label:c.def?'default':'case '+short(clean(F,c.cs,c.ce),30),color:col('switch'),onClick:()=>selectByLine(F.lineAt(c.ls)),children:conv(c.body)}))));
-   else if(s.t==='try'){const kids=conv(s.body);for(const c of s.catches)kids.push({label:'catch '+short(clean(F,c.cs,c.ce),30),color:col('try'),onClick:()=>selectByLine(F.lineAt(c.ls)),children:conv(c.body)});if(s.fin)kids.push({label:'finally',color:col('try'),onClick:()=>selectByLine(F.lineAt(s.fin.ls)),children:conv(s.fin.body)});out.push(mk('try',"try",kids))}
-   else out.push(mk(lbl(s.s,s.e),s.t));
-   i++;
-  }
-  return out;
- };
- return{label:fn.qname,root:true,children:conv(ast)};
-}
-
 /* ---------- trace mode ---------- */
 function traceGo(id){
  const fn=state.P.funcs[state.fnId],tr=state.trace;
@@ -1718,6 +1937,7 @@ function traceGo(id){
 function traceBack(){const tr=state.trace;if(!tr.path.length)return;tr.vis.delete(tr.cur);tr.cur=tr.path.pop();paintTrace();const n=state.P.funcs[state.fnId].flow.nodes[tr.cur];fnVp.centerOn(n.x,n.y+n.h/2);selectNode(tr.cur)}
 function paintTrace(){
  const fn=state.P.funcs[state.fnId],tr=state.trace,bar=$('#stepbar');
+ if(tr.on&&tr.mode==='run'&&fn.run)return paintRunTrace(fn,tr,bar);
  state.nodeEls.forEach((g,k)=>{g.classList.toggle('cur',tr.on&&k===tr.cur);g.classList.toggle('vis',tr.on&&tr.vis.has(k)&&k!==tr.cur)});
  const seq=[...tr.path,tr.cur];
  state.edgeEls.forEach(o=>{let on=false;for(let i=0;i<seq.length-1;i++)if(seq[i]===o.e.from&&seq[i+1]===o.e.to)on=true;o.el.classList.toggle('cur',tr.on&&on)});
@@ -1730,10 +1950,26 @@ function paintTrace(){
  else outs.forEach(e=>{const tn=fn.flow.nodes[e.to];bar.append(H('button',{class:'chip',onclick:()=>traceGo(e.to),text:(e.label||t('next'))+' → '+(tn.type==='end'?'end':'L'+tn.l1)}))});
  bar.append(H('button',{class:'chip',onclick:traceBack,text:t('prev')}),H('button',{class:'chip',onclick:()=>{tr.path=[];tr.vis=new Set();tr.cur=null;traceGo(0)},text:t('restart')}));
 }
+function paintRunTrace(fn,tr,bar){
+ const r=fn.run,s=r.steps[tr.idx];
+ state.nodeEls.forEach((g,k)=>{g.classList.toggle('cur',s&&k===s.node);g.classList.toggle('vis',false)});
+ for(let i=0;i<tr.idx;i++){const nn=r.steps[i].node;if(nn!=null&&state.nodeEls.has(nn)&&nn!==(s&&s.node))state.nodeEls.get(nn).classList.add('vis')}
+ state.edgeEls.forEach(o=>o.el.classList.remove('cur'));
+ bar.hidden=!tr.on;if(!tr.on||!s)return;bar.innerHTML='';
+ const code=(fn.file.lines[s.line-1]||'').trim();
+ const eff=Object.entries(s.changed).map(([k,v])=>`${k} = ${v}`).concat(s.calls.map(c=>`${c.name}(${c.args}) → ${c.ret}`));
+ bar.append(H('div',{class:'d'},H('b',{text:t('stepOf',tr.idx+1,r.steps.length,s.line)}),H('div',{class:'mono',text:code}),...eff.map(x=>H('div',{class:'mono',style:'color:var(--c-if)',text:x}))));
+ bar.append(H('button',{class:'chip',onclick:()=>traceRunGo(tr.idx-1),text:t('prev')}),H('button',{class:'chip',onclick:()=>traceRunGo(tr.idx+1),text:t('next')}),
+  H('button',{class:'chip',onclick:()=>{if(tr.timer){clearInterval(tr.timer);tr.timer=null;paintTrace();return}tr.timer=setInterval(()=>{if(tr.idx>=r.steps.length-1){clearInterval(tr.timer);tr.timer=null;paintTrace();return}traceRunGo(tr.idx+1)},1000);paintTrace()},text:tr.timer?t('pause'):t('play')}),
+  H('button',{class:'chip',onclick:()=>{if(tr.timer)clearInterval(tr.timer);tr.on=false;$('#btnStep').classList.remove('on');paintTrace()},text:t('exit')}));
+}
 $('#btnStep').addEventListener('click',()=>{
  if(state.fnView!=='flow'){state.fnView='flow';renderFn(true)}
- const tr=state.trace;tr.on=!tr.on;$('#btnStep').classList.toggle('on',tr.on);
- if(tr.on){tr.path=[];tr.vis=new Set();tr.cur=null;traceGo(0)}else paintTrace();
+ const fn=state.P.funcs[state.fnId],tr=state.trace;
+ if(tr.timer){clearInterval(tr.timer);tr.timer=null}
+ tr.on=!tr.on;$('#btnStep').classList.toggle('on',tr.on);
+ if(tr.on&&fn.run&&fn.run.steps.length){tr.mode='run';tr.idx=0;traceRunGo(0)}
+ else if(tr.on){tr.mode='branch';tr.path=[];tr.vis=new Set();tr.cur=null;traceGo(0)}else paintTrace();
 });
 
 /* ================= export ================= */
@@ -1840,14 +2076,14 @@ async function loadGithub(){
 $('#ghGo').addEventListener('click',loadGithub);
 
 /* ================= wiring ================= */
-$$('#drawer .tabs [data-tab]').forEach(b=>b.addEventListener('click',()=>{$$('#drawer .tabs [data-tab]').forEach(x=>x.classList.toggle('on',x===b));$$('#drawer [data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab)}));
+$$('#drawer .tabs [data-tab]').forEach(b=>b.addEventListener('click',()=>{$$('#drawer .tabs [data-tab]').forEach(x=>x.classList.toggle('on',x===b));$$('#drawer [data-pane]').forEach(p=>p.hidden=p.dataset.pane!==b.dataset.tab);if(b.dataset.tab==='notes')renderNotes()}));
 $('#btnDrawer').addEventListener('click',()=>$('#drawer').classList.toggle('closed'));
 $('#btnTheme').addEventListener('click',()=>setTheme(state.theme==='dark'?'light':'dark'));
-$('#btnLang').addEventListener('click',()=>{LANG=LANG==='ar'?'en':'ar';store.set('cm.lang',LANG);applyI18n();setStats();updateProgress();if(state.P){if(state.fnId!=null)renderFn(false);else renderOverview(false)}});
+$('#btnLang').addEventListener('click',()=>{LANG=LANG==='ar'?'en':'ar';store.set('cm.lang',LANG);applyI18n();renderNotes();setStats();updateProgress();if(state.P){if(state.fnId!=null)renderFn(false);else renderOverview(false)}});
 $$('#segView button').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.v;$$('#segView button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
 $$('#segLayout button').forEach(b=>b.addEventListener('click',()=>{state.layout=b.dataset.l;$$('#segLayout button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
 $$('#segTree button').forEach(b=>b.addEventListener('click',()=>{state.treeMode=b.dataset.m;$$('#segTree button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
-$$('#segFn button').forEach(b=>b.addEventListener('click',()=>{state.fnView=b.dataset.fv;state.trace.on=false;$('#btnStep').classList.remove('on');$('#stepbar').hidden=true;renderFn(true)}));
+$$('#segFn button').forEach(b=>b.addEventListener('click',()=>{state.fnView=b.dataset.fv;if(state.trace.timer)clearInterval(state.trace.timer);state.trace={on:false,cur:null,path:[],vis:new Set()};$('#btnStep').classList.remove('on');$('#stepbar').hidden=true;renderFn(true)}));
 $('#search').addEventListener('input',e=>{state.q=e.target.value;if(state.ovApply)state.ovApply()});
 $('#search').addEventListener('keydown',e=>{if(e.key==='Enter'&&state.ovFirst)state.ovFirst()});
 $('#isoOff').addEventListener('click',()=>{state.iso=null;state.fileF=null;renderOverview(true)});
@@ -1866,8 +2102,480 @@ addEventListener('hashchange',route);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&state.fnId!=null)$('#fnBack').click();if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&state.fnId==null){e.preventDefault();$('#search').focus()}});
 addEventListener('resize',()=>{if(state.P&&state.fnId==null&&!$('#overview').hidden){}});
 
+
+$('#btnSet').addEventListener('click',()=>{renderSettings();$('#settings').hidden=false});
+$('#settings').addEventListener('click',e=>{if(e.target.id==='settings')$('#settings').hidden=true});
+['#nScope','#nLang','#nSort'].forEach(s=>$(s).addEventListener('change',renderNotes));$('#nSearch').addEventListener('input',renderNotes);
+$('#nSave').addEventListener('click',saveNote);$('#nCancel').addEventListener('click',()=>{editingNote=null;$('#nTrig').value='';$('#nText').value='';$('#nTg').value='';$('#nCancel').hidden=true});
+$('#nExp').addEventListener('click',()=>download(new Blob([JSON.stringify(NOTES.list,null,1)],{type:'application/json'}),'codemap-notes.json'));
+$('#nImp').addEventListener('change',async e=>{try{const a=JSON.parse(await e.target.files[0].text());if(Array.isArray(a)){const ids=new Set(NOTES.list.map(n=>n.id));NOTES.set(NOTES.list.concat(a.filter(n=>n&&n.trigger&&!ids.has(n.id))));renderNotes()}}catch(x){}});
+/* ================= settings ================= */
+const SETTINGS=[
+{k:'tips',g:'gen',def:true,ready:1,ar:'تلميحات المرور (hover) للرموز والكلمات',en:'Hover tips for symbols and keywords'},
+{k:'noteMarks',g:'gen',def:true,ready:1,ar:'تمييز الرموز التي كتبتَ عنها ملاحظة',en:'Mark tokens you wrote notes about'},
+{k:'values',g:'gen',def:true,ready:1,ar:'إظهار القيم على العقد بعد التشغيل',en:'Show values on nodes after a run'},
+{k:'ex_run',g:'exp',def:true,ready:1,ar:'تشغيل الدوال بمدخلات تجريبية (JS وPython)',en:'Run functions with sample inputs (JS & Python)'},
+{k:'ex_py',g:'exp',def:true,ready:1,ar:'السماح بتحميل Pyodide (~10MB) لتشغيل Python',en:'Allow loading Pyodide (~10MB) to run Python'},
+{k:'ex_ai',g:'exp',def:false,ready:0,ar:'شرح ذكي لكل عقدة بالذكاء الاصطناعي (يتطلب مفتاح API)',en:'AI explanation per node (needs an API key)'},
+{k:'ex_sync',g:'exp',def:false,ready:0,ar:'مزامنة الملاحظات بين الأجهزة',en:'Sync notes across devices'},
+{k:'ex_more',g:'exp',def:false,ready:0,ar:'لغات إضافية (Ruby وLua وScala)',en:'More languages (Ruby, Lua, Scala)'},
+{k:'ex_heat',g:'exp',def:false,ready:0,ar:'خريطة حرارية لتكرار التنفيذ على مستوى المشروع',en:'Project-level execution heatmap'},
+{k:'ex_diff',g:'exp',def:false,ready:0,ar:'مقارنة نسختين من الكود',en:'Compare two versions of the code'},
+{k:'ex_share',g:'exp',def:false,ready:0,ar:'رابط مشاركة للرسم',en:'Share link for the diagram'}];
+const SETCACHE={v:store.get('cm.set',{})};
+const cfg=k=>{const d=SETTINGS.find(x=>x.k===k);return k in SETCACHE.v?SETCACHE.v[k]:(d?d.def:false)};
+// hooks for future features: HOOKS.ex_ai = async node => text ; read via cfg('ex_ai')
+const HOOKS={ex_ai:null,ex_sync:null,ex_more:null,ex_heat:null,ex_diff:null,ex_share:null};
+function renderSettings(){
+ const sh=$('#setSheet');sh.innerHTML='';
+ sh.append(H('h3',{text:t('settings')}));
+ for(const[g,title]of[['gen',t('setGen')],['exp',t('setExp')]]){
+  sh.append(H('h4',{text:title}));
+  if(g==='exp')sh.append(H('p',{class:'hint',text:t('setNote')}));
+  for(const d of SETTINGS.filter(x=>x.g===g)){
+   const cb=H('input',{type:'checkbox'});cb.checked=!!cfg(d.k);
+   cb.addEventListener('change',()=>{SETCACHE.v[d.k]=cb.checked;store.set('cm.set',SETCACHE.v);if(state.fnId!=null)renderFn(false);else if(state.P)renderOverview(false)});
+   sh.append(H('label',{class:'setrow'},cb,H('span',{},d[LANG],d.ready?null:H('span',{class:'soon',text:t('soon')}))));
+  }
+ }
+ sh.append(H('h4',{text:t('setBackup')}));
+ sh.append(H('div',{class:'row'},
+  H('button',{class:'chip',text:t('export'),onclick:()=>download(new Blob([JSON.stringify({notes:NOTES.list,settings:SETCACHE.v},null,1)],{type:'application/json'}),'codemap-backup.json')}),
+  H('label',{class:'chip'},t('import'),H('input',{type:'file',accept:'.json',hidden:true,onchange:async e=>{try{const j=JSON.parse(await e.target.files[0].text());if(j.notes)NOTES.set(j.notes);if(j.settings){SETCACHE.v=j.settings;store.set('cm.set',j.settings)}renderSettings();renderNotes()}catch(x){}}})),
+  H('button',{class:'chip',text:t('setReset'),onclick:()=>{SETCACHE.v={};store.set('cm.set',{});renderSettings()}})));
+ sh.append(H('div',{class:'row',style:'margin-top:14px'},H('button',{class:'primary',text:t('close'),onclick:()=>$('#settings').hidden=true})));
+}
+
+/* ================= notes ================= */
+const NOTES={list:store.get('cm.notes',[]),set(a){this.list=a;store.set('cm.notes',a)}};
+const curLang=()=>{const P=state.P;if(!P)return 'js';if(state.fnId!=null)return P.funcs[state.fnId].file.lang;return P.files[0]?P.files[0].lang:'js'};
+function notesFor(lang,tok){
+ const P=state.P;return NOTES.list.filter(n=>n.trigger===tok&&(n.scope==='all'||(n.scope==='lang'&&n.lang===lang)||(n.scope==='code'&&P&&n.proj===P.name)));
+}
+function tipText(tok,lang){
+ const parts=[];
+ if(cfg('tips')){const b=builtinTip(lang,tok);if(b)parts.push(`${tok}\n${b.txt}${b.ex?'\n'+t('example')+': '+b.ex:''}`)}
+ for(const n of notesFor(lang,tok))parts.push(`${t('myNote')}: ${n.text}`);
+ return parts.join('\n\n');
+}
+function tokClass(lang,tok,base){
+ let c=base?'tk-'+base:'';
+ if(cfg('tips')&&builtinTip(lang,tok))c+=' hastip';
+ if(cfg('noteMarks')&&notesFor(lang,tok).length)c+=' hasnote';
+ return c.trim()||null;
+}
+const tokAttr=(lang,tok)=>(tipText(tok,lang)?{'data-tk':tok,'data-tl':lang}:{});
+document.addEventListener('pointerover',e=>{const el=e.target.closest&&e.target.closest('[data-tk]');if(!el)return;const tx=tipText(el.dataset.tk,el.dataset.tl);if(tx)showTip(tx,e)});
+document.addEventListener('pointermove',e=>{if(tip.style.display==='block'&&e.target.closest&&e.target.closest('[data-tk]'))showTip(tip.textContent,e)});
+document.addEventListener('pointerout',e=>{if(e.target.closest&&e.target.closest('[data-tk]'))hideTip()});
+let editingNote=null;
+function openNote(pre){
+ $('#drawer').classList.remove('closed');
+ $$('#drawer .tabs [data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab==='notes'));$$('#drawer [data-pane]').forEach(p=>p.hidden=p.dataset.pane!=='notes');
+ editingNote=pre&&pre.id||null;
+ $('#nTrig').value=pre&&pre.trigger||'';$('#nText').value=pre&&pre.text||'';$('#nTg').value=pre&&pre.tags?pre.tags.join(', '):'';
+ $('#nSc').value=pre&&pre.scope||'lang';$('#nCancel').hidden=!editingNote;
+ (pre&&pre.trigger?$('#nText'):$('#nTrig')).focus();
+}
+function fillNoteSelects(){
+ const fill=(sel,opts)=>{const v=sel.value;sel.innerHTML='';opts.forEach(([k,l])=>sel.append(H('option',{value:k,text:l})));if(v&&opts.some(o=>o[0]===v))sel.value=v};
+ fill($('#nScope'),[['',t('allScopes')],['all',t('scAll')],['lang',t('scLang')],['code',t('scCode')]]);
+ fill($('#nLang'),[['',t('allLangs')],...Object.keys(LANGS).map(k=>[k,LANGS[k].name])]);
+ fill($('#nSort'),[['new',t('sortNew')],['trig',t('sortTrig')],['lang',t('sortLang')]]);
+ fill($('#nSc'),[['all',t('scAll')],['lang',t('scLang')],['code',t('scCode')]]);
+}
+function renderNotes(){
+ fillNoteSelects();
+ const sc=$('#nScope').value,lg=$('#nLang').value,q=$('#nSearch').value.trim().toLowerCase(),so=$('#nSort').value,tg=state.noteTag||'';
+ const P=state.P;let list=NOTES.list.slice();
+ const tags=new Set();list.forEach(n=>(n.tags||[]).forEach(x=>tags.add(x)));
+ list=list.filter(n=>(!sc||n.scope===sc)&&(!lg||n.lang===lg)&&(!tg||(n.tags||[]).includes(tg))&&(!q||(n.trigger+' '+n.text+' '+(n.tags||[]).join(' ')).toLowerCase().includes(q)));
+ list.sort((a,b)=>so==='trig'?a.trigger.localeCompare(b.trigger):so==='lang'?(a.lang||'').localeCompare(b.lang||'')||a.trigger.localeCompare(b.trigger):b.t-a.t);
+ const tg0=$('#nTags');tg0.innerHTML='';
+ [...tags].forEach(x=>tg0.append(H('button',{class:'chip'+(tg===x?' on':''),text:'#'+x,onclick:()=>{state.noteTag=state.noteTag===x?'':x;renderNotes()}})));
+ const el=$('#nList');el.innerHTML='';
+ if(!list.length)el.append(H('p',{class:'hint',text:t('noNotes')}));
+ for(const n of list){
+  el.append(H('div',{class:'note'},H('div',{class:'trg',text:n.trigger}),H('div',{text:n.text}),
+   H('div',{class:'meta'},H('span',{text:n.scope==='all'?t('scAll'):n.scope==='lang'?(LANGS[n.lang]?LANGS[n.lang].name:n.lang):(n.proj||t('scCode'))}),...(n.tags||[]).map(x=>H('span',{text:'#'+x})),
+    H('button',{text:t('edit'),onclick:()=>openNote(n)}),H('button',{text:t('del'),onclick:()=>{NOTES.set(NOTES.list.filter(x=>x.id!==n.id));renderNotes();refreshTips()}}))));
+ }
+}
+function refreshTips(){if(state.fnId!=null)renderFn(false)}
+function saveNote(){
+ const trigger=$('#nTrig').value.trim(),text=$('#nText').value.trim();if(!trigger||!text)return;
+ const scope=$('#nSc').value,tags=$('#nTg').value.split(',').map(x=>x.trim().replace(/^#/,'')).filter(Boolean);
+ const note={id:editingNote||('n'+Date.now()),trigger,text,scope,lang:curLang(),proj:state.P?state.P.name:'',tags,t:Date.now()};
+ NOTES.set(editingNote?NOTES.list.map(n=>n.id===editingNote?Object.assign(n,note,{t:n.t}):n):[note,...NOTES.list]);
+ editingNote=null;$('#nTrig').value='';$('#nText').value='';$('#nTg').value='';$('#nCancel').hidden=true;renderNotes();refreshTips();
+}
+// floating "+ note" button on selection in the source pane
+let selPop=null;
+document.addEventListener('mouseup',e=>{
+ if(selPop){selPop.remove();selPop=null}
+ const sel=getSelection();if(!sel||sel.isCollapsed)return;
+ const tx=sel.toString().trim();if(!tx||tx.length>120)return;
+ const an=sel.anchorNode&&(sel.anchorNode.nodeType===3?sel.anchorNode.parentElement:sel.anchorNode);
+ if(!an||!an.closest||!an.closest('#spSource'))return;
+ selPop=H('button',{class:'selpop',text:t('addNote'),style:`left:${Math.min(e.clientX,innerWidth-110)}px;top:${e.clientY+12}px`,onmousedown:ev=>ev.preventDefault(),onclick:()=>{openNote({trigger:tx,scope:'lang'});selPop.remove();selPop=null;getSelection().removeAllRanges()}});
+ document.body.append(selPop);
+});
+
+/* ================= statement explanations ================= */
+function outerCalls(fn,s,e){
+ const P=state.P,F=fn.file,m=F.m;
+ const calls=extractCalls(m,s,e).map(c=>Object.assign(c,{close:matchClose(m,c.open)})).filter(c=>c.close>0&&c.close<=e);
+ const out=[];
+ for(const c of calls){if(calls.some(o=>o!==c&&o.open<c.idx&&o.close>c.close))continue;
+  const ids=resolveCall(P,c,fn);out.push({name:c.name,id:ids&&ids.length?ids[0]:null,qname:ids&&ids.length?P.funcs[ids[0]].qname:c.name,args:short(clean(F,c.open+1,c.close),28),c});}
+ return out;
+}
+function singleCall(fn,s,e,pa){
+ const F=fn.file,m=F.m,calls=outerCalls(fn,s,e);if(calls.length!==1)return null;
+ const c=calls[0].c,rs=s+pa.endIdx,pre=m.slice(rs,c.idx).trim(),after=m.slice(c.close+1,e).trim().replace(/;$/,'');
+ return /^(?:await\s+|new\s+)*[\w$.]*$/.test(pre)&&!after?calls[0]:null;
+}
+function explainStmt(fn,s){
+ const F=fn.file,m=F.m,cl=(a,b)=>short(clean(F,a,b).replace(/;$/,''),44);
+ switch(s.t){
+  case'if':return t('x_if',cl(s.cs,s.ce));
+  case'loop':case'dowhile':return t('x_loop',s.kind,cl(s.cs,s.ce));
+  case'switch':return t('x_switch',cl(s.cs,s.ce));
+  case'try':return t('x_try');
+  case'return':{const x=clean(F,s.s,s.e).replace(/^return\s*/,'').replace(/;$/,'');return x?t('x_return',short(x,40)):t('x_return0')}
+  case'throw':return t('x_throw');case'break':return t('x_break');case'continue':return t('x_continue');
+ }
+ const txt=m.slice(s.s,s.e),pa=parseAssign(txt);
+ if(pa){const sc=singleCall(fn,s.s,s.e,pa);const v=pa.vars.join(', ');
+  if(sc)return t('x_assign_call',v,sc.qname);
+  return t('x_assign',v,short(clean(F,s.s+pa.endIdx,s.e).replace(/;$/,''),36))}
+ const cs=outerCalls(fn,s.s,s.e);if(cs.length)return t('x_call',cs.map(c=>c.qname).join(', '));
+ return '';
+}
+
+/* ================= outline (meaningful steps) ================= */
+function buildOutline(fn){
+ const F=fn.file,ast=getAst(fn),col=n=>`var(${TYCOL[n]})`;
+ const lbl=(s,e)=>short(clean(F,s,e).replace(/;$/,''),48);
+ const conv=list=>{
+  const out=[];
+  for(const s of list){
+   const ln=F.lineAt(s.s),click=()=>selectByLine(ln);
+   const mk=(label,type,children)=>({label,sub:explainStmt(fn,s),color:col(type),onClick:click,children:children||[]});
+   const grp=(label,type,body,l)=>({label,color:col(type),onClick:()=>selectByLine(l||ln),children:conv(body)});
+   if(s.t==='if'){const kids=[grp(t('x_true'),'if',s.body)];if(s.else)kids.push(grp(t('x_false'),'if',s.else));out.push(mk('if '+short(clean(F,s.cs,s.ce),44),'if',kids))}
+   else if(s.t==='loop'||s.t==='dowhile')out.push(mk(`${s.kind} ${short(clean(F,s.cs,s.ce),40)}`,'loop',conv(s.body)));
+   else if(s.t==='switch')out.push(mk(`${s.kw} ${short(clean(F,s.cs,s.ce),40)}`,'switch',s.cases.map(c=>({label:c.def?'default':'case '+short(clean(F,c.cs,c.ce),30),color:col('switch'),onClick:()=>selectByLine(F.lineAt(c.ls)),children:conv(c.body)}))));
+   else if(s.t==='try'){const kids=[grp('try','try',s.body)];for(const c of s.catches)kids.push(grp('catch '+short(clean(F,c.cs,c.ce),30),'try',c.body,F.lineAt(c.ls)));if(s.fin)kids.push(grp('finally','try',s.fin.body,F.lineAt(s.fin.ls)));out.push(mk('try','try',kids))}
+   else{
+    const node=mk(lbl(s.s,s.e),s.t),pa=s.t==='stmt'?parseAssign(F.m.slice(s.s,s.e)):null;
+    const sc=pa?singleCall(fn,s.s,s.e,pa):null;
+    for(const c of outerCalls(fn,s.s,s.e)){if(c.id==null)continue;
+     node.children.push({label:`${c.qname}(${c.args})`+(sc&&sc.id===c.id?' → '+pa.vars.join(', '):''),fnId:c.id,color:'var(--c-call)',children:[]})}
+    out.push(node);
+   }
+  }
+  return out;
+ };
+ const root={label:fn.qname,root:true,rowH:48,sub:paramNames(fn).length?t('x_in',paramNames(fn).join(', ')):'',children:conv(ast)};
+ return root;
+}
+
+/* ================= data flow ================= */
+function buildDataflow(P,fn){
+ const F=fn.file,m=F.m,ast=getAst(fn);
+ const nodes=[],edges=[],ek=new Set(),cache=new Map();
+ const node=(key,mk)=>{let n=cache.get(key);if(!n){n=Object.assign({id:nodes.length},mk());nodes.push(n);cache.set(key,n)}return n};
+ const edge=(a,b,label,kind)=>{if(a===b)return;const k=a+'>'+b+':'+label;if(ek.has(k))return;ek.add(k);edges.push({from:a,to:b,label,kind:kind||''})};
+ const cloneEnv=e=>{const c=new Map();for(const[k,v]of e)c.set(k,new Set(v));return c};
+ const mergeEnv=(a,b)=>{const c=cloneEnv(a);for(const[k,v]of b){if(!c.has(k))c.set(k,new Set());for(const x of v)c.get(k).add(x)}return c};
+ const useVars=(str,env)=>{const seen=new Set();for(const id of idents(str.replace(/\.\s*[A-Za-z_$][\w$]*/g,' ')))if(env.has(id))seen.add(id);return seen};
+ const blank=(str,a,b)=>str.slice(0,a)+' '.repeat(Math.max(0,b-a))+str.slice(b);
+ let env=new Map();
+ for(const p of paramNames(fn)){const n=node('p:'+p,()=>({type:'param',text:p,line:fn.line}));env.set(p,new Set([n]))}
+ function proc(s,e,kind,env,label){
+  const txt=m.slice(s,e);
+  const calls=extractCalls(m,s,e).map(c=>Object.assign(c,{close:matchClose(m,c.open)})).filter(c=>c.close>0&&c.close<=e);
+  for(const c of calls){let par=null;for(const o of calls)if(o!==c&&o.open<c.idx&&o.close>c.close&&(!par||o.open>par.open))par=o;c.parent=par}
+  const cn=new Map();
+  for(const c of calls){
+   const ids=resolveCall(P,c,fn),isInt=!!(ids&&ids.length);
+   cn.set(c,node('c:'+c.idx,()=>({type:isInt?'call':'ext',text:isInt?P.funcs[ids[0]].qname:c.name,fnId:isInt?ids[0]:null,args:short(clean(F,c.open+1,c.close),30),line:F.lineAt(c.idx)})));
+  }
+  for(const c of calls){
+   let a=m.slice(c.open+1,c.close);
+   for(const o of calls)if(o.parent===c)a=blank(a,o.idx-(c.open+1),o.close+1-(c.open+1));
+   const nd=cn.get(c);
+   for(const v of useVars(a,env))for(const d of env.get(v))edge(d.id,nd.id,v);
+   if(c.dot&&c.obj&&env.has(c.obj))for(const d of env.get(c.obj))edge(d.id,nd.id,c.obj);
+   if(c.parent)edge(nd.id,cn.get(c.parent).id,'__res','res');
+  }
+  const outer=calls.filter(c=>!c.parent);
+  let outside=txt;for(const c of outer)outside=blank(outside,c.idx-s,c.close+1-s);
+  if(kind==='stmt'){
+   const pa=parseAssign(txt);if(!pa)return null;
+   const sc=singleCall(fn,s,e,pa);let def;
+   if(sc){def=cn.get(calls.find(c=>c.idx===sc.c.idx));def.outVars=(def.outVars||[]).concat(pa.vars.filter(v=>!(def.outVars||[]).includes(v)))}
+   else{
+    def=node('a:'+s,()=>({type:'assign',text:short(clean(F,s,e).replace(/;$/,''),44),line:F.lineAt(s)}));
+    for(const c of outer)edge(cn.get(c).id,def.id,'__res','res');
+    for(const v of useVars(outside.slice(pa.endIdx),env))for(const d of env.get(v))edge(d.id,def.id,v);
+   }
+   if(pa.aug)for(const v of pa.vars)if(env.has(v))for(const d of env.get(v))edge(d.id,def.id,v);
+   for(const v of pa.vars){if(pa.weak&&env.has(v))env.get(v).add(def);else env.set(v,new Set([def]))}
+   return def;
+  }
+  const nd=node((kind==='ret'?'r:':'k:')+s,()=>({type:kind==='ret'?'ret':'cond',text:label||short(clean(F,s,e),44),line:F.lineAt(s)}));
+  for(const c of outer)edge(cn.get(c).id,nd.id,'__res','res');
+  for(const v of useVars(outside,env))for(const d of env.get(v))edge(d.id,nd.id,v);
+  return nd;
+ }
+ const hdrLabel=(a,b)=>short(clean(F,a,b).replace(/\s*[{:]$/,''),48);
+ function loopHeader(s,env){
+  const raw=m.slice(s.cs,s.ce);let defs=[];
+  let mm=/^\s*(?:(?:const|let|var|final|val|auto)\s+)?([^;]+?)\s+(?:of|in)\s+([^;]+)$/.exec(raw)||/^\s*(.+?)\s*:=\s*range\s+(.+)$/.exec(raw)||/^\s*(?:[\w<>\[\],?*&\s]+?\s+)?(\w+)\s*:\s*([^;:]+)$/.exec(raw);
+  const nd=proc(s.cs,s.ce,'cond',env,hdrLabel(s.hs,s.he));
+  if(mm)defs=lhsVars(mm[1]);else if(raw.includes(';')){const pa=parseAssign(raw.split(';')[0]);if(pa)defs=pa.vars}
+  for(const v of defs)env.set(v,new Set([nd]));
+ }
+ function walk(list,env){
+  for(const s of list){
+   switch(s.t){
+    case'stmt':proc(s.s,s.e,'stmt',env);break;
+    case'return':case'throw':proc(s.s,s.e,'ret',env,short(clean(F,s.s,s.e).replace(/;$/,''),44));break;
+    case'if':{proc(s.cs,s.ce,'cond',env,hdrLabel(s.hs,s.he));const e1=walk(s.body,cloneEnv(env)),e2=s.else?walk(s.else,cloneEnv(env)):cloneEnv(env);env=mergeEnv(e1,e2);break}
+    case'loop':case'dowhile':{
+     loopHeader(s,env);
+     let e1=mergeEnv(env,walk(s.body,cloneEnv(env)));let e2=walk(s.body,cloneEnv(e1));env=mergeEnv(e1,e2);loopHeader(s,env);break}
+    case'switch':{proc(s.cs,s.ce,'cond',env,hdrLabel(s.hs,s.he));let acc=cloneEnv(env);for(const c of s.cases)acc=mergeEnv(acc,walk(c.body,cloneEnv(env)));env=acc;break}
+    case'try':{let acc=walk(s.body,cloneEnv(env));for(const c of s.catches)acc=mergeEnv(acc,walk(c.body,cloneEnv(env)));if(s.fin)acc=mergeEnv(acc,walk(s.fin.body,cloneEnv(acc)));env=acc;break}
+   }
+  }
+  return env;
+ }
+ walk(ast,env);
+ // drop isolated helper nodes, renumber
+ const deg=new Map();for(const e of edges){deg.set(e.from,(deg.get(e.from)||0)+1);deg.set(e.to,(deg.get(e.to)||0)+1)}
+ const keep=nodes.filter(n=>n.type==='param'||n.type==='ret'||n.type==='call'||deg.get(n.id));
+ const remap=new Map();keep.forEach((n,i)=>remap.set(n.id,i));
+ const ns=keep.map((n,i)=>Object.assign(n,{id:i}));
+ const es=edges.filter(e=>remap.has(e.from)&&remap.has(e.to)).map(e=>({from:remap.get(e.from),to:remap.get(e.to),label:e.label,kind:e.kind}));
+ // forward edges must go low->high id; others become back edges (handled by layoutFlow)
+ return{nodes:ns,edges:es};
+}
+function sizeData(nodes){
+ for(const n of nodes){
+  const hex=n.type==='cond';
+  if(n.type==='param'){n.disp=n.text;n.w=clamp(n.text.length*7.8+34,64,260);n.h=28}
+  else if(n.type==='call'||n.type==='ext'){n.disp=`${n.text}(${n.args})`;if(n.disp.length>44)n.disp=n.disp.slice(0,43)+'…';n.sub=n.outVars&&n.outVars.length?'→ '+n.outVars.join(', '):'';n.w=clamp(n.disp.length*7.3+34,110,360);n.h=n.sub?46:32}
+  else{n.disp=n.text;n.w=clamp(n.text.length*7.3+(hex?50:34),100,360);n.h=32}
+ }
+}
+function drawData(fn,fit){
+ const P=state.P;
+ if(!fn.df){fn.df=buildDataflow(P,fn);sizeData(fn.df.nodes);fn.dfLay=fn.df.nodes.length?layoutFlow(fn.df.nodes,fn.df.edges):{paths:[],w:300,h:120}}
+ const{nodes,edges}=fn.df,lay=fn.dfLay;fnBounds={w:lay.w,h:lay.h};fnG.innerHTML='';
+ const hint=$('#dfHint');hint.hidden=false;hint.textContent=nodes.length?t('dfHint'):t('dfNone');
+ const gE=S('g'),gN=S('g');fnG.append(gE,gN);state.edgeEls=[];state.nodeEls=new Map();
+ for(const p of lay.paths){
+  const e=p.e,res=e.label==='__res',lb=res?t('result'):e.label;
+  gE.append(S('path',{class:'fl-edge'+(res?' res':'')+(p.back?' k-back':''),d:p.back?roundedD(p.pts,10):pathD(p.pts)}));
+  let x,y;if(p.back){x=p.pts[1].x+6;y=(p.pts[1].y+p.pts[2].y)/2}else{const a=p.pts[0],b=p.pts[1];x=(a.x+b.x)/2+6;y=(a.y+b.y)/2+4}
+  gE.append(S('text',{class:'fl-lbl'+(res?' res':''),x,y,text:lb}));
+ }
+ for(const n of nodes){
+  const g=S('g',{class:`fl-node d-${n.type}`,transform:`translate(${n.x-n.w/2},${n.y})`});
+  if(n.type==='param')g.append(S('rect',{class:'fl-shape',width:n.w,height:n.h,rx:14}),S('text',{class:'fl-code',x:n.w/2,y:n.h/2+4.3,'text-anchor':'middle',text:n.disp}));
+  else{
+   if(n.type==='cond')g.append(S('path',{class:'fl-shape',d:`M0,${n.h/2} L13,0 L${n.w-13},0 L${n.w},${n.h/2} L${n.w-13},${n.h} L13,${n.h} Z`}));
+   else g.append(S('rect',{class:'fl-shape',width:n.w,height:n.h,rx:7}),S('rect',{class:'fl-bar',width:5,height:n.h,rx:2}));
+   const isCall=n.type==='call'||n.type==='ext';
+   g.append(S('text',{class:isCall&&n.type==='call'?'nm':'fl-code',x:n.type==='cond'?20:14,y:n.sub?17:n.h/2+4.3,text:n.disp}));
+   if(n.sub)g.append(S('text',{class:'d-sub',x:14,y:35,text:n.sub}));
+   g.append(S('text',{class:'fl-ln',x:n.w-5,y:11,text:n.line}));
+  }
+  g.addEventListener('click',()=>{if(fnVp.wasDrag())return;if(n.fnId!=null)openFn(n.fnId,true);else{state.nodeEls.forEach(x=>x.classList.remove('dsel'));g.classList.add('dsel');hlLines([n.line]);setSideTab('source')}});
+  g.addEventListener('pointerenter',ev=>showTip(n.type==='call'?`${n.text}\n${P.funcs[n.fnId].file.path}:${P.funcs[n.fnId].line}`:`${t('loc')} ${n.line}`,ev));g.addEventListener('pointerleave',hideTip);
+  gN.append(g);state.nodeEls.set(n.id,g);
+ }
+ if(fit){const r=fnSvg.getBoundingClientRect(),W=r.width||800,Hh=r.height||600,kf=Math.min((W-40)/lay.w,(Hh-40)/lay.h,1),k=Math.max(kf,.6);
+  fnVp.st.k=k;fnVp.st.x=k===kf?(W-lay.w*k)/2:20;fnVp.st.y=k===kf?Math.max(10,(Hh-lay.h*k)/2):60;fnVp.apply()}
+}
+function hlLines(ls){$$('#spSource .src div').forEach(d=>d.classList.toggle('hl',ls.includes(+d.dataset.ln)));const d=$('#spSource .src div.hl');if(d&&d.scrollIntoView)d.scrollIntoView({block:'center'})}
+
+/* ================= run with sample inputs ================= */
+const RUN_LANGS={js:1,py:1};
+function guessArg(name,lang){
+ const n=name.toLowerCase(),py=lang==='py';
+ if(/^(n|k|i|j|count|num|size|limit|depth|idx|index|len|length)$/.test(n))return '5';
+ if(/(nums|numbers|xs|ys|arr|array|list|values|data|items|vals|scores|a|b)$/.test(n)&&n.length>1||/^(xs|ys|a|b|arr|lst)$/.test(n))return '[3, 1, 4, 1, 5]';
+ if(/(name|text|str|word|msg|message|s|title|label|key|email)$/.test(n))return '"hello"';
+ if(/(flag|is_|has_|ok|enabled|debug|verbose)/.test(n))return py?'True':'true';
+ if(/(price|amount|total|rate|x|y|v|val|value|avg|mean)$/.test(n))return '2.5';
+ if(/(dict|map|obj|options|opts|config|cfg|order|user|item|record)$/.test(n))return py?'{"id": 1, "items": []}':'{ id: 1, items: [] }';
+ return '3';
+}
+const fmtJs=(v,max=60)=>{let s;try{if(v===undefined)s='undefined';else if(typeof v==='function')s='ƒ';else if(typeof v==='string')s=JSON.stringify(v);else{const seen=new WeakSet();s=JSON.stringify(v,(k,x)=>{if(typeof x==='object'&&x){if(seen.has(x))return'[Circular]';seen.add(x)}if(typeof x==='function')return'ƒ';return x});if(s===undefined)s=String(v)}}catch(e){s=String(v)}return s.length>max?s.slice(0,max-1)+'…':s};
+function declNames(body){
+ const o=new Set();let t2;
+ const r1=/\b(?:let|const|var)\s+([A-Za-z_$][\w$]*)/g;while((t2=r1.exec(body)))o.add(t2[1]);
+ const r2=/\b(?:let|const|var)\s*[\[{]([^\]}]*)[\]}]/g;while((t2=r2.exec(body)))for(const id of idents(t2[1]))o.add(id);
+ const r3=/\bcatch\s*\(\s*([A-Za-z_$][\w$]*)/g;while((t2=r3.exec(body)))o.add(t2[1]);
+ return[...o];
+}
+async function runJs(fn,argSrcs){
+ const P=state.P,F=fn.file,ast=getAst(fn);
+ const names=[...new Set([...paramNames(fn),...declNames(F.m.slice(fn.bodyStart,fn.bodyEnd))])];
+ const pos=new Set();
+ const add=p=>{let q=p-1;while(q>=0&&F.m.charCodeAt(q)<=32)q--;const pc=F.m[q];if(pc==='{'||pc===';'||pc==='}'||pc===':')pos.add(p)};
+ (function visit(l){for(const s of l){add(s.s);if(s.body)visit(s.body);if(s.else)visit(s.else);if(s.cases)s.cases.forEach(c=>visit(c.body));if(s.catches)s.catches.forEach(c=>visit(c.body));if(s.fin)visit(s.fin.body)}})(ast);
+ const getters='['+names.map(n=>`()=>${n}`).join(',')+']',nm=JSON.stringify(names);
+ let code=F.code;
+ for(const p of[...pos].sort((a,b)=>b-a))code=code.slice(0,p)+`__t(${F.lineAt(p)},${getters},${nm});`+code.slice(p);
+ code=code.replace(/^\s*import\s[^;\n]*;?/gm,'').replace(/^\s*export\s*\{[^}]*\};?/gm,'').replace(/^\s*export\s+default\s+/gm,'').replace(/^\s*export\s+(?=\w)/gm,'');
+ const wr=P.funcs.filter(f=>f.file===F&&!f.module&&!f.owner&&/^[A-Za-z_$][\w$]*$/.test(f.name));
+ code+=`\n;(function(){${wr.map(f=>`try{__w(${JSON.stringify(f.name)},function(){return ${f.name}},function(v){${f.name}=v})}catch(e){}`).join('')}})();\nreturn ${fn.name};`;
+ const rt={on:false,steps:[],depth:0,tdepth:0,count:0,cur:null},logs=[];
+ const __t=(line,gs,ns)=>{if(!rt.on||rt.tdepth!==1)return;if(++rt.count>3000)throw new Error('step limit (3000)');const vars={};gs.forEach((g,i)=>{try{const v=g();if(v!==undefined)vars[ns[i]]=fmtJs(v)}catch(e){}});rt.cur={line,vars,calls:[]};rt.steps.push(rt.cur)};
+ const __w=(name,get,set)=>{const orig=get();if(typeof orig!=='function')return;const isT=name===fn.name;
+  set(function(...a){const top=rt.on&&rt.tdepth===1&&rt.depth===1&&!isT,cur=rt.cur;if(isT)rt.tdepth++;rt.depth++;let r,ok=false;
+   try{r=orig.apply(this,a);ok=true;return r}finally{rt.depth--;if(isT)rt.tdepth--;if(top&&cur)cur.calls.push({name,args:a.map(x=>fmtJs(x,26)).join(', '),ret:ok?fmtJs(r,30):'throw'})}})};
+ const cons={log:(...a)=>logs.push(a.map(x=>typeof x==='string'?x:fmtJs(x,200)).join(' ')),error:(...a)=>logs.push(a.join(' ')),warn:(...a)=>logs.push(a.join(' ')),info:(...a)=>logs.push(a.join(' '))};
+ let ret,err=null;
+ try{
+  const api=(new Function('__t','__w','console',code))(__t,__w,cons);
+  const args=argSrcs.map(a=>a.trim()===''?undefined:(new Function('return ('+a+')'))());
+  rt.on=true;ret=api(...args);if(ret&&typeof ret.then==='function')ret=await ret;
+ }catch(e){err=String(e&&e.message||e)}finally{rt.on=false}
+ return{steps:rt.steps,ret:err?null:fmtJs(ret,120),err,out:logs.join('\n')};
+}
+const PYHARNESS=`
+import sys, json, io, contextlib
+_cm_steps=[]; _cm_calls=[]; _cm_info={'ret':None,'err':None}
+_cm_entry=[None]; _cm_cmap={}; _cm_n=[0]
+def _cm_fmt(v):
+    try: s=repr(v)
+    except Exception: s='?'
+    return s if len(s)<=60 else s[:59]+'…'
+def _cm_snap(f):
+    return {k:_cm_fmt(v) for k,v in f.f_locals.items() if not k.startswith('__')}
+def _cm_callret(frame,event,arg):
+    if event=='return':
+        i=_cm_cmap.get(id(frame))
+        if i is not None: _cm_calls[i]['ret']=_cm_fmt(arg)
+    return _cm_callret
+def _cm_local(frame,event,arg):
+    if event=='line':
+        _cm_n[0]+=1
+        if _cm_n[0]>3000: raise RuntimeError('step limit (3000)')
+        _cm_steps.append({'line':frame.f_lineno,'vars':_cm_snap(frame),'calls':[]})
+    elif event=='return':
+        _cm_steps.append({'line':-1,'vars':_cm_snap(frame),'calls':[]})
+        _cm_info['ret']=_cm_fmt(arg)
+    return _cm_local
+def _cm_tracer(frame,event,arg):
+    if event!='call' or frame.f_code.co_filename!='<codemap>': return None
+    b=frame.f_back
+    if _cm_entry[0] is None and frame.f_code.co_name==_cm_target and (b is None or b.f_code.co_filename!='<codemap>'):
+        _cm_entry[0]=frame
+        return _cm_local
+    if _cm_entry[0] is not None and b is _cm_entry[0]:
+        _cm_calls.append({'name':frame.f_code.co_name,'args':', '.join(_cm_fmt(v) for v in frame.f_locals.values()),'ret':None,'step':len(_cm_steps)-1})
+        _cm_cmap[id(frame)]=len(_cm_calls)-1
+        return _cm_callret
+    return None
+_cm_ns={'__name__':'codemap_mod'}
+_cm_out=io.StringIO()
+try:
+    with contextlib.redirect_stdout(_cm_out):
+        exec(compile(_cm_src,'<codemap>','exec'),_cm_ns)
+        _cm_a=[eval(a,_cm_ns) if a.strip() else None for a in _cm_args]
+        sys.settrace(_cm_tracer)
+        try:
+            _cm_ns[_cm_target](*_cm_a)
+        finally:
+            sys.settrace(None)
+except BaseException as e:
+    _cm_info['err']=type(e).__name__+': '+str(e)
+_cm_result=json.dumps({'steps':_cm_steps,'calls':_cm_calls,'info':_cm_info,'out':_cm_out.getvalue()})
+`;
+let pyP=null;
+function loadPy(){
+ if(pyP)return pyP;
+ pyP=new Promise((res,rej)=>{const base='https://cdn.jsdelivr.net/pyodide/v0.26.4/full/',s=document.createElement('script');s.src=base+'pyodide.js';
+  s.onload=()=>loadPyodide({indexURL:base}).then(res,rej);s.onerror=()=>{pyP=null;rej(new Error('Pyodide'))};document.head.append(s)});
+ return pyP;
+}
+async function runPy(fn,argSrcs){
+ const py=await loadPy();
+ py.globals.set('_cm_src',fn.file.code);py.globals.set('_cm_target',fn.name);py.globals.set('_cm_args',py.toPy(argSrcs));
+ await py.runPythonAsync(PYHARNESS);
+ const r=JSON.parse(py.globals.get('_cm_result'));
+ let steps=r.steps,fin=null;
+ if(steps.length&&steps[steps.length-1].line===-1){fin=steps.pop()}
+ r.calls.forEach(c=>{if(steps[c.step])steps[c.step].calls.push({name:c.name,args:c.args,ret:c.ret===null?'…':c.ret})});
+ if(fin)steps.finalVars=fin.vars;
+ return{steps,ret:r.info.err?null:r.info.ret,err:r.info.err,out:r.out,finalVars:fin&&fin.vars};
+}
+function attachRun(fn,res){
+ const st=res.steps;
+ st.forEach((s,i)=>{const nx=st[i+1]?st[i+1].vars:(res.finalVars||null);s.changed={};if(nx)for(const k in nx)if(s.vars[k]!==nx[k])s.changed[k]=nx[k]});
+ const visits=new Map(),vals=new Map();
+ st.forEach((s,i)=>{
+  s.node=fn.lineOwner?fn.lineOwner[s.line]:undefined;
+  if(s.node!=null){if(!visits.has(s.node))visits.set(s.node,[]);visits.get(s.node).push(i);
+   if(!vals.has(s.node))vals.set(s.node,new Map());const mp=vals.get(s.node);
+   for(const k in s.changed)mp.set(k,`${k} = ${s.changed[k]}`);for(const c of s.calls)mp.set('()'+c.name,`${c.name}(${c.args}) → ${c.ret}`)}
+ });
+ res.visits=visits;res.vals=new Map([...vals].map(([k,m])=>[k,[...m.values()].slice(-6)]));
+ fn.run=res;
+}
+function relayoutRun(fn){if(!fn.flow)return;sizeFlow(state.P,fn,fn.flow.nodes);fn.lay=layoutFlow(fn.flow.nodes,fn.flow.edges)}
+function renderRun(){
+ const P=state.P,fn=P.funcs[state.fnId],el=$('#spRun');el.innerHTML='';
+ if(!cfg('ex_run')){el.append(H('p',{class:'hint',text:t('runOff')}));return}
+ if(!RUN_LANGS[fn.file.lang]||fn.owner||fn.module){el.append(H('p',{class:'hint',text:t('runUnsupported')}));return}
+ const names=paramNames(fn),saved=store.get('cm.run.'+lkey(fn),null)||names.map(n=>guessArg(n,fn.file.lang));
+ el.append(H('p',{class:'hint',text:t('runHint')}));
+ const inps=names.map((n,i)=>{const inp=H('input',{type:'text',dir:'ltr',value:saved[i]!=null?saved[i]:''});el.append(H('label',{class:'runrow'},H('span',{class:'mono',text:n}),inp));return inp});
+ const status=H('p',{class:'hint'});
+ el.append(H('div',{class:'row'},H('button',{class:'primary',text:t('runBtn'),onclick:async()=>{
+  const srcs=inps.map(i=>i.value);store.set('cm.run.'+lkey(fn),srcs);
+  try{
+   if(fn.file.lang==='py'){if(!cfg('ex_py')){status.textContent=t('runNoPy');return}status.textContent=pyP?t('runWork'):t('runLoading')}else status.textContent=t('runWork');
+   if(!fn.flow){fn.flow=buildFlow(P,fn);sizeFlow(P,fn,fn.flow.nodes);fn.lay=layoutFlow(fn.flow.nodes,fn.flow.edges)}
+   fn.lineOwner=fn.lineOwner||(()=>{const m={};for(const n of fn.flow.nodes)for(const l of n.lineNums||[])if(!(l in m))m[l]=n.id;return m})();
+   const res=fn.file.lang==='py'?await runPy(fn,srcs):await runJs(fn,srcs);
+   attachRun(fn,res);relayoutRun(fn);state.trace={on:true,mode:'run',idx:0,cur:null,path:[],vis:new Set()};
+   state.fnView='flow';renderFn(true);setSideTab('run');$('#btnStep').classList.add('on');paintTrace();if(res.steps.length)traceRunGo(0);
+  }catch(e){status.textContent=t('runErr')+': '+e.message}
+ }})));
+ el.append(status);
+ const r=fn.run;if(!r)return;
+ if(r.err)el.append(H('p',{style:'color:var(--c-ret)',class:'mono',text:t('runErr')+': '+r.err}));
+ else el.append(H('p',{},t('runRet')+': ',H('span',{class:'mono',style:'font-weight:600',text:r.ret})));
+ if(r.out)el.append(H('h5',{text:t('runOut')}),H('div',{class:'out',text:r.out}));
+ if(!r.steps.length){el.append(H('p',{class:'hint',text:t('runNoSteps')}));return}
+ el.append(H('h5',{text:`${t('runSteps')} (${r.steps.length})`}));
+ const tb=H('table',{class:'steps'});
+ r.steps.forEach((s,i)=>{
+  const eff=Object.entries(s.changed).map(([k,v])=>`${k} = ${v}`).concat(s.calls.map(c=>`${c.name}(${c.args}) → ${c.ret}`)).join('\n');
+  tb.append(H('tr',{'data-i':i,class:state.trace.on&&state.trace.mode==='run'&&state.trace.idx===i?'cur':'',onclick:()=>{state.trace={on:true,mode:'run',idx:i,cur:null,path:[],vis:new Set()};if(state.fnView!=='flow'){state.fnView='flow';renderFn(true)}$('#btnStep').classList.add('on');traceRunGo(i)}},
+   H('td',{class:'mono',style:'color:var(--ink3)',text:i+1}),H('td',{class:'mono',text:'L'+s.line}),H('td',{class:'v',style:'white-space:pre-wrap',text:eff||'·'})));
+ });
+ el.append(tb);
+}
+function traceRunGo(i){
+ const fn=state.P.funcs[state.fnId],r=fn.run;if(!r||!r.steps.length)return;
+ const tr=state.trace;tr.on=true;tr.mode='run';tr.idx=clamp(i,0,r.steps.length-1);paintTrace();
+ const s=r.steps[tr.idx];
+ if(s.node!=null&&state.nodeEls&&state.nodeEls.get(s.node)){const n=fn.flow.nodes[s.node];fnVp.centerOn(n.x,n.y+n.h/2,Math.max(fnVp.st.k,.75));state.sel=s.node;state.nodeEls.forEach((g,k)=>g.classList.toggle('sel',k===s.node));renderInfo()}
+ hlLines([s.line]);
+ $$('#spRun .steps tr').forEach(tr2=>tr2.classList.toggle('cur',+tr2.dataset.i===tr.idx));
+ const cur=$('#spRun .steps tr.cur');if(cur&&cur.scrollIntoView&&state.sideTab==='run')cur.scrollIntoView({block:'nearest'});
+}
 /* ---------- boot ---------- */
-setTheme(state.theme);applyI18n();
+setTheme(state.theme);applyI18n();renderNotes();
 $('#src').value=SAMPLES.JavaScript;
 setStats();updateProgress();
 $('#empty').textContent=t('empty');

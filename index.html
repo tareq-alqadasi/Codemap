@@ -137,6 +137,12 @@ textarea.note-in{min-height:64px;resize:vertical;border:1px solid var(--line);ba
 .errbox details summary{cursor:pointer;color:var(--ink2);font-size:12.5px}
 .errbox pre{margin:6px 0;white-space:pre-wrap;word-break:break-all;font-size:11.5px;max-height:140px;overflow:auto}
 .toast{position:fixed;inset-inline:12px;inset-block-end:16px;margin:0 auto;max-width:520px;z-index:70;box-shadow:var(--shadow);cursor:pointer}
+#structView{position:absolute;inset:0;overflow:auto;padding:14px;background:var(--bg)}
+.stBar{display:flex;height:26px;border-radius:8px;overflow:hidden;margin:6px 0}.stBar div{display:grid;place-items:center;color:#fff;font:600 11.5px var(--ui);white-space:nowrap;overflow:hidden;min-width:2px}
+.stCols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;align-items:start}
+.stCol{background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--rc);border-radius:12px;padding:10px 12px}
+.stHd{display:flex;gap:8px;align-items:baseline;justify-content:space-between;flex-wrap:wrap;margin-bottom:4px}
+.stCol details{margin:6px 0}.btag text{fill:#fff;font:600 10px var(--ui);text-anchor:middle}
 #secView{position:absolute;inset:0;overflow:auto;padding:14px;background:var(--bg)}
 .secHead{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
 .secHead h3{margin:0 0 6px}.startList{margin:0 0 10px;padding-inline-start:22px;display:grid;gap:5px}
@@ -292,10 +298,10 @@ textarea.note-in{min-height:64px;resize:vertical;border:1px solid var(--line);ba
   </aside>
   <section id="overview">
     <div class="toolbar">
-      <div class="seg" id="segView"><button data-v="sections" class="on" data-t="vSec" data-ti="tipSec"></button><button data-v="graph" data-t="vGraph"></button><button data-v="tree" data-t="vTree"></button></div>
+      <div class="seg" id="segView"><button data-v="sections" class="on" data-t="vSec" data-ti="tipSec"></button><button data-v="struct" data-t="vStruct"></button><button data-v="graph" data-t="vGraph"></button><button data-v="tree" data-t="vTree"></button></div>
       <div class="seg" id="segLayout"><button data-l="frames" class="on" data-t="lFrames" data-ti="tipFrames"></button><button data-l="layered" data-t="lLayer" data-ti="tipLayer"></button><button data-l="force" data-t="lForce" data-ti="tipForce"></button></div>
       <div class="seg" id="segTree" hidden><button data-m="sec" class="on" data-t="tSec"></button><button data-m="call" data-t="tCall"></button><button data-m="file" data-t="tFile"></button></div>
-      <input id="search" type="search" data-tph="search" style="width:170px">
+      <select id="structSel" hidden></select><button id="structEd" class="chip" hidden data-t="structEdit"></button><input id="search" type="search" data-tph="search" style="width:170px">
       <button id="isoOff" class="chip" hidden></button><button id="secOff" class="chip on" hidden></button><button id="isoTog" class="chip" hidden></button>
       <div class="grow"></div>
       <button id="btnRel" class="chip" data-t="rel"></button>
@@ -307,7 +313,7 @@ textarea.note-in{min-height:64px;resize:vertical;border:1px solid var(--line);ba
     </div>
     <div class="canvas" id="ovCanvas">
       <svg class="cv" id="ovSvg"><defs><marker id="ar-ov" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ar-ov" d="M0 1l9 4-9 4z"/></marker></defs><g id="ovG"></g></svg>
-      <div id="secView" hidden></div><div class="legend" id="legend" hidden></div>
+      <div id="secView" hidden></div><div id="structView" hidden></div><div class="legend" id="legend" hidden></div>
       <div class="empty" id="empty"></div>
     </div>
     <div class="rel" id="rel" hidden></div>
@@ -348,6 +354,7 @@ textarea.note-in{min-height:64px;resize:vertical;border:1px solid var(--line);ba
 </main>
 </div>
 <div id="tip"></div>
+<div id="structModal" class="modal" hidden><div class="sheet" id="structSheet" style="width:min(760px,100%)"></div></div>
 <div id="settings" class="modal" hidden><div class="sheet" id="setSheet"></div></div>
 <script>
 'use strict';
@@ -1761,7 +1768,9 @@ function renderOverview(fit=true){
  $('#segLayout').hidden=state.view!=='graph';$('#segTree').hidden=state.view!=='tree';
  $('#isoOff').hidden=state.iso==null&&state.fileF==null;
  $('#secOff').hidden=state.sec==null;if(state.sec!=null&&P.sections[state.sec])$('#secOff').textContent=t('secOff')+': '+short(P.sections[state.sec].title,26)+' ×';
- const sv=state.view==='sections';$('#secView').hidden=!sv;ovSvg.style.display=sv?'none':'';
+ const sv=state.view==='sections',stv=state.view==='struct';$('#secView').hidden=!sv;$('#structView').hidden=!stv;ovSvg.style.display=(sv||stv)?'none':'';
+ $('#structSel').hidden=!stv;$('#structEd').hidden=!stv;ensureStruct();
+ if(stv){fillStructToolbar();$('#isoTog').hidden=true;renderStructView();renderLegend();renderRel();return}
  if(sv){$('#isoTog').hidden=true;renderSections();renderLegend();renderRel();return}
  if(state.view==='graph')drawGraph(fit);else{drawTreeInto(ovG,state.treeMode==='call'?buildCallTree():state.treeMode==='sec'&&P.sections&&P.sections.length?buildSecTree():buildFileTree(),ovVp,b=>ovBounds=b,fit,id=>openFn(id))}
  const it=$('#isoTog');it.hidden=state.view!=='graph'||(!state.isoCount&&state.hideIso);it.textContent=state.hideIso?t('hideIso',state.isoCount):t('showIso');
@@ -1779,7 +1788,7 @@ function edgeGeom(a,b,mode,self){
  return{d:`M${p1.x},${p1.y} Q${mx+nx},${my+ny} ${p2.x},${p2.y}`,lx:mx+nx/2,ly:my+ny/2-4,cyc:false};
 }
 function drawGraph(fit){
- const P=state.P,fns=visibleFns();sizeOv(fns);
+ ensureStruct();const P=state.P,fns=visibleFns();sizeOv(fns);
  const ids=new Set(fns.map(f=>f.id)),edges=P.edges.filter(e=>ids.has(e.from)&&ids.has(e.to));
  const lay=state.layout==='frames'&&P.sections&&P.sections.length?layoutFrames(fns,edges):state.layout==='force'?layoutForce(fns,edges,P.files.length>1):layoutLayered(fns,edges);
  ovBounds={w:lay.w,h:lay.h};
@@ -1809,7 +1818,7 @@ function drawGraph(fit){
   const p=lay.pos.get(f.id),learned=state.learned.has(lkey(f));
   const g=S('g',{class:'ov-node'+(f.nCallers===0?' entry':'')+(f.module?' mod':'')+(f._out?' outside':''),transform:`translate(${p.x},${p.y})`});
   g.append(S('rect',{class:'box',width:p.w,height:p.h,rx:9}),S('rect',{x:1,y:1,width:5,height:p.h-2,rx:2.5,fill:secColor(f)}),
-   S('text',{class:'nm',x:15,y:p.h/2+4,text:f.disp}),S('rect',{x:12,y:p.h-5,width:Math.min(p.w-26,f.cx*7),height:2.5,rx:1.2,fill:CXCOL(f.cx)}),S('circle',{cx:p.w-9,cy:9,r:4,fill:f.eff==='do'?'var(--c-if)':'none',stroke:f.eff==='calc'?'var(--c-call)':'var(--c-if)','stroke-width':1.6}));
+   S('text',{class:'nm',x:15,y:p.h/2+4,text:f.disp}),S('rect',{x:12,y:p.h-5,width:Math.min(p.w-26,f.cx*7),height:2.5,rx:1.2,fill:CXCOL(f.cx)}),S('circle',{cx:p.w-9,cy:9,r:4,fill:f.eff==='do'?'var(--c-if)':'none',stroke:f.eff==='calc'?'var(--c-call)':'var(--c-if)','stroke-width':1.6}),roleColorOf(f)?S('rect',{x:p.w-24,y:5,width:8,height:8,rx:2,fill:roleColorOf(f)}):null);
   if(learned)g.append(S('circle',{cx:p.w-12,cy:p.h/2,r:6.5,fill:'var(--c-call)'}),S('path',{d:`M${p.w-15},${p.h/2} l2.2,2.4 l4.2,-4.6`,fill:'none',stroke:'#fff','stroke-width':1.8,'stroke-linecap':'round'}));
   const info=`${f.qname}\n${fnPurpose(f)} · ${t('role_'+fnRole(f))}\n${f.module?'':t('eff_'+f.eff)}\n${f.file.path}:${f.line}\n${t('loc')}: ${f.loc}   ${t('cx')}: ${f.cx}\n${t('callers')}: ${f.nCallers}   ${t('callees')}: ${f.nCallees}`+(f.nCallers===0?'\n'+t('entry'):'')+(f.rec?'\n'+t('rec'):'');
   g.addEventListener('pointerenter',ev=>{highlight(f.id);showTip(info,ev)});g.addEventListener('pointermove',ev=>showTip(info,ev));g.addEventListener('pointerleave',()=>{highlight(null);hideTip()});
@@ -1928,6 +1937,7 @@ function renderFn(fit){
  $$('#segFn button').forEach(b=>b.classList.toggle('on',b.dataset.fv===state.fnView));
  if(!fn.flow){fn.flow=buildFlow(P,fn);sizeFlow(P,fn,fn.flow.nodes);fn.lay=layoutFlow(fn.flow.nodes,fn.flow.edges)}
  fn.lineOwner=fn.lineOwner||(()=>{const m={};for(const n of fn.flow.nodes)for(const l of n.lineNums||[])if(!(l in m))m[l]=n.id;return m})();
+ ensureStruct();classifyBlocks(fn);
  $('#dfHint').hidden=true;
  if(state.fnView==='flow')drawFlow(fn,fit);
  else if(state.fnView==='data')drawData(fn,fit);
@@ -1977,6 +1987,7 @@ function drawFlow(fn,fit){
   g.addEventListener('click',()=>{if(fnVp.wasDrag())return;selectNode(n.id)});
   g.addEventListener('pointerenter',()=>hoverLines(n));g.addEventListener('pointerleave',()=>hoverLines(null));
   gN.append(g);state.nodeEls.set(n.id,g);
+  if(n.sr&&n.sr.role&&n.srS){const rr=roleOf(n.srS,n.sr.role);if(rr){const bw=rr.name.length*6.2+14;g.append(S('g',{class:'btag',transform:`translate(${n.w-bw+8},-9)`},S('rect',{width:bw,height:15,rx:7.5,fill:rr.color}),S('text',{x:bw/2,y:11,text:rr.name})))}}
   const vis=fn.run&&fn.run.visits.get(n.id);
   if(vis&&vis.length){const txt=vis.length>1?`${vis[0]+1} ×${vis.length}`:String(vis[0]+1),bw=txt.length*6.6+12;
    g.append(S('g',{class:'visit',transform:'translate(-6,-9)'},S('rect',{width:bw,height:17,rx:8.5}),S('text',{x:bw/2,y:12.3,text:txt})))}
@@ -2177,7 +2188,7 @@ $$('#segView button').forEach(b=>b.addEventListener('click',()=>{state.view=b.da
 $$('#segLayout button').forEach(b=>b.addEventListener('click',()=>{state.layout=b.dataset.l;$$('#segLayout button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
 $$('#segTree button').forEach(b=>b.addEventListener('click',()=>{state.treeMode=b.dataset.m;$$('#segTree button').forEach(x=>x.classList.toggle('on',x===b));renderOverview(true)}));
 $$('#segFn button').forEach(b=>b.addEventListener('click',()=>{state.fnView=b.dataset.fv;if(state.trace.timer)clearInterval(state.trace.timer);state.trace={on:false,cur:null,path:[],vis:new Set()};$('#btnStep').classList.remove('on');$('#stepbar').hidden=true;renderFn(true)}));
-$('#search').addEventListener('input',e=>{state.q=e.target.value;if(state.ovApply)state.ovApply()});
+$('#search').addEventListener('input',e=>{state.q=e.target.value;if(state.view==='sections')renderSections();else if(state.view==='struct')renderStructView();else if(state.ovApply)state.ovApply()});
 $('#search').addEventListener('keydown',e=>{if(e.key==='Enter'&&state.ovFirst)state.ovFirst()});
 $('#isoOff').addEventListener('click',()=>{state.iso=null;state.fileF=null;renderOverview(true)});
 $('#btnLeg').addEventListener('click',()=>{state.showLeg=!state.showLeg;renderLegend()});
@@ -2212,6 +2223,7 @@ const SETTINGS=[
 {k:'values',g:'gen',def:true,ready:1,ar:'إظهار القيم على العقد بعد التشغيل',en:'Show values on nodes after a run'},
 {k:'ex_run',g:'exp',def:true,ready:1,ar:'تشغيل الدوال بمدخلات تجريبية (JS وPython)',en:'Run functions with sample inputs (JS & Python)'},
 {k:'ex_py',g:'exp',def:true,ready:1,ar:'السماح بتحميل Pyodide (~10MB) لتشغيل Python',en:'Allow loading Pyodide (~10MB) to run Python'},
+{k:'ex_structjs',g:'exp',def:false,ready:1,ar:'السماح لبنى مخصصة بتنفيذ JavaScript (مستخرِجات خصائص feature)',en:'Allow custom structures to run JavaScript (feature extractors)'},
 {k:'ex_ai',g:'exp',def:false,ready:0,ar:'شرح ذكي لكل عقدة بالذكاء الاصطناعي (يتطلب مفتاح API)',en:'AI explanation per node (needs an API key)'},
 {k:'ex_sync',g:'exp',def:false,ready:0,ar:'مزامنة الملاحظات بين الأجهزة',en:'Sync notes across devices'},
 {k:'ex_more',g:'exp',def:false,ready:0,ar:'لغات إضافية (Ruby وLua وScala)',en:'More languages (Ruby, Lua, Scala)'},
@@ -2230,7 +2242,7 @@ function renderSettings(){
   if(g==='exp')sh.append(H('p',{class:'hint',text:t('setNote')}));
   for(const d of SETTINGS.filter(x=>x.g===g)){
    const cb=H('input',{type:'checkbox'});cb.checked=!!cfg(d.k);
-   cb.addEventListener('change',()=>{SETCACHE.v[d.k]=cb.checked;store.set('cm.set',SETCACHE.v);if(state.fnId!=null)renderFn(false);else if(state.P)renderOverview(false)});
+   cb.addEventListener('change',()=>{SETCACHE.v[d.k]=cb.checked;if(typeof STRUCT!=='undefined'){STRUCT.ver++;STRUCT.cache=null;if(state.P)state.P._srKey=null}store.set('cm.set',SETCACHE.v);if(state.fnId!=null)renderFn(false);else if(state.P)renderOverview(false)});
    sh.append(H('label',{class:'setrow'},cb,H('span',{},d[LANG],d.ready?null:H('span',{class:'soon',text:t('soon')}))));
   }
  }
@@ -3008,7 +3020,7 @@ function computeSections(P){
  const seenK=new Map();merged.forEach(s=>{const k=(s.file?s.file.path:'')+'::'+s.title,n=(seenK.get(k)||0)+1;seenK.set(k,n);s.key=n>1?k+'#'+n:k});
  applyOverrides(P,merged);
  merged.forEach((s,i)=>{s.id=i;s.order=i+1;s.color=SECHUE(i);s.fns.forEach(id=>{P.funcs[id].sec=i});s.loc=s.fns.reduce((a,id)=>a+(P.funcs[id].module?0:P.funcs[id].loc),0)});
- P.sections=merged;
+ P.sections=merged;P._secVer=(P._secVer||0)+1;
  // inter-section dependencies
  for(const s of merged){s.deps=new Map();s.users=new Map()}
  for(const e of P.edges){const a=P.funcs[e.from].sec,b=P.funcs[e.to].sec;if(a==null||b==null||a===b)continue;
@@ -3105,6 +3117,7 @@ function renderSections(){
   card.append(H('div',{class:'secStats',text:stats.join('  ·  ')}));
   if(s.fns.length){
    const sm=secSummary(P,s);if(sm)card.append(H('div',{class:'secSum',text:sm}));
+   {const SS=ensureStruct();if(SS){const cnt=new Map();s.fns.forEach(id=>{const r=P.funcs[id].sr;if(r&&r.role&&!P.funcs[id].module)cnt.set(r.role,(cnt.get(r.role)||0)+1)});const tot=[...cnt.values()].reduce((a,b)=>a+b,0);if(tot){const bb=H('div',{class:'stBar',style:'height:10px'});for(const r of SS.roles){const n=cnt.get(r.id);if(n)bb.append(H('div',{style:`flex:${n} 1 0;background:${r.color}`,title:`${r.name}: ${n}`}))}card.append(bb)}}}
    {const real=s.fns.map(id=>P.funcs[id]).filter(f=>!f.module);const calc=real.filter(f=>f.eff==='calc').length;if(real.length)card.append(H('div',{class:'hint',text:t('coreRatio',calc,real.length)}))}
    card.append(H('div',{class:'secLbl',text:t('secKey')}));
    const kf=H('div',{class:'chips'});for(const f of keyFns(P,s))kf.append(H('a',{class:'lnk',title:fnPurpose(f),onclick:()=>openFn(f.id)},f.qname));card.append(kf);
@@ -3150,6 +3163,7 @@ function renderRoleBox(fn,el){
  const P=state.P,role=fnRole(fn),s=secOf(fn);
  const box=H('div',{class:'roleBox'},H('h5',{text:t('why')}),H('p',{},H('b',{text:t('role_'+role)}),' — ',fnPurpose(fn)));
  if(fn.multi>1)box.append(H('p',{class:'hint',text:t('multi',fn.multi)}));
+ {const SS=ensureStruct();if(SS&&fn.sr&&fn.sr.role){const rr=roleOf(SS,fn.sr.role);box.append(H('div',{class:'hint',style:'margin-top:6px'},t('stRoleOf')+' ('+SS.name+') '),H('b',{style:`color:${rr.color}`,text:rr.name+(fn.sr.second?' + '+roleOf(SS,fn.sr.second).name:'')}));if(fn.sr.why.length)box.append(H('div',{class:'hint',text:t('stWhy')+': '+fn.sr.why.slice(0,2).join('  ·  ')}))}}
  if(!fn.module){box.append(H('div',{class:'hint',style:'margin-top:6px'},t('effTitle')+' '),H('b',{style:`color:${fn.eff==='calc'?'var(--c-call)':'var(--c-if)'}`,text:t('eff_'+fn.eff)}));
   const ws=fn.effWhy.map(k=>t('w_'+k)+(k==='state'&&fn.effOuter.length?' ('+fn.effOuter.join(', ')+')':''));if(ws.length)box.append(H('div',{class:'chips'},...ws.map(x=>H('span',{class:'lnk ext',text:x}))));
   box.append(H('div',{class:'hint',text:[t('nParamsT',fn.nParams),fn.returnsValue?'':t('noReturn')].filter(Boolean).join('  ·  ')}))}
@@ -3259,6 +3273,279 @@ function computeEffects(P){
    for(const e of P.out.get(fn.id)){if(e.ref||e.to===fn.id)continue;const k=P.funcs[e.to].eff;if(k==='do'||k==='do2'){fn.eff='do2';ch++;break}}}
   if(!ch)break}
 }
+/* ================= structures: a higher-level lens (Input > Work > Output, or anything you define) ================= */
+Object.assign(I18N.ar,{vStruct:'البنية',structPick:'البنية',structEdit:'تحرير البنى',
+stIntro:'كما أن للنص مقدمة وصلبًا وخاتمة، فللكود مدخلات وعمل ومخرجات. هذه عدسة فوق الأقسام: تصنّف كل وحدة (دالة أو كتلة) بحسب دورها، وتستطيع تعريف بنية خاصة بك.',
+stUnits:n=>`${n} وحدة`,stNoRole:'غير مصنّفة',stFlow:'من يستدعي من؟ (بين الأدوار)',stBack:'استدعاء عكسي: يستحق التأمل',stStartIn:r=>`ابدأ القراءة من «${r}»`,stWhy:'سبب التصنيف',stRoleOf:'دور الوحدة',stAlso:'وأيضًا',
+stEdTitle:'تحرير البنى (الطبقة المخصصة)',stEdHelp:'اكتب بنية بصيغة تشبه CSS: أدوار (role) وقواعد تصنّف الوحدات إليها. تُحفظ على جهازك وتُطبَّق فورًا. لا حاجة لأي تغيير في الأداة نفسها.',
+stApply:'تحقق وطبّق',stTemplate:'أدرج قالبًا…',stClear:'مسح المخصص',stOk:'تم التطبيق',stJsOff:'سطور feature تحتاج تفعيل «السماح لبنى مخصصة بتنفيذ JavaScript» من الإعدادات.',st_else:'الدور الافتراضي (else)',stCheat:'ورقة المرجع: المحمولات (predicates)',
+st_nostruct:'اكتب سطر structure أولًا',st_role_unknown:r=>`الدور «${r}» غير معرَّف`,st_need2:'البنية تحتاج دورين على الأقل',stLevel:'المستوى'});
+Object.assign(I18N.en,{vStruct:'Structure',structPick:'Structure',structEdit:'Edit structures',
+stIntro:'Just as a text has an intro, a body and a summary, code has inputs, work and outputs. This is a lens above sections: it classifies every unit (function or block) by its role, and you can define your own structure.',
+stUnits:n=>`${n} units`,stNoRole:'Unclassified',stFlow:'Who calls whom? (between roles)',stBack:'Backward call: worth a look',stStartIn:r=>`Start reading from “${r}”`,stWhy:'Why this role',stRoleOf:'Unit role',stAlso:'also',
+stEdTitle:'Edit structures (the custom layer)',stEdHelp:'Write a structure in a CSS-like syntax: roles and rules that classify units into them. Saved on your device, applied instantly. No change to the tool itself is needed.',
+stApply:'Validate & apply',stTemplate:'Insert template…',stClear:'Clear custom',stOk:'Applied',stJsOff:'feature lines need “Allow custom structures to run JavaScript” in Settings.',st_else:'Default role (else)',stCheat:'Cheat sheet: predicates',
+st_nostruct:'Write a structure line first',st_role_unknown:r=>`Role “${r}” is not defined`,st_need2:'A structure needs at least two roles',stLevel:'Level'});
+
+const STRUCT_DEFAULT_SRC=`
+// ───── Input › Work › Output: like a text's intro, body and summary ─────
+structure ipo "مدخلات › عمل › مخرجات" level function blocks ipo_blocks
+role input  "مدخلات"  #2f6fed "تستقبل: أحداث، قراءة، تحليل نص خارجي"
+role work   "عمل"      #e0762c "تحسب وتحوّل وتقرّر"
+role output "مخرجات"  #1f9a6b "تُظهر أو تحفظ أو ترسل"
+input  : listens | verb(on,handle,read,load,get,fetch,parse,import,open,listen,receive,restore) | name(/^(on|handle)[A-Z_]/)  weight 2
+input  : eff(io) & !eff(dom) & callers(0)  weight 1
+input  : calls(/(getItem|loadLS|readFile|fetch|prompt)$/)  weight 1
+output : eff(dom) | verb(render,draw,paint,show,display,print,write,save,store,export,update,speak,play,notify,message,toast,apply)  weight 2
+output : calls(/^(console|print|alert)/) | calls(/(setItem|removeItem|saveLS|writeFile|postMessage|send|emit|dispatchEvent)$/)  weight 2
+work   : pure  weight 2
+work   : returns & !eff(dom) & !eff(io)  weight 1
+else work
+
+structure ipo_blocks "كتل: مدخلات › عمل › مخرجات" level block
+role input  "مدخل"  #2f6fed
+role work   "عمل"   #e0762c
+role output "مخرج"  #1f9a6b
+input  : first & (type(if,throw) | text(/\\b(arguments|params?|opts?|options|args?|event|evt|req|input)\\b/))  weight 2
+input  : first & type(stmt) & !hascall & !dom  weight 1
+output : type(return) | dom | io  weight 2
+work   : type(loop,switch,try,if) & !first  weight 2
+work   : type(stmt) & !first & !dom & !io  weight 1
+else work
+
+// ───── Layers: UI › Logic › Data ─────
+structure layers "طبقات: واجهة › منطق › بيانات" level function
+role ui    "واجهة"  #8b5cf6
+role logic "منطق"   #e0762c
+role data  "بيانات" #0ea5a4
+ui    : eff(dom) | verb(render,draw,show,paint,toggle,open,close)  weight 2
+data  : calls(/(localStorage|getItem|setItem|saveLS|loadLS|fetch|sessionStorage|indexedDB)/) | verb(save,load,store,persist,restore,backup,import,export)  weight 2
+logic : pure | returns  weight 1
+else logic
+
+// ───── Life cycle: Setup › Run › Cleanup ─────
+structure lifecycle "دورة الحياة: تهيئة › تشغيل › تنظيف" level function
+role setup   "تهيئة"  #0284c7
+role run     "تشغيل"  #e0762c
+role cleanup "تنظيف"  #7c3aed
+setup   : verb(init,setup,boot,start,create,build,prepare,configure,register,install,bind,mount) | name(/^(init|boot|setup)/)  weight 2
+cleanup : verb(destroy,cleanup,clear,close,dispose,stop,reset,remove,unmount,leave,teardown,exit)  weight 2
+else run
+`;
+const STRUCT_TEMPLATE_CUSTOM=`// ───── مثال: بنية خاصة بتطبيقك ─────
+// 1) عرّف البنية:        structure <id> "الاسم" level function|block [blocks <id>]
+// 2) عرّف أدوارها:       role <id> "الاسم" #لون ["وصف"]
+// 3) اكتب قواعد:         <role> : <شرط> [weight N]    الشروط تُدمج بـ  &  |  !  ( )
+// 4) الدور الاحتياطي:     else <role>
+structure api "حدود الـ API › منطق › عرض" level function
+role boundary "حدود"  #0ea5a4 "يتصل بالعالم الخارجي"
+role core     "جوهر"  #e0762c
+role view     "عرض"   #8b5cf6
+boundary : calls(/fetch|XMLHttpRequest|localStorage/) | verb(fetch,load,save,sync)  weight 2
+view     : eff(dom)  weight 2
+core     : pure  weight 2
+else core
+// خاصية جديدة بكود JavaScript (يتطلب تفعيلها من الإعدادات):
+// feature isBig = u.loc > 60 && u.cx > 8
+// view : feat(isBig)
+`;
+const STRUCT=(()=>({custom:store.get('cm.struct.src',''),active:store.get('cm.struct.active','ipo'),ver:0,cache:null,errors:[]}))();
+
+/* ---------- expression language ---------- */
+function readArgs(s,i){
+ let d=0,prev='(';
+ for(let j=i;j<s.length;j++){
+  const c=s[j];
+  if(c==='/'&&(prev==='('||prev===',')){j++;let cls=false;while(j<s.length&&(s[j]!=='/'||cls)){if(s[j]==='\\')j++;else if(s[j]==='[')cls=true;else if(s[j]===']')cls=false;j++}while(/[a-z]/i.test(s[j+1]||''))j++;prev='/';continue}
+  if(c==='(')d++;else if(c===')'){d--;if(d===0)return{args:s.slice(i+1,j),end:j+1}}
+  if(!/\s/.test(c))prev=c;
+ }
+ throw new Error('unclosed (');
+}
+function parseArgs(a){
+ const out=[];let cur='',i=0,prev=',';
+ const push=()=>{const x=cur.trim();cur='';if(!x)return;
+  if(x[0]==='/'){const k=x.lastIndexOf('/');out.push(new RegExp(x.slice(1,k),x.slice(k+1)))}
+  else if(/^(>=|<=|>|<|=)?\s*-?\d+(\.\d+)?$/.test(x)){const m=/^(>=|<=|>|<|=)?\s*(-?\d+(?:\.\d+)?)$/.exec(x);out.push({cmp:m[1]||'=',num:+m[2]})}
+  else out.push(x)};
+ while(i<a.length){const c=a[i];
+  if(c==='/'&&prev===','&&!cur.trim()){let j=i+1,cls=false;while(j<a.length&&(a[j]!=='/'||cls)){if(a[j]==='\\')j++;else if(a[j]==='[')cls=true;else if(a[j]===']')cls=false;j++}while(/[a-z]/i.test(a[j+1]||''))j++;cur=a.slice(i,j+1);i=j+1;prev='/';continue}
+  if(c===','){push();prev=',';i++;continue}
+  cur+=c;if(!/\s/.test(c))prev=c;i++}
+ push();return out;
+}
+const _rx=a=>a.find(x=>x instanceof RegExp),_w=a=>a.filter(x=>typeof x==='string').map(x=>x.toLowerCase());
+const _cmp=a=>{const c=a.find(x=>x&&x.num!==undefined);return v=>!c?!!v:(c.cmp==='>'?v>c.num:c.cmp==='>='?v>=c.num:c.cmp==='<'?v<c.num:c.cmp==='<='?v<=c.num:v===c.num)};
+const _str=(k)=>a=>{const r=_rx(a),w=_w(a);return u=>{const v=u[k];if(v==null)return false;return r?r.test(v):w.some(x=>String(v).toLowerCase().includes(x))}};
+const _num=k=>a=>{const f=_cmp(a);return u=>u[k]!==undefined&&f(u[k])};
+const PRED={
+ name:a=>{const r=_rx(a),w=_w(a);return u=>u.name!==undefined&&(r?(r.test(u.qname)||r.test(u.name)):w.includes(u.name.toLowerCase()))},
+ verb:a=>{const w=_w(a);return u=>u.verb!==undefined&&w.includes(u.verb)},
+ tok:a=>{const w=_w(a);return u=>!!u.tk&&u.tk.some(x=>w.includes(x))},
+ calls:a=>{const r=_rx(a),w=_w(a);return u=>!!u.calls&&u.calls.some(c=>r?r.test(c):w.includes(c.toLowerCase()))},
+ file:_str('file'),sec:_str('sec'),doc:_str('doc'),text:a=>{const r=_rx(a);return u=>!!r&&u.text!==undefined&&r.test(u.text)},
+ eff:a=>{const w=_w(a);return u=>u.eff!==undefined&&w.some(k=>u.eff===k||(u.why||[]).includes(k))},
+ pure:()=>u=>u.eff==='calc',effectful:()=>u=>!!u.eff&&u.eff!=='calc',
+ entry:()=>u=>u.callers===0,leaf:()=>u=>u.callees===0,helper:()=>u=>u.role==='helper',orch:()=>u=>u.role==='orch',module:()=>u=>!!u.module,prop:()=>u=>!!u.prop,
+ returns:()=>u=>u.returns===true,void:()=>u=>u.returns===false,listens:()=>u=>!!u.listens,
+ callers:_num('callers'),callees:_num('callees'),loc:_num('loc'),cx:_num('cx'),params:_num('params'),
+ feat:a=>{const k=a[0];return u=>!!(u.custom&&u.custom[k])},
+ type:a=>{const w=_w(a);return u=>!!u.btype&&w.includes(u.btype)},pos:a=>{const w=_w(a);return u=>w.includes(u.pos)},
+ first:()=>u=>u.pos==='first',last:()=>u=>u.pos==='last',dom:()=>u=>!!u.dom,io:()=>u=>!!u.io,hascall:()=>u=>!!u.hascall
+};
+function compileExpr(s){
+ let i=0;const ws=()=>{while(i<s.length&&/\s/.test(s[i]))i++};
+ function or(){let l=and();ws();while(s[i]==='|'){i++;const r=and(),a=l;l=u=>a(u)||r(u);ws()}return l}
+ function and(){let l=not();ws();while(s[i]==='&'){i++;const r=not(),a=l;l=u=>a(u)&&r(u);ws()}return l}
+ function not(){ws();if(s[i]==='!'){i++;const x=not();return u=>!x(u)}return atom()}
+ function atom(){
+  ws();if(s[i]==='('){i++;const x=or();ws();if(s[i]!==')')throw new Error('expected )');i++;return x}
+  const m=/^[A-Za-z_]\w*/.exec(s.slice(i));if(!m)throw new Error('predicate expected near "'+s.slice(i,i+14)+'"');
+  i+=m[0].length;let args='';if(s[i]==='('){const r=readArgs(s,i);args=r.args;i=r.end}
+  const mk=PRED[m[0]];if(!mk)throw new Error('unknown predicate: '+m[0]);return mk(parseArgs(args));
+ }
+ const f=or();ws();if(i<s.length)throw new Error('unexpected "'+s.slice(i,i+12)+'"');return f;
+}
+function parseStructures(src,allowJs){
+ const out=[],errs=[];let cur=null;
+ src.split('\n').forEach((raw,li)=>{
+  const ln=raw.replace(/(^|\s)\/\/.*$/,'').trim();if(!ln)return;const L=li+1;let m;
+  if((m=/^structure\s+([A-Za-z_][\w-]*)\s+"([^"]+)"(?:\s+level\s+(\w+))?(?:\s+blocks\s+([A-Za-z_][\w-]*))?\s*$/.exec(ln))){cur={id:m[1],name:m[2],level:m[3]||'function',blocks:m[4]||null,roles:[],rules:[],fallback:null,features:[],line:L};out.push(cur);return}
+  if(!cur){errs.push({line:L,msg:t('st_nostruct')});return}
+  if((m=/^role\s+([A-Za-z_][\w-]*)\s+"([^"]+)"\s+(#[0-9a-fA-F]{3,8})(?:\s+"([^"]*)")?\s*$/.exec(ln))){cur.roles.push({id:m[1],name:m[2],color:m[3],desc:m[4]||'',order:cur.roles.length});return}
+  if((m=/^else\s+([A-Za-z_][\w-]*)\s*$/.exec(ln))){cur.fallback=m[1];return}
+  if((m=/^feature\s+([A-Za-z_]\w*)\s*=\s*(.+)$/.exec(ln))){
+   if(!allowJs){errs.push({line:L,msg:t('stJsOff')});return}
+   try{cur.features.push({name:m[1],fn:new Function('u','fn','P','return ('+m[2]+')')})}catch(e){errs.push({line:L,msg:e.message})}return}
+  if((m=/^([A-Za-z_][\w-]*)\s*:\s*(.+)$/.exec(ln))){
+   let expr=m[2],w=1;const wm=/\s+weight\s+(\d+(?:\.\d+)?)\s*$/.exec(expr);if(wm){w=+wm[1];expr=expr.slice(0,wm.index)}
+   if(!cur.roles.some(r=>r.id===m[1])){errs.push({line:L,msg:t('st_role_unknown',m[1])});return}
+   try{cur.rules.push({role:m[1],weight:w,fn:compileExpr(expr),src:ln})}catch(e){errs.push({line:L,msg:e.message})}return}
+  errs.push({line:L,msg:'?  '+ln});
+ });
+ for(const s of out){if(s.roles.length<2)errs.push({line:s.line,msg:t('st_need2')});if(s.fallback&&!s.roles.some(r=>r.id===s.fallback))errs.push({line:s.line,msg:t('st_role_unknown',s.fallback)})}
+ return{list:out,errors:errs};
+}
+function allStructs(){
+ if(STRUCT.cache&&STRUCT.cache.ver===STRUCT.ver)return STRUCT.cache;
+ const allowJs=typeof cfg==='function'&&cfg('ex_structjs');
+ const d=parseStructures(STRUCT_DEFAULT_SRC,true),c=STRUCT.custom.trim()?parseStructures(STRUCT.custom,allowJs):{list:[],errors:[]};
+ const map=new Map();[...d.list,...c.list].forEach(s=>map.set(s.id,s));
+ STRUCT.errors=c.errors;STRUCT.cache={ver:STRUCT.ver,map,order:[...map.keys()]};return STRUCT.cache;
+}
+function activeStruct(){const a=allStructs();let s=a.map.get(STRUCT.active);if(!s||s.level!=='function')s=a.map.get('ipo');return s}
+
+/* ---------- features & classification ---------- */
+const BLK_EFF=()=>({dom:EFF_RULES[0][1],io:EFF_RULES[1][1]});
+function fnFeatures(P,fn,S){
+ if(!fn._ft){
+  const tk=nameTokens(fn.name),body=(fn.members||[{bodyStart:fn.bodyStart,bodyEnd:fn.bodyEnd}]).map(b=>fn.file.m.slice(b.bodyStart,b.bodyEnd)).join('\n');
+  fn._ft={name:fn.name,qname:fn.qname,tk,verb:tk[0]||'',calls:(fn.calls||[]).map(c=>(c.obj?c.obj+'.':'')+c.name),file:fn.file.path,doc:fn.doc||'',eff:fn.module?'do':fn.eff,why:fn.effWhy||[],
+   callers:fn.nCallers,callees:fn.nCallees,loc:fn.loc,cx:fn.cx,params:fn.nParams,returns:!!fn.returnsValue,module:!!fn.module,prop:!!fn.prop,role:fnRole(fn),
+   listens:/\baddEventListener\b|\.on\(/.test(body)||/^(on|handle)[A-Z_]/.test(fn.name),dom:(fn.effWhy||[]).includes('dom'),io:(fn.effWhy||[]).includes('io')};
+ }
+ const u=Object.assign({},fn._ft);const s=secOf(fn);u.sec=s?s.title:'';u.custom={};
+ for(const f of S.features||[]){try{u.custom[f.name]=f.fn(u,fn,P)}catch(e){u.custom[f.name]=false}}
+ return u;
+}
+function classifyUnit(S,u){
+ const sc=new Map(),why=new Map();
+ for(const r of S.rules){let ok=false;try{ok=!!r.fn(u)}catch(e){}
+  if(ok){sc.set(r.role,(sc.get(r.role)||0)+r.weight);if(!why.has(r.role))why.set(r.role,[]);why.get(r.role).push(r.src)}}
+ let best=null,bv=0,second=null,sv=0;
+ for(const ro of S.roles){const v=sc.get(ro.id)||0;if(v>bv){second=best;sv=bv;best=ro.id;bv=v}else if(v>sv&&v>0){second=ro.id;sv=v}}
+ let fb=false;if(!best&&S.fallback){best=S.fallback;fb=true}
+ return{role:best,score:bv,second:(second&&sv>=bv*.6)?second:null,why:best?(fb?[t('st_else')]:(why.get(best)||[])):[],fb};
+}
+function ensureStruct(){
+ const P=state.P;if(!P)return null;const S=activeStruct();if(!S)return null;
+ const key=S.id+'|'+STRUCT.ver+'|'+(P._secVer||0);
+ if(P._srKey!==key){P.funcs.forEach(f=>{f.sr=classifyUnit(S,fnFeatures(P,f,S))});P._srKey=key;P._sr=S}
+ return S;
+}
+const roleOf=(S,id)=>S.roles.find(r=>r.id===id);
+const roleColorOf=fn=>{const S=state.P&&state.P._sr;if(!S||!fn.sr||!fn.sr.role)return null;const r=roleOf(S,fn.sr.role);return r?r.color:null};
+function classifyBlocks(fn){
+ const S0=activeStruct();if(!S0||!S0.blocks)return;const S=allStructs().map.get(S0.blocks);if(!S||S.level!=='block')return;
+ const nodes=(fn.flow?fn.flow.nodes:[]).filter(n=>n.type!=='start'&&n.type!=='end'),N=nodes.length,q=Math.max(1,Math.ceil(N*.25)),F=fn.file,P=state.P,X=BLK_EFF();
+ nodes.forEach((n,i)=>{
+  const text=(n.lineNums||[]).map(l=>F.lines[l-1]||'').join('\n');
+  const u={btype:n.type,pos:i<q?'first':i>=N-q?'last':'mid',text,calls:[...(n.ext||[]),...(n.calls||[]).map(id=>P.funcs[id].qname)],hascall:!!(n.calls&&n.calls.length),dom:X.dom.test(text),io:X.io.test(text),custom:{}};
+  for(const f of S.features||[]){try{u.custom[f.name]=f.fn(u,fn,P)}catch(e){}}
+  n.sr=classifyUnit(S,u);n.srS=S;
+ });
+}
+
+/* ---------- the structure view ---------- */
+function renderStructView(){
+ const P=state.P,box=$('#structView');box.innerHTML='';const S=ensureStruct();
+ if(!P||!S){box.append(H('p',{class:'hint',text:t('secEmpty')}));return}
+ const q=state.q.trim().toLowerCase(),fns=P.funcs.filter(f=>!f.prop&&(!q||f.qname.toLowerCase().includes(q)));
+ const by=new Map(S.roles.map(r=>[r.id,[]]));by.set('',[]);
+ for(const f of fns)(by.get(f.sr&&f.sr.role)||by.get('')).push(f);
+ const total=fns.length||1;
+ const head=H('div',{class:'secHead'},H('h3',{text:S.name}),H('p',{class:'hint',style:'margin:0 0 8px',text:t('stIntro')}));
+ const bar=H('div',{class:'stBar'});
+ for(const r of S.roles){const n=by.get(r.id).length;if(n)bar.append(H('div',{style:`flex:${n} 1 0;background:${r.color}`,title:`${r.name}: ${n}`},r.name+' \u200E'+Math.round(100*n/total)+'%\u200E'))}
+ head.append(bar);
+ const first=S.roles[0],entry=by.get(first.id).filter(f=>!f.module).sort((a,b)=>reachOf(P,b.id)-reachOf(P,a.id))[0];
+ if(entry)head.append(H('div',{class:'row'},H('button',{class:'primary',text:t('stStartIn',first.name),onclick:()=>startTour(entry.id)})));
+ box.append(head);
+ const cols=H('div',{class:'stCols'});
+ const mkCol=(r,list)=>{
+  const col=H('div',{class:'stCol',style:`--rc:${r?r.color:'#888'}`});
+  const loc=list.reduce((a,f)=>a+(f.module?0:f.loc),0);
+  col.append(H('div',{class:'stHd'},H('b',{text:r?r.name:t('stNoRole')}),H('span',{class:'hint',text:`${t('stUnits',list.length)} · ${t('secLoc',loc)}`})));
+  if(r&&r.desc)col.append(H('div',{class:'hint',text:r.desc}));
+  const groups=new Map();for(const f of list){const k=f.sec!=null?f.sec:-1;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(f)}
+  [...groups].sort((a,b)=>a[0]-b[0]).forEach(([k,fl])=>{
+   const sc=k>=0?P.sections[k]:null;
+   col.append(H('details',{open:list.length<=14||null},H('summary',{style:`border-inline-start:4px solid ${sc?sc.color:'#888'};padding-inline-start:6px`},sc?`${sc.order}. ${short(sc.title,28)}`:'—',H('span',{class:'hint',text:`  ${fl.length}`})),
+    H('div',{class:'chips'},...fl.map(f=>H('a',{class:'lnk',title:`${fnPurpose(f)}${f.sr&&f.sr.why[0]?'\n'+f.sr.why[0]:''}`,onclick:()=>openFn(f.id)},f.qname+(f.sr&&f.sr.second?' +':''))))))});
+  return col};
+ S.roles.forEach(r=>cols.append(mkCol(r,by.get(r.id))));
+ if(by.get('').length)cols.append(mkCol(null,by.get('')));
+ box.append(cols);
+ // role-to-role calls
+ const mx=new Map();for(const e of P.edges){if(e.ref||e.from===e.to)continue;const a=P.funcs[e.from].sr,b=P.funcs[e.to].sr;if(!a||!b||!a.role||!b.role||a.role===b.role)continue;const k=a.role+'>'+b.role;mx.set(k,(mx.get(k)||0)+e.count)}
+ const ord=new Map(S.roles.map((r,i)=>[r.id,i]));
+ if(mx.size){const rows=[...mx].sort((a,b)=>b[1]-a[1]).slice(0,12);
+  box.append(H('div',{class:'secHead',style:'margin-top:14px'},H('h3',{text:t('stFlow')}),
+   H('div',{class:'chips'},...rows.map(([k,n])=>{const[a,b]=k.split('>'),back=ord.get(b)<ord.get(a);return H('span',{class:'chip'+(back?' warn':''),style:back?'border-color:var(--c-if);color:var(--c-if)':'',title:back?t('stBack'):''},`${roleOf(S,a).name} → ${roleOf(S,b).name} ×${n}${back?' ↩':''}`)}))))}
+}
+function fillStructToolbar(){
+ const sel=$('#structSel'),A=allStructs();sel.innerHTML='';
+ for(const id of A.order){const s=A.map.get(id);if(s.level==='function')sel.append(H('option',{value:id,text:s.name}))}
+ sel.value=activeStruct().id;
+}
+function setActiveStruct(id){STRUCT.active=id;store.set('cm.struct.active',id);if(state.P)state.P._srKey=null;if(state.fnId!=null)renderFn(false);else renderOverview(false)}
+
+/* ---------- the editor (the injected layer) ---------- */
+function openStructEditor(){
+ const m=$('#structModal'),sh=$('#structSheet');sh.innerHTML='';
+ const ta=H('textarea',{id:'stTa',class:'mono',spellcheck:'false',style:'width:100%;min-height:260px;font-size:12.5px'});
+ ta.value=STRUCT.custom||STRUCT_TEMPLATE_CUSTOM;
+ const msg=H('div',{id:'stMsg'});
+ const apply=()=>{STRUCT.custom=ta.value===STRUCT_TEMPLATE_CUSTOM?'':ta.value;STRUCT.ver++;STRUCT.cache=null;store.set('cm.struct.src',STRUCT.custom);
+  const A=allStructs();msg.innerHTML='';
+  if(STRUCT.errors.length)msg.append(...STRUCT.errors.map(e=>errCard({title:`${LANG==='ar'?'سطر':'line'} ${e.line}`,detail:e.msg},'err')));else msg.append(H('div',{class:'errbox info'},H('b',{text:t('stOk')})));
+  if(state.P)state.P._srKey=null;fillStructToolbar();if(state.fnId!=null)renderFn(false);else renderOverview(false)};
+ const tpl=H('select',{onchange:e=>{const v=e.target.value;if(v==='ex')ta.value=STRUCT_TEMPLATE_CUSTOM;else if(v){const src=STRUCT_DEFAULT_SRC.split(/\n(?=\/\/ ─────)/).find(x=>x.includes('structure '+v+' ')||x.includes('structure '+v+'\n'));ta.value=(ta.value.trim()?ta.value+'\n\n':'')+'// copy of '+v+'\n'+(src||'').trim().replace(new RegExp('structure '+v+'\\b','g'),'structure my_'+v)}e.target.value=''}},
+  H('option',{value:'',text:t('stTemplate')}),H('option',{value:'ex',text:'api (custom example)'}),H('option',{value:'ipo',text:'ipo'}),H('option',{value:'layers',text:'layers'}),H('option',{value:'lifecycle',text:'lifecycle'}));
+ const cheat=H('details',{},H('summary',{text:t('stCheat')}),H('pre',{class:'mono',style:'white-space:pre-wrap;font-size:12px;margin:6px 0'},
+`unit (function):  name(x,y | /re/)  verb(read,load)  tok(word)  calls(/re/)  file(/re/)  sec(/re/)  doc(/re/)
+                  eff(dom|io|rand|state|calc|do|do2)  pure  effectful  entry  leaf  helper  orch  module
+                  returns  void  listens  callers(>3)  callees(0)  loc(>50)  cx(>=8)  params(>2)  feat(name)
+block:            type(if,loop,switch,try,return,stmt,throw)  first  last  pos(mid)  text(/re/)  dom  io  hascall
+combine:          a & b    a | b    !a    ( a | b ) & c        weight N          else <role>
+levels:           function · block  (sections and files are summarised automatically from their units)`));
+ sh.append(H('h3',{text:t('stEdTitle')}),H('p',{class:'hint',text:t('stEdHelp')}),ta,H('div',{class:'row'},H('button',{class:'primary',text:t('stApply'),onclick:apply}),tpl,H('button',{class:'chip bad',text:t('stClear'),onclick:()=>{ta.value=STRUCT_TEMPLATE_CUSTOM;apply();STRUCT.custom='';store.set('cm.struct.src','')}}),H('button',{class:'chip',text:t('close'),onclick:()=>m.hidden=true})),msg,cheat);
+ m.hidden=false;
+}
+document.addEventListener('DOMContentLoaded',()=>{});
+$('#structSel').addEventListener('change',e=>setActiveStruct(e.target.value));
+$('#structEd').addEventListener('click',openStructEditor);
+$('#structModal').addEventListener('click',e=>{if(e.target.id==='structModal')e.target.hidden=true});
 /* ---------- boot ---------- */
 setTheme(state.theme);applyI18n();renderNotes();
 $('#src').value=SAMPLES.JavaScript;
